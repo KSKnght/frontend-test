@@ -2,42 +2,38 @@ import React, { Suspense } from 'react'
 import Navbar from '../components/Navbar'
 import getProjects from '@/lib/read'
 import ProjectsCard from '../components/Cards/ProjectsCard'
-import ProjectTable from '../components/ProjectList'
-import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import Modal from '../components/Modal'
 
-export type Props = {
+type SearchParamProps = {
     searchParams: Record<string, string> | null | undefined;
-}
+  };
 
-const page = async ({ props: Props }) => {
+const page = async ({searchParams} : SearchParamProps) => {
 // const page = async () => {
     const display = await getProjects();
+    const show = searchParams?.show;
 
 
     // const showModal = Props.searchParams?.modal === 'true';
     
   return (
         <main className='flex flex-row'>
+            {show && <Modal returnLink={'/Projects'} body={"YAWA"}/>}
             <div>
                 <Navbar />
             </div>
             <div className='p-5'>
                 <div>
-                    <button>add Project</button>
+                    <Link href={'/Projects/?show=true'}>add Button</Link>
                 </div>
-                
-                <ul>
-                    {display.map((display, i) => {
-                        return <li><ProjectsCard data={display} key={i}/></li>
-                    })}
-                </ul>
-                {/* <div>
+                <Suspense>
                     <ul>
                         {display.map((display, i) => {
-                            return <ProjectsCard data={display} key={i}/>
+                            return <li key={i}><ProjectsCard data={display}/></li>
                         })}
                     </ul>
-                </div> */}
+                </Suspense>
             </div>
             
         </main>
