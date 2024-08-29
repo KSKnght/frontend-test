@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model client {
+  id         Int       @id @default(autoincrement())
+  firstname  String    @db.VarChar(40)
+  lastname   String    @db.VarChar(40)
+  middlename String    @db.VarChar(40)
+  emailAdd   String    @db.VarChar(40)
+  contactNum String    @db.VarChar(40)
+  project    project[]
+}
+
+model materials {
+  id      Int       @id @default(autoincrement())
+  name    String    @db.VarChar(40)
+  taskMat taskMat[]
+}
+
+model phase {
+  id         Int          @id @default(autoincrement())
+  projectID  Int
+  priority   Int
+  phaseName  String       @db.VarChar(40)
+  progress   progessField
+  project    project      @relation(fields: [projectID], references: [id])
+  phaseTasks phaseTasks[]
+}
+
+model phaseTasks {
+  id          Int          @id @default(autoincrement())
+  taskName    String       @db.VarChar(100)
+  description String
+  phaseID     Int
+  progress    progessField
+  deadline    DateTime     @db.Date
+  phase       phase        @relation(fields: [phaseID], references: [id])
+  taskMat     taskMat[]
+  subCon      subCon[]
+}
+
+model projMat {
+  id       Int   @id @default(autoincrement())
+  projId   Int
+  matId    Int
+  totalQty Float
+  usedQty  Float
+  unit     unit
+}
+
+model project {
+  id             Int          @id @default(autoincrement())
+  name           String       @db.VarChar(120)
+  type           type
+  projectAddress String       @db.VarChar(40)
+  startDate      DateTime     @db.Date
+  endDate        DateTime     @db.Date
+  clientID       Int
+  progress       progessField
+  phase          phase[]
+  client         client       @relation(fields: [clientID], references: [id])
+}
+
+model subCon {
+  id         Int          @id @default(autoincrement())
+  Name       String       @db.VarChar(40)
+  phaseTasks phaseTasks[]
+}
+
+model taskMat {
+  id         Int        @id @default(autoincrement())
+  taskId     Int
+  matId      Int
+  qty        Float
+  unit       unit
+  materials  materials  @relation(fields: [matId], references: [id])
+  phaseTasks phaseTasks @relation(fields: [taskId], references: [id])
+}
+
+enum progessField {
+  COMPLETE
+  NOT_STARTED
+  IN_PROGRESS
+}
+
+enum type {
+  BUILD
+  DESIGN_BUILD
+  DESIGN
+}
+
+enum unit {
+  KG
+  PC
+  INCH
+  METER
+}
