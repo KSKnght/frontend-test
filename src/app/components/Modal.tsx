@@ -1,6 +1,13 @@
+"use server";
+
+import React from "react";
 import Link from "next/link";
 
-export default function Modal({returnLink, body}) {
+type Props = {
+
+}
+
+export default async function Modal({returnLink, body}) {
 
     return (
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">

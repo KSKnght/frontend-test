@@ -1,3 +1,5 @@
+"use server";
+
 import React, { Suspense } from 'react'
 import Navbar from '../components/Navbar'
 import getProjects from '@/lib/read'
@@ -9,6 +11,14 @@ type SearchParamProps = {
     searchParams: Record<string, string> | null | undefined;
   };
 
+const AddProject = () => {
+    return (
+        <form action={() => {}}>
+            <h1>hi</h1>
+        </form>
+    )
+}
+
 const page = async ({searchParams} : SearchParamProps) => {
 // const page = async () => {
     const display = await getProjects();
@@ -19,7 +29,7 @@ const page = async ({searchParams} : SearchParamProps) => {
     
   return (
         <main className='flex flex-row'>
-            {show && <Modal returnLink={'/Projects'} body={"YAWA"}/>}
+            {show && <Modal returnLink={'/Projects'} body={<div><AddProject /></div>}/>}
             <div>
                 <Navbar />
             </div>
