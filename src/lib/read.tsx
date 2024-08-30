@@ -1,6 +1,6 @@
 import prisma from "./db";
 
-export default async function getProjects() {
+export async function getProjects() {
     const data = await prisma.project.findMany({
         include: {
             client: {
@@ -16,4 +16,19 @@ export default async function getProjects() {
     });
 
     return data;
+}
+
+export async function getClients() {
+    const data = await prisma.client.findMany();
+
+    return data;
+}
+
+export async function getInfoProject(id:number) {
+    const data = await prisma.project.findFirst({
+        where: {
+            id
+        }
+    })
+    
 }
