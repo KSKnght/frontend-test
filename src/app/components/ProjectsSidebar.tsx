@@ -17,6 +17,9 @@ const ProjectsSidebar = ({project}) => {
         <h1>{new Date(project.startDate).toUTCString().slice(0,16)}</h1>
         <h1>{new Date(project.endDate).toUTCString().slice(0,16)}</h1>
         </div>
+        <div>
+          <Link href={'/Projects/'+ project.id+'/view/?editproject=true'}>Edit</Link>
+        </div>
     </div>
   )
 }
