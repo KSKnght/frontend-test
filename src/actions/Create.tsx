@@ -48,4 +48,48 @@ export async function updateProject(FormData : FormData, id: number) {
     });
     revalidatePath('/Project');
     redirect('/Project');
+};
+
+export async function addPhase(FormData : FormData, id: any) {
+    try {
+        await prisma.phase.create({
+            data: {
+                priority: Number(FormData.get('priority')),
+                phaseName: FormData.get('phaseName') as string,
+                progress: 'NOT_STARTED',
+                project: {
+                    connect: {
+                        id: id
+                    }
+                }
+            }
+        })
+    }
+    catch (err) {
+        console.log(err)
+    };
+    revalidatePath('/Projects/' + id + '/view');
+};
+
+export async function createTask(FormData : FormData, id: any) {
+    try {
+        await prisma.phaseTasks.create({
+            data: {
+                taskName: FormData.get('taskName') as string,
+                description: FormData.get('description') as string,
+                deadline: FormData.get('deadline') + 'T00:00:00.000Z',
+                progress: 'NOT_STARTED',
+                phase: {
+                    connect: {
+                        id: Number(id)
+                    }
+                }
+            }
+        })
+    }
+    catch (err) {
+        console.log(err)
+    }
+
+    revalidatePath('/Projects/' + id + '/view');
 }
