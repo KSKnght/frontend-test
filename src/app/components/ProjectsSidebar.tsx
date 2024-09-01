@@ -6,7 +6,7 @@ import React from 'react'
 
 const ProjectsSidebar = ({project}) => {
   return (
-    <div>
+    <div className='w-[15%] bg-slate-700'>
         <Link href={'/Projects'}>Back</Link>
         <div>
         <h1>{project.name}</h1>
