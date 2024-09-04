@@ -4,7 +4,7 @@ import Link from "next/link";
 export default async function Modal({returnLink, children } : { children: React.ReactNode , returnLink : any}) {
 
     return (
-      <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+      <div className="fixed inset-0 bg-gray-900 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
         <div className="flex flex-col">
           
           <div className="p-8 border w-96 shadow-lg rounded-md bg-white">

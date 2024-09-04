@@ -1,5 +1,5 @@
 import Button from '@/app/components/Button'
-import { getInfoProject, getPhases } from '@/lib/read'
+import { getInfoProject, getPhases } from '@/actions/read'
 import Link from 'next/link'
 import React from 'react'
 import ProjectsSidebar from '../../../components/ProjectsSidebar'
@@ -7,6 +7,7 @@ import PhaseCard from '../../../components/Cards/PhaseCard'
 import AddPhase from '../../../components/Modals/AddPhase'
 import AddTask from '../../../components/Modals/AddTask'
 import Modal from '@/app/components/Modal'
+import EditTask from '@/app/components/Modals/EditTask'
 
 type SearchParamProps = {
   addsub: any
@@ -47,7 +48,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                 <AddTask data={phase} />
             </Modal>}
       {edittask && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
-                <AddTask data={phase} />
+                <EditTask data={edittask} />
             </Modal>}
       {viewtask && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
                 <AddTask data={phase} />

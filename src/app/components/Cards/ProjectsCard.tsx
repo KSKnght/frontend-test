@@ -6,16 +6,16 @@ import React from 'react'
 const ProjectsCard = ({data}) => {
   const router = useRouter()
   return (
-    <div className='m-3 w-full items-center bg-slate-300 p-3' onClick={() => {router.push('/Projects/'+ data.id+'/view')}}>
+    <div className='mt-10 ml-12 w-auto items-center bg-slate-200 rounded-3xl p-8' onClick={() => {router.push('/Projects/'+ data.id+'/view')}}>
       <div className='flex flex-row items-center w-auto'>
-        <h1 className=' w-96'>
+        <h1 className=' w-full text-3xl font-semibold'>
           {data.name}
         </h1>
-        <div>
-          Status: {data.progress}
+        <div className='py-2 px-4 bg-red-400 text-red-900 rounded-full text-xs font-bold'>
+          {data.progress}
         </div>
       </div>
-      <div className='flex flex-row'>
+      <div className='flex flex-row mt-4'>
         <div className=' w-36'>
           {data.type}
         </div>

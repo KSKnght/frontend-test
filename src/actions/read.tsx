@@ -1,4 +1,4 @@
-import prisma from "./db";
+import prisma from "../lib/db";
 
 export async function getProjects() {
     const data = await prisma.project.findMany({
@@ -87,4 +87,13 @@ export async function getPhases(id:number) {
         }
     })
     return data
+};
+
+export async function getTask(id:number) {
+    const data = await prisma.phaseTasks.findFirst({
+        where: {
+            id: id
+        }
+    })
+    return data;
 }
