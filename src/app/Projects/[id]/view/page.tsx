@@ -1,13 +1,14 @@
-import Button from '@/app/components/Button'
+
 import { getInfoProject, getPhases } from '@/actions/read'
 import Link from 'next/link'
-import React from 'react'
+import React, { Suspense } from 'react'
 import ProjectsSidebar from '../../../components/ProjectsSidebar'
 import PhaseCard from '../../../components/Cards/PhaseCard'
 import AddPhase from '../../../components/Modals/AddPhase'
 import AddTask from '../../../components/Modals/AddTask'
 import Modal from '@/app/components/Modal'
 import EditTask from '@/app/components/Modals/EditTask'
+import TaskDetails from '@/app/components/Modals/TaskDetails'
 
 type SearchParamProps = {
   addsub: any
@@ -51,7 +52,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                 <EditTask data={edittask} />
             </Modal>}
       {viewtask && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
-                <AddTask data={phase} />
+                <TaskDetails data={viewtask} />
             </Modal>}
       {addmat && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
                 <AddTask data={phase} />
@@ -66,11 +67,13 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
         <div className='p-2'>
             <Link href={'/Projects/'+project.id+'/view?addPhase=true'}>Add Phase</Link>
         </div>
-        <div className=' overflow-x-scroll overflow-y-scroll flex flex-row h-screen'>
-          {phaseTasks.map((phase, i) => {
-              return <PhaseCard Phase={phase} key={i}/>
-          })}
-        </div>
+        <Suspense fallback={'loading'}>
+          <div className=' overflow-x-scroll overflow-y-scroll flex flex-row h-screen'>
+            {phaseTasks.map((phase, i) => {
+                return <PhaseCard Phase={phase} key={i}/>
+            })}
+          </div>
+        </Suspense>
       </div>
     </div>
   )

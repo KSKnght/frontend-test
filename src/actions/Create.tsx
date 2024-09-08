@@ -57,6 +57,7 @@ export async function createTask(FormData : FormData, id: any) {
     try {
         await prisma.phaseTasks.create({
             data: {
+                priority: Number(FormData.get('priority')),
                 taskName: FormData.get('taskName') as string,
                 description: FormData.get('description') as string,
                 deadline: FormData.get('deadline') + 'T00:00:00.000Z',

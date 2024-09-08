@@ -41,6 +41,7 @@ model phaseTasks {
   progress    progessField
   deadline    DateTime     @db.Date
   phase       phase        @relation(fields: [phaseID], references: [id])
+  priority    Int?
   taskMat     taskMat[]
   subCon      subCon[]
 }

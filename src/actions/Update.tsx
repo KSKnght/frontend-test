@@ -28,7 +28,9 @@ export async function updateTask(FormData : FormData, id: number) {
     await prisma.phaseTasks.update({
         where: {id},
         data: {
-            
+            taskName: FormData.get('taskName') as string,
+            description: FormData.get('description') as string,
+            deadline: FormData.get('deadline') + 'T00:00:00.000Z',
         }
     });
     revalidatePath('/Project');
