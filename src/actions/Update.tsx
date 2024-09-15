@@ -1,6 +1,6 @@
 'use server';
 
-import { type } from "@prisma/client";
+import { type, unit } from "@prisma/client";
 import prisma from "../lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -36,3 +36,47 @@ export async function updateTask(FormData : FormData, id: number) {
     revalidatePath('/Project');
     redirect('/Project');
 };
+
+export async function addMaterial(FormData : FormData, taskID : number) {
+    await prisma.taskMat.create({
+        data: {
+            phaseTasks: {
+                connect: {
+                    id: taskID
+                }
+            },
+            qty: Number(FormData.get('qty')),
+            unit: FormData.get('unit') as unit,
+            materials: {
+                connectOrCreate: {
+                    where: {
+                        name: FormData.get('materialName') as string
+                    },
+                    create: {
+                        name: FormData.get('materialName') as string
+                    }
+                }
+            }
+        }
+    })
+}
+
+export async function addSubCom(FormData : FormData, taskID : number) {
+    await prisma.phaseTasks.update({
+        where: {
+            id: Number(taskID)
+        },
+        data: {
+            subCon: {
+                connectOrCreate: {
+                    where: {
+                        Name: FormData.get('SubConName') as string
+                    },
+                    create: {
+                        Name: FormData.get('SubConName') as string
+                    }
+                }
+            }
+        }
+    })
+}

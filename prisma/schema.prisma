@@ -19,7 +19,7 @@ model client {
 
 model materials {
   id      Int       @id @default(autoincrement())
-  name    String    @db.VarChar(40)
+  name    String    @db.VarChar(40) @unique
   taskMat taskMat[]
 }
 
@@ -70,7 +70,7 @@ model project {
 
 model subCon {
   id         Int          @id @default(autoincrement())
-  Name       String       @db.VarChar(40)
+  Name       String       @db.VarChar(40) @unique
   phaseTasks phaseTasks[]
 }
 

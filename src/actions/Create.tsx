@@ -4,11 +4,12 @@ import { type } from "@prisma/client";
 import prisma from "../lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Build, Design, DesignBuild } from "./TypeTemp";
 
 export async function createProject(FormData : FormData) {
     console.log(FormData)
     try {
-        await prisma.project.create({
+        const proj = await prisma.project.create({
             data: {
                 name: FormData.get('name') as string,
                 type: FormData.get('type') as type,
@@ -23,6 +24,17 @@ export async function createProject(FormData : FormData) {
                 }
             }
         });
+
+        if (FormData.get('type') == 'BUILD') {
+            Build(proj.id);
+        }
+        else if (FormData.get('type') == 'DESIGN_BUILD') {
+            DesignBuild(proj.id)
+        }
+        else {
+            Design(proj.id)
+        }
+
         revalidatePath('/Project');
         redirect('/Project');
     } catch (err) {
