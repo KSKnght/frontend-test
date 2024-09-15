@@ -1,6 +1,5 @@
 'use server';
 
-import { type } from "@prisma/client";
 import prisma from "../lib/db";
 
 
