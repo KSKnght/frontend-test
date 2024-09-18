@@ -40,7 +40,7 @@ export async function getInfoProject(id:number) {
                 }
             }
         },
-    })
+    });
     return data
 }
 
@@ -85,7 +85,7 @@ export async function getPhases(id:number) {
         orderBy: {
             priority: 'asc'
         }
-    })
+    });
     return data
 };
 
@@ -94,6 +94,18 @@ export async function getTask(id:number) {
         where: {
             id: id
         }
-    })
+    });
+    return data;
+}
+
+export async function getMaterials() {
+    const data = await prisma.materials.findMany();
+
+    return data;
+}
+
+export async function getSubcontracts() {
+    const data = await prisma.subCon.findMany();
+
     return data;
 }
