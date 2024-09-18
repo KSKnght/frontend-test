@@ -51,16 +51,22 @@ const page = async ({searchParams} : SearchParamProps) => {
             <div>
                 <Navbar />
             </div>
-            <div className='p-5'>
-                <div>
-                    <Link href={'/Projects/?show=true'}>add Button</Link>
+            <div className='pt-2 h-screen'>
+                <div className='mb-6 mt-4 space-x-56 flex'>
+                    <h1 className='px-10 text-5xl font-bold mt-3 text-pink-600'>PROJECTS</h1>
+                    <div className='mx-20 my-4 px-5 py-2 rounded-lg bg-pink-600 text-white shadow-lg shadow-pink-600/50'>
+                        <i className="fi fi-rr-add pr-2 align-middle"></i>
+                        <Link href={'/Projects/?show=true'}>Create New Project</Link>
+                    </div>
                 </div>
                 <Suspense>
-                    <ul>
-                        {display.map((display, i) => {
-                            return <li key={i}><ProjectsCard data={display}/></li>
-                        })}
-                    </ul>
+                    <div className='h-[calc(100vh-130px)] overflow-y-scroll project'>
+                        <ul>
+                            {display.map((display, i) => {
+                                return <li key={i}><ProjectsCard data={display}/></li>
+                            })}
+                        </ul>
+                    </div>
                 </Suspense>
             </div>
             

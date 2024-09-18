@@ -49,7 +49,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                 <AddTask data={phase} />
             </Modal>}
       {edittask && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
-                <EditTask data={edittask} />
+                <EditTask data={edittask} project={project.id}/>
             </Modal>}
       {viewtask && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
                 <TaskDetails data={viewtask} />

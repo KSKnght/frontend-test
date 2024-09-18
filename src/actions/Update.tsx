@@ -4,6 +4,8 @@ import { type } from "@prisma/client";
 import prisma from "../lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Router } from "next/router";
+
 
 export async function updateProject(FormData : FormData, id: number) {
     await prisma.project.update({
@@ -24,7 +26,7 @@ export async function updateProject(FormData : FormData, id: number) {
     revalidatePath('/Project');
     redirect('/Project');
 };
-export async function updateTask(FormData : FormData, id: number) {
+export async function updateTask(FormData : FormData, id: number, projID: number) {
     await prisma.phaseTasks.update({
         where: {id},
         data: {
@@ -33,6 +35,5 @@ export async function updateTask(FormData : FormData, id: number) {
             deadline: FormData.get('deadline') + 'T00:00:00.000Z',
         }
     });
-    revalidatePath('/Project');
-    redirect('/Project');
+    revalidatePath('/Projects/' + projID + '/view');    
 };

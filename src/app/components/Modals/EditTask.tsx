@@ -1,12 +1,12 @@
 import { getTask } from '@/actions/read'
 import { updateTask } from '@/actions/Update';
+import { redirect } from 'next/navigation';
 import React from 'react'
 
-const EditTask = async ({data}) => {
+const EditTask = async ({data, project}) => {
     const task = await getTask(Number(data));
-    console.log(task.deadline.toISOString().slice(0,10))
     return (
-        <form action={async e => {'use server'; updateTask(e, task.id)}}>
+        <form action={async e => {'use server'; updateTask(e, task.id, project); redirect('/Projects/' + project + '/view')}}>
             <div>
                 <input type="text" name='taskName' placeholder='Task Name' defaultValue={task.taskName}/>
                 <textarea className='resize-none' name='description' placeholder='Description' defaultValue={task.description}/>
