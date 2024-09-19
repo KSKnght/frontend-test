@@ -1,24 +1,24 @@
 import React from "react";
 import Link from "next/link";
+import { IoIosClose } from "react-icons/io";
 
 export default async function Modal({returnLink, children } : { children: React.ReactNode , returnLink : any}) {
 
     return (
-      <div className="fixed inset-0 bg-gray-900 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+      <div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-10 overflow-y-auto h-full w-full flex items-center justify-center">
         <div className="flex flex-col">
           
-          <div className="p-8 border w-96 shadow-lg rounded-md bg-white">
+          <div className="p-8 border max-w-3xl shadow-lg rounded-md bg-slate-50">
             <div className="text-center">
-              <div className="flex flex-row justify-center place-items-center">
-                <h3 className="text-2xl font-bold text-gray-900">Modal Title</h3>
+              <div className="flex flex-row justify-between">
+                <h3 className="text-2xl font-bold text-pink-600">Create New Project</h3>
                 <Link
                   href={returnLink}
-                  className=" self-end px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
-                >
-                  Close
+                  className=''>
+                  <IoIosClose className='w-6 h-6 hover:bg-slate-100 rounded-md'/>
                 </Link>
               </div>
-              <div className="mt-2 px-7 py-3">
+              <div className="mt-2 py-3">
                 {children}
               </div>
             </div>
