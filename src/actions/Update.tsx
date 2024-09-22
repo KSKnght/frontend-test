@@ -82,3 +82,18 @@ export async function addSubCom(FormData : FormData, taskID : number) {
         }
     })
 }
+
+export async function updateClient(FormData : FormData, id: number) {
+    await prisma.client.update({
+        where: {
+            id
+        },
+        data: {
+            lastname: FormData.get('lastname') as string,
+            firstname: FormData.get('firstname') as string,
+            middlename: FormData.get('middlename') as string,
+            contactNum: FormData.get('contactNum') as string,
+            emailAdd: FormData.get('emailAdd') as string
+        }
+    })
+}

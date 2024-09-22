@@ -42,8 +42,6 @@ export async function createProject(FormData : FormData) {
     }
 }
 
-
-
 export async function addPhase(FormData : FormData, id: any) {
     try {
         await prisma.phase.create({
@@ -87,4 +85,23 @@ export async function createTask(FormData : FormData, id: any) {
     }
 
     revalidatePath('/Projects/' + id + '/view');
+}
+
+export async function createClient(FormData : FormData) {
+    try {
+        await prisma.client.create({
+            data: {
+                lastname: FormData.get('lastname') as string,
+                firstname: FormData.get('firstname') as string,
+                middlename: FormData.get('middlename') as string,
+                contactNum: FormData.get('contactNum') as string,
+                emailAdd: FormData.get('emailAdd') as string
+            }
+        })
+    }
+    catch (err) {
+        console.log(err)
+    };
+
+    revalidatePath('/Clients')
 }

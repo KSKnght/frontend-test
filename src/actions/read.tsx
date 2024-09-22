@@ -19,7 +19,11 @@ export async function getProjects() {
 }
 
 export async function getClients() {
-    const data = await prisma.client.findMany();
+    const data = await prisma.client.findMany({
+        orderBy: {
+            id: 'asc'
+        }
+    });
 
     return data;
 }
@@ -108,4 +112,14 @@ export async function getSubcontracts() {
     const data = await prisma.subCon.findMany();
 
     return data;
+}
+
+export async function showClient(id: number) {
+    const data = await prisma.client.findFirst({
+        where: {
+            id: id
+        },
+    });
+
+    return data
 }

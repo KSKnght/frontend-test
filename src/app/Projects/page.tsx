@@ -15,7 +15,7 @@ const AddProject = async () => {
     const clients = await getClients()
 
     return (
-        <form action={async (e) => {'use server'; createProject(e); revalidatePath('/Project')}}>
+        <form action={async (e) => {'use server'; createProject(e); revalidatePath('/Projects')}}>
             <input type="text" name='name' placeholder='Name of Project'/>
             <input type="text" name='address' placeholder='Address'/>
             <input type="date" name='startDate'/>
