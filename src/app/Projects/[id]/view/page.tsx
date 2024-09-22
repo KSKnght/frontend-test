@@ -18,6 +18,7 @@ type SearchParamProps = {
   edittask: any
   phase: any
   addPhase: boolean
+  state: any
   searchParams: Record<string, string> | null | undefined;
 };
 
@@ -38,6 +39,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
   const addsub = searchParams?.addsub;
   const project = await getInfoProject(Number(id))
   const phaseTasks = await getPhases(Number(id))
+  const state = searchParams?.state;
 
   console.log()
   return (
@@ -53,7 +55,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                 <EditTask data={edittask} project={project.id}/>
             </Modal>}
       {viewtask && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
-                <TaskDetails data={viewtask} />
+                <TaskDetails data={viewtask} state={state} projID={id}/>
             </Modal>}
       {addmat && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
                 <AddTask data={phase} />

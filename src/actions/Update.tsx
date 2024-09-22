@@ -52,10 +52,11 @@ export async function addMaterial(FormData : FormData, taskID : number) {
             materials: {
                 connectOrCreate: {
                     where: {
-                        name: FormData.get('materialName') as string
+                        name: FormData.get('name') as string
                     },
                     create: {
-                        name: FormData.get('materialName') as string
+                        name: FormData.get('name') as string,
+                        unit: FormData.get('unit') as unit
                     }
                 }
             }
@@ -72,10 +73,10 @@ export async function addSubCom(FormData : FormData, taskID : number) {
             subCon: {
                 connectOrCreate: {
                     where: {
-                        Name: FormData.get('SubConName') as string
+                        Name: FormData.get('name') as string
                     },
                     create: {
-                        Name: FormData.get('SubConName') as string
+                        Name: FormData.get('name') as string
                     }
                 }
             }

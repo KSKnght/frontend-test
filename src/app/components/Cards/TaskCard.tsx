@@ -11,7 +11,7 @@ const MatList = ({tasks}) => {
     <div>
           <h3>Materials List:</h3>
           {tasks.map((mat, i) => {
-            return <li key={i}>{mat.materials.name}</li>
+            return <li key={i}>{mat.materials.name + ' ' + mat.qty + ' ' + mat.unit}</li>
           })}
         </div>
   )
@@ -32,7 +32,7 @@ const SubConList = ({subcon}) => {
 const TaskCard = ({tasks, data}) => {
   const router = useRouter()
   return (
-    <div className='my-3 w-full items-center bg-slate-300 rounded-md p-3 cursor-pointer' onClick={() => {router.push('/Projects/'+ data+'/view/?viewtask='+tasks.id)}}>
+    <div className='my-3 w-full items-center bg-slate-300 rounded-md p-3 cursor-pointer' onClick={() => {router.push('/Projects/'+ data+'/view/?viewtask='+tasks.id+'&state=Mat')}}>
         <div>
           <div className='flex flex-row justify-between'>
             <h1 className='font-bold text-slate-800'>{tasks.taskName}</h1>
