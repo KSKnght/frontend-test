@@ -9,9 +9,10 @@ import { IoTime } from "react-icons/io5";
 const MatList = ({tasks}) => {
   if (tasks.length != 0) return (
     <div>
-          <h3>Materials List:</h3>
+          <h3 className='mt-3 text-xs font-bold'>Materials List</h3>
           {tasks.map((mat, i) => {
-            return <li key={i}>{mat.materials.name + ' ' + mat.qty + ' ' + mat.unit}</li>
+            return <li className='text-xs'
+            key={i}>{mat.materials.name + ' ' + mat.qty + ' ' + mat.unit}</li>
           })}
         </div>
   )
@@ -20,9 +21,9 @@ const MatList = ({tasks}) => {
 const SubConList = ({subcon}) => {
   if (subcon.length != 0) return (
     <div>
-      <h3>Subcontractors:</h3>
+      <h3 className='mt-3 text-xs font-bold'>Subcontractors</h3>
       {subcon.map((sub, i) => {
-        return <li key={i}>{sub.Name}</li>
+        return <li className='text-xs' key={i}>{sub.Name}</li>
       })}
     </div>
   )

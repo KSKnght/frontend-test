@@ -64,11 +64,16 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                 <AddTask data={phase} />
             </Modal>}
 
+      <div className='h-screen'>
+        <div className='h-full flex-col bg-white border-r shadow-sm w-80 px-3 py-2'>
+        </div>
+      </div>
 
       <ProjectsSidebar project={project} />
-      <div className=' flex flex-col'>
+
+      <div className='flex flex-col'>
         <div className='ml-6 my-6'>
-            <Link className='flex flex-row w-32 rounded-lg px-3 py-2 text-white bg-pink-600' href={'/Projects/'+project.id+'/view?addPhase=true'}>
+            <Link className='flex flex-row w-32 rounded-lg px-3 py-1 text-white bg-pink-600' href={'/Projects/'+project.id+'/view?addPhase=true'}>
               <IoIosAddCircle className='mt-1 mr-1'/>
               <p>Add Phase</p>
             </Link>

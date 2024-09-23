@@ -15,7 +15,7 @@ import { IoCalendarClear } from "react-icons/io5";
 
 const ProjectsSidebar = ({project}) => {
   return (
-    <div className='h-screen'>
+    <div className='h-full fixed'>
       <div className='h-full flex-col bg-white border-r shadow-sm w-80 px-3 py-2'>
 
             <div className='mt-2 flex flex-row'>

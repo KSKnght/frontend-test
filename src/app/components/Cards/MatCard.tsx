@@ -5,7 +5,7 @@ const MatCard = ({data}) => {
 
   return (
     <div 
-    className=' bg-slate-200'
+    className='text-sm justify-start bg-slate-100 hover:bg-slate-200'
     onClick={e => {
         const name = document.getElementById('name') as HTMLInputElement;
         const unit = document.getElementById('unit') as HTMLInputElement;
