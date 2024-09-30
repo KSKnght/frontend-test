@@ -44,24 +44,18 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
   console.log()
   return (
     <div className=' flex flex-row overflow-x-auto'>
-      {addPhase && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
+      {addPhase && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Add Phase'}>
                 <AddPhase data={project.id} />
             </Modal>}
 
-      {phase && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
+      {phase && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Add Task'}>
                 <AddTask data={phase} />
             </Modal>}
-      {edittask && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
+      {edittask && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Edit Task'}>
                 <EditTask data={edittask} project={project.id}/>
             </Modal>}
-      {viewtask && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
+      {viewtask && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Task Details'}>
                 <TaskDetails data={viewtask} state={state} projID={id}/>
-            </Modal>}
-      {addmat && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
-                <AddTask data={phase} />
-            </Modal>}
-      {addsub && <Modal returnLink={'/Projects/'+ project.id+'/view'}>
-                <AddTask data={phase} />
             </Modal>}
 
       <div className='h-screen'>
