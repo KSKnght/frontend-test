@@ -72,14 +72,16 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
       <ProjectsSidebar project={project} />
 
       <div className='flex flex-col'>
-        <div className='ml-6 my-6'>
-            <Link className='flex flex-row w-32 rounded-lg px-3 py-1 text-white bg-pink-600' href={'/Projects/'+project.id+'/view?addPhase=true'}>
-              <IoIosAddCircle className='mt-1 mr-1'/>
-              <p>Add Phase</p>
-            </Link>
+        <div className=''>
+          <div className='ml-6 my-6 fixed'>
+              <Link className='flex flex-row w-32 rounded-lg px-3 py-1 text-white bg-pink-600' href={'/Projects/'+project.id+'/view?addPhase=true'}>
+                <IoIosAddCircle className='mt-1 mr-1'/>
+                <p>Add Phase</p>
+              </Link>
+          </div>
         </div>
         <Suspense fallback={'loading'}>
-          <div className='flex flex-row w-screen overflow-x-scroll overscroll-auto'>
+          <div className='flex flex-row w-screen overflow-x-scroll overscroll-auto mt-20 '>
             {phaseTasks.map((phase, i) => {
                 return <PhaseCard Phase={phase} key={i}/>
             })}
