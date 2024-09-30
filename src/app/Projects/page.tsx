@@ -45,7 +45,7 @@ const page = async ({searchParams} : SearchParamProps) => {
     
   return (
         <main className='flex'>
-            {show && <Modal returnLink={'/Projects'}>
+            {show && <Modal returnLink={'/Projects'} name={'Add Project'}>
                 <AddProject />
             </Modal>}
             <div>

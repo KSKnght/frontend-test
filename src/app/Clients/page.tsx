@@ -32,10 +32,10 @@ const page = async ({searchParams} : SearchParamProps) => {
   const edit = searchParams?.edit;
   return (
     <main className='flex'>
-      {show && <Modal returnLink={'/Clients'}>
+      {show && <Modal returnLink={'/Clients'} name={'Add Client'}>
           <AddClient />
         </Modal>}
-      {edit && <Modal returnLink={'/Clients'}>
+      {edit && <Modal returnLink={'/Clients'} name={'Edit Client'}>
           <EditClient data={edit} />
         </Modal>}
       <div>
