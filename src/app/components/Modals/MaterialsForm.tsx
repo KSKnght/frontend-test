@@ -32,6 +32,7 @@ const MaterialsForm = ({materials, taskID, projID}) => {
             <button  className='mt-5 text-sm px-4 py-1 bg-pink-600 rounded-lg text-white mb-3' type='submit'>Add Material</button>
             {/* <input id='unit' type="text" name='unit' placeholder='unit'/> */}
             <div>
+                <p className='flex font-bold text-xs'>Select Material</p>
                 {materials.map((mat, i) => {
                     return <MatCard data={mat} key={i}/>
                 })}

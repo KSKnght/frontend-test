@@ -16,24 +16,50 @@ const AddProject = async () => {
 
     return (
         <form action={async (e) => {'use server'; createProject(e); revalidatePath('/Projects')}}>
-            <input type="text" name='name' placeholder='Name of Project'/>
-            <input type="text" name='address' placeholder='Address'/>
-            <input type="date" name='startDate'/>
-            <input type="date" name='endDate'/>
-            <select defaultValue={'Select'} name='type'>
-                <option value={'Select'} disabled={true}>Select type</option>
-                <option value={'BUILD'}>BUILD</option>
-                <option value={'DESIGN_BUILD'}>DESIGN + BUILD</option>
-                <option value={'DESIGN'}>DESIGN</option>
-            </select>
-            <select defaultValue={'Select'} name='id'>
-                <option value={'Select'} disabled={true}>Select client</option>
-                {clients.map((clients, i) => {
-                    return <option key={i} value={clients.id}>{clients.lastname + ', ' + clients.firstname+ ' ' + clients.middlename}</option>
-                })}
-            </select>
+            <div className='flex flex-row justify-between space-x-3'>
+                <div>
+                    <p className='subHeader'>Project Name</p>
+                    <input className='inputSubHeader inputSubHeader:focus w-[22rem]'
+                           type="text" name='name' placeholder=''/>
+                </div>
+                <div>
+                    <p className='subHeader'>Project Type</p>
+                    <select className='inputSubHeader inputSubHeader:focus w-[10rem]'
+                        defaultValue={'Select'} name='type'>
+                            <option value={'Select'} disabled={true}>Select type</option>
+                            <option value={'BUILD'}>Build</option>
+                            <option value={'DESIGN_BUILD'}>Design + Build</option>
+                            <option value={'DESIGN'}>Design</option>
+                    </select>
+                </div>
+                <div>
+                    <p className='subHeader'>Start Date</p>
+                    <input className='inputSubHeader inputSubHeader:focus w-[10rem]' type="date" name='startDate'/>
+                </div>
+            </div>
+            
+            <div className='flex flex-row justify-between space-x-3 mt-3'>
+                <div>
+                    <p className='subHeader'>Address</p>
+                    <input className='inputSubHeader inputSubHeader:focus w-[22rem]' type="text" name='address' placeholder='Address'/>
+                </div>
+                <div>
+                    <p className='subHeader'>Client</p>
+                    <select className='inputSubHeader inputSubHeader:focus w-[10rem]' defaultValue={'Select'} name='id'>
+                        <option value={'Select'} disabled={true}>Select Client</option>
+                        {clients.map((clients, i) => {
+                            return <option key={i} value={clients.id}>{clients.lastname + ', ' + clients.firstname+ ' ' + clients.middlename}</option>
+                        })}
+                    </select>
+                </div>
+                <div>
+                    <p className='subHeader'>End Date</p>
+                    <input className='inputSubHeader inputSubHeader:focus w-[10rem]' type="date" name='endDate'/>
+                </div>
+            </div>
+            
 
-            <button type='submit'> submit </button>
+            <button className='submitButton' type='submit'>Create Project</button>
         </form>
     )
 }
@@ -54,7 +80,7 @@ const page = async ({searchParams} : SearchParamProps) => {
             <div className='pt-2 h-screen'>
                 <div className='mb-6 mt-4 space-x-56 flex'>
                     <h1 className='px-10 text-5xl font-bold mt-3 text-pink-600'>PROJECTS</h1>
-                    <div className='mx-20 my-4 px-5 py-2 rounded-lg bg-pink-600 text-white shadow-lg shadow-pink-600/50'>
+                    <div className='mx-20 my-4 px-5 py-2 rounded-lg bg-pink-600 text-white'>
                         <i className="fi fi-rr-add pr-2 align-middle"></i>
                         <Link href={'/Projects/?show=true'}>Create New Project</Link>
                     </div>

@@ -36,7 +36,7 @@ const TaskCard = ({tasks, data}) => {
     <div className='my-3 w-full items-center bg-slate-300 rounded-md p-3 cursor-pointer' onClick={() => {router.push('/Projects/'+ data+'/view/?viewtask='+tasks.id+'&state=Mat')}}>
         <div>
           <div className='flex flex-row justify-between'>
-            <h1 className='font-bold text-slate-800'>{tasks.taskName}</h1>
+            <h1 className='font-bold text-slate-800 leading-tight'>{tasks.taskName}</h1>
             <button className='text-slate-600' onClick={(e) => {e.stopPropagation(); router.push('/Projects/'+ data+'/view/?edittask='+tasks.id)}}>
               <MdEdit />
             </button>

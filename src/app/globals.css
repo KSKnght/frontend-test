@@ -3,18 +3,43 @@
 @import "tailwindcss/utilities";
 @import "tailwindcss/variants";
 
-phaseCard {
-  padding: 2.5rem;
+
+@layer components{
+  .inputSubHeader {
+    height: 1.5rem;
+    display: flex;
+    border-width: 1px;
+    border-color: rgb(226 232 240);
+    border-radius: 0.5rem;
+    padding-left: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  .inputSubHeader:focus {
+    outline-color: #db2777;
+  }
+  .subHeader {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    display: flex;
+    margin-bottom: 0.25rem;
+  }
+  .submitButton {
+    margin-top: 2rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    background-color: rgb(219 39 119);
+    border-radius: 0.5rem;
+    color: white
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-::-webkit-scrollbar {
-  scrollbar-width: none;
-}
-
-inputSubHeader {
-  font-size: x-small;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-  display: flex;
-}
 
