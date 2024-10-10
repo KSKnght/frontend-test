@@ -3,6 +3,8 @@ import TaskCard from './TaskCard'
 import Link from 'next/link'
 import { IoIosAddCircle } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
+import Popover from "../Submenu/Project_Popover"
+import { Button } from "../UI/button"
 
 const PhaseCard = ({Phase}) => {
   return (
@@ -13,20 +15,23 @@ const PhaseCard = ({Phase}) => {
           </div>
         <div className='flex flex-row text-slate-600 ml-4'>
             <Link href={'/Projects/'+Phase.projectID+'/view?phase='+Phase.id}>
-              <IoIosAddCircle className='w-4 h-4 mx-1 text-slate-600 hover:text-pink-600 transition-colors ease-out'/>
+              <IoIosAddCircle className='w-5 h-5 mx-1 text-slate-600 hover:text-pink-600 transition-colors ease-out'/>
             </Link>
-            <MdEdit className='w-4 h-4 text-slate-600 hover:text-pink-600 transition-colors ease-out'/>
+
         </div>
         </div>
 
         <div className='mt-2 mb-8 text-xs px-2 py-1 bg-slate-400 rounded-xl w-[8rem]'>
           <h2>{Phase.progress}</h2>
         </div>
-        {
-            Phase.phaseTasks.map((task, i) => {
-              return <TaskCard tasks={task} data={Phase.projectID} key={i}/>
-            })
-        }
+        
+        <div>
+          {
+              Phase.phaseTasks.map((task, i) => {
+                return <TaskCard tasks={task} data={Phase.projectID} key={i}/>
+              })
+          }
+        </div>
     </div>
   )
 }

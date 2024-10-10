@@ -6,6 +6,9 @@ import ProjectsCard from '../components/Cards/ProjectsCard'
 import Link from 'next/link'
 import Modal from '../components/Modal'
 import { revalidatePath } from 'next/cache'
+import { HiDocumentText } from "react-icons/hi2"
+
+
 
 type SearchParamProps = {
     searchParams: Record<string, string> | null | undefined;
@@ -59,7 +62,9 @@ const AddProject = async () => {
             </div>
             
 
-            <button className='submitButton' type='submit'>Create Project</button>
+            <button className='submitButton' type='submit'>
+                Create Project
+            </button>
         </form>
     )
 }
@@ -77,17 +82,25 @@ const page = async ({searchParams} : SearchParamProps) => {
             <div>
                 <Navbar />
             </div>
-            <div className='pt-2 h-screen'>
-                <div className='mb-6 mt-4 space-x-56 flex'>
-                    <h1 className='px-10 text-5xl font-bold mt-3 text-pink-600'>PROJECTS</h1>
-                    <div className='mx-20 my-4 px-5 py-2 rounded-lg bg-pink-600 text-white'>
+            <div className='pt-2 h-screen w-full pr-16'>
+                <div className='mb-6 mt-4 space-x-56 flex justify-between'>
+                    <div className='flex flex-row ml-10'>
+                        <HiDocumentText className='w-10 h-10 mr-5 translate-y-[1rem] text-pink-600'/>
+                        <h1 className='text-5xl font-bold mt-3 text-pink-600'>PROJECTS</h1>
+                    </div>
+                    <div className='mx-20 my-4 px-5 py-2 rounded-xl bg-pink-600 text-white'>
                         <i className="fi fi-rr-add pr-2 align-middle"></i>
-                        <Link href={'/Projects/?show=true'}>Create New Project</Link>
+                        <Link 
+                            href={'/Projects/?show=true'}
+                            >
+                            Create New Project
+                        </Link>
                     </div>
                 </div>
+                
                 <Suspense>
-                    <div className='h-[calc(100vh-130px)] overflow-y-scroll project'>
-                        <ul>
+                    <div className='h-[calc(100vh-130px)] overflow-y-scroll'>
+                        <ul className='grid grid-cols-2 pr-8'>
                             {display.map((display, i) => {
                                 return <li key={i}><ProjectsCard data={display}/></li>
                             })}

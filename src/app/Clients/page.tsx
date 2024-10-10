@@ -4,11 +4,15 @@ import Navbar from '../components/Navbar'
 import { getClients } from '@/actions/read';
 import Link from 'next/link';
 import Modal from '../components/Modal';
+
+  
+
 import { createClient } from '@/actions/Create';
 import { revalidatePath } from 'next/cache';
 import EditClient from '../components/Modals/EditClient'
 import { IoIosAddCircle } from 'react-icons/io';
 import { MdEdit } from "react-icons/md";
+
 
 type SearchParamProps = {
   searchParams: Record<string, string> | null | undefined;
@@ -113,6 +117,11 @@ const page = async ({searchParams} : SearchParamProps) => {
               </tbody>
             </table>
           </div>
+
+            
+
+
+
         </Suspense>
       </div>
     </main>
