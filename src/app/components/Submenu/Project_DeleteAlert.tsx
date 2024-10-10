@@ -22,15 +22,17 @@ const Project_DeleteAlert = () => {
         </AlertDialogTrigger>
         <AlertDialogContent>
             <AlertDialogHeader>
-            <AlertDialogTitle>Delete a Project?</AlertDialogTitle>
+            <AlertDialogTitle>Delete this Project?</AlertDialogTitle>
             <AlertDialogDescription>
                 This action cannot be undone. This will permanently delete the project
                 and its data will be removed from the system.
             </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction className='text-red-500'>Delete</AlertDialogAction>
+            <AlertDialogCancel onClick={(e) => {e.stopPropagation()}}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={(e) => {e.stopPropagation()}} className='text-red-500 bg-red-50 hover:bg-red-100'>
+              Delete
+            </AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
         </AlertDialog>
