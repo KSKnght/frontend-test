@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Modal from '../components/Modal'
 import { revalidatePath } from 'next/cache'
 import { HiDocumentText } from "react-icons/hi2"
+import { FaFilter } from "react-icons/fa6";
 
 
 
@@ -88,13 +89,25 @@ const page = async ({searchParams} : SearchParamProps) => {
                         <HiDocumentText className='w-10 h-10 mr-5 translate-y-[1rem] text-pink-600'/>
                         <h1 className='text-5xl font-bold mt-3 text-pink-600'>PROJECTS</h1>
                     </div>
-                    <div className='mx-20 my-4 px-5 py-2 rounded-xl bg-pink-600 text-white'>
-                        <i className="fi fi-rr-add pr-2 align-middle"></i>
-                        <Link 
-                            href={'/Projects/?show=true'}
-                            >
-                            Create New Project
-                        </Link>
+                    <div className='flex flex-row space-x-4 items-center'>
+                        <div className='flex flex-row space-x-1'>
+                            <div>
+                                <button className='p-[13px] bg-slate-100 hover:bg-slate-200 rounded-lg'>
+                                    <FaFilter className='text-slate-600'/>
+                                </button>
+                            </div>
+                            <div>
+                                <input type='text' placeholder='Search Projects' className='w-72 px-3 py-2 rounded-lg border focus:outline-pink-500'>
+                                </input>
+                            </div>
+                        </div>
+                        <div className='px-2 w-36 py-2 rounded-xl bg-pink-600 text-white'>
+                            <i className="fi fi-rr-add pr-2 align-middle justify-center"></i>
+                            <Link 
+                                href={'/Projects/?show=true'}
+                                >Create Project
+                            </Link>
+                        </div>
                     </div>
                 </div>
                 

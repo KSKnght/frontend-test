@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { IoIosAddCircle } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import Popover from "../Submenu/Project_Popover"
-import { Button } from "../UI/button"
+import { Button } from "../ui/button"
 
 const PhaseCard = ({Phase}) => {
   return (
-    <div className='h-auto w-64 rounded-lg bg-slate-100 ml-5 mt-2 mb-auto p-4 shadow-sm border'>
+    <div className='h-auto w-full rounded-lg bg-slate-100 ml-5 mt-2 mb-auto p-4 shadow-sm border'>
         <div className='flex flex-row justify-between'>
           <div className='flex flex-row justify-between'>
             <h1 className='mt-1 text-xl font-semibold text-pink-600 leading-tight'>{Phase.phaseName}</h1>

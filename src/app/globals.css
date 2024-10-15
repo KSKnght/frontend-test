@@ -6,7 +6,7 @@
 
 @layer components{
   .inputSubHeader {
-    height: 2rem;
+    height: 2.3rem;
     display: flex;
     border-width: 1px;
     border-color: rgb(226 232 240);

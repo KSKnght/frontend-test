@@ -11,7 +11,7 @@ import { FaCalendarCheck } from "react-icons/fa";
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 
 
-import { Separator } from "../UI/separator"
+import { Separator } from "../ui/separator"
 import Popover from "../Submenu/Project_Popover"
 
 

@@ -9,8 +9,8 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-  } from "../UI/alertdialog"
-import { Button } from "../UI/button";
+  } from "../ui/alertdialog"
+import { Button } from "../ui/button";
   
 
 const Project_DeleteAlert = () => {
@@ -18,7 +18,7 @@ const Project_DeleteAlert = () => {
     <div>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-            <Button onClick={(e) => {e.stopPropagation()}} className='text-red-500 hover:text-red-500 hover:bg-red-50' variant='ghost'>Delete</Button>
+            <Button onClick={(e) => {e.stopPropagation()}} className='h-8 text-red-500 hover:text-red-500 hover:bg-red-50' variant='ghost'>Delete</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
             <AlertDialogHeader>
