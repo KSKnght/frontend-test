@@ -1,4 +1,4 @@
-import {getProjects} from '@/actions/read'
+import {getProjects} from '@/actionsPrisma/read'
 import React from 'react'
 import ProjectsCard from './Cards/ProjectsCard'
 

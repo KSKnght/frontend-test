@@ -1,5 +1,5 @@
 
-import { getInfoProject, getPhases } from '@/actions/read'
+import { getInfoProject, getPhases } from '@/actionsPrisma/read'
 import Link from 'next/link'
 import React, { Suspense } from 'react'
 import ProjectsSidebar from '../../../components/ProjectsSidebar'

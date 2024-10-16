@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import Navbar from '../components/Navbar'
 // import ClientsCard from '../components/Cards/ClientsCard'
-import { getClients } from '@/actions/read';
+import { getClients } from '@/actionsPrisma/read';
 import Link from 'next/link';
 import Modal from '../components/Modal';
 import { createClient } from '@/actions/Create';
