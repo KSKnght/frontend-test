@@ -1,5 +1,5 @@
 import { getTask } from '@/actionsPrisma/read'
-import { updateTask } from '@/actions/Update';
+import { updateTask } from '@/actionsSupaBase/Update';
 import { redirect } from 'next/navigation';
 import React from 'react'
 

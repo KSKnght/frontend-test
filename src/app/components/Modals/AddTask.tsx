@@ -1,4 +1,4 @@
-import { createTask } from '@/actions/Create';
+import { createTask } from '@/actionsSupaBase/Create';
 import React from 'react'
 
 const AddTask = async ({data}) => {

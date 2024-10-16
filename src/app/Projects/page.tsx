@@ -1,13 +1,14 @@
 import React, { Suspense } from 'react'
 import Navbar from '../components/Navbar'
-import {getClients, getProjects} from '@/actionsPrisma/read'
-import {createProject} from '../../actionsPrisma/Create'
+import {getClients, getProjects} from '@/actionsSupabase/read'
+import {createProject} from '../../actionsSupaBase/Create'
 import ProjectsCard from '../components/Cards/ProjectsCard'
 import Link from 'next/link'
 import Modal from '../components/Modal'
 import { revalidatePath } from 'next/cache'
 import { HiDocumentText } from "react-icons/hi2"
 import { FaFilter } from "react-icons/fa6";
+import { redirect } from 'next/navigation'
 
 
 
@@ -19,7 +20,7 @@ const AddProject = async () => {
     const clients = await getClients()
 
     return (
-        <form action={async (e) => {'use server'; createProject(e); revalidatePath('/Projects')}}>
+        <form action={async (e) => {'use server'; createProject(e); redirect('/Projects')}}>
             <div className='flex flex-row justify-between space-x-3'>
                 <div>
                     <p className='subHeader'>Project Name</p>

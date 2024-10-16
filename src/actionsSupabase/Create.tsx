@@ -5,40 +5,48 @@ import prisma from "../lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Build, Design, DesignBuild } from "./TypeTemp";
+import { supabase } from "../lib/supabase";
 
 export async function createProject(FormData : FormData) {
     console.log(FormData)
     try {
-        const proj = await prisma.project.create({
-            data: {
-                name: FormData.get('name') as string,
-                type: FormData.get('type') as type,
-                projectAddress: FormData.get('address') as string,
-                startDate: FormData.get('startDate') + 'T00:00:00.000Z',
-                endDate: FormData.get('endDate') + 'T00:00:00.000Z',
-                progress: 'NOT_STARTED',
-                client: {
-                    connect: {
-                        id: Number(FormData.get('id'))
-                    }
-                }
+        const { data, error } = await supabase
+        .from('project')
+        .insert([
+            {
+            name: FormData.get('name'),
+            type: FormData.get('type'),
+            projectAddress: FormData.get('address'), // Use the appropriate column name from your table
+            startDate: new Date(FormData.get('startDate') + 'T00:00:00.000Z'),
+            endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
+            progress: 'NOT_STARTED',
+            clientID: Number(FormData.get('id')) // Assuming this is the foreign key in your projects table
             }
-        });
+        ]);
 
-        if (FormData.get('type') == 'BUILD') {
-            Build(proj.id);
-        }
-        else if (FormData.get('type') == 'DESIGN_BUILD') {
-            DesignBuild(proj.id)
-        }
-        else {
-            Design(proj.id)
+        if (error) {
+        console.error('Error creating project:', error);
+        } else {
+        console.log('Project created:', data);
         }
 
-        revalidatePath('/Project');
-        redirect('/Project');
+        // if (FormData.get('type') == 'BUILD') {
+        //     Build(proj.id);
+        // }
+        // else if (FormData.get('type') == 'DESIGN_BUILD') {
+        //     DesignBuild(proj.id)
+        // }
+        // else {
+        //     Design(proj.id)
+        // }
+
+        
+        
     } catch (err) {
         console.log(err)
+    } finally {
+        revalidatePath('/Project', "page");
+        revalidatePath('/Projects?show=true', "page");
     }
 }
 

@@ -1,4 +1,4 @@
-import { addSubCom } from '@/actions/Update';
+import { addSubCom } from '@/actionsSupaBase/Update';
 import { revalidatePath } from 'next/cache';
 import SubConCard from '../Cards/SubConCard'
 import React from 'react'

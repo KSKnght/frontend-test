@@ -1,6 +1,6 @@
 import React  from 'react'
 import MatCard from '../Cards/MatCard'
-import { addMaterial } from '@/actions/Update'
+import { addMaterial } from '@/actionsSupaBase/Update'
 import { revalidatePath } from 'next/cache'
 
 
