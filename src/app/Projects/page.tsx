@@ -15,6 +15,10 @@ import { revalidatePath } from 'next/cache'
 import { HiDocumentText } from "react-icons/hi2"
 import { FaFilter } from "react-icons/fa6";
 import { redirect } from 'next/navigation'
+<<<<<<< HEAD
+=======
+import EditProject from '../components/Modals/EditProject'
+>>>>>>> 41a7926 (minor edits)
 
 
 
@@ -26,7 +30,11 @@ const AddProject = async () => {
     const clients = await getClients()
 
     return (
+<<<<<<< HEAD
         <form action={async (e) => {'use server'; await createProject(e); redirect('/Projects')}}>
+=======
+        <form action={async (e) => {'use server'; createProject(e); revalidatePath('/Projects'); redirect('/Projects')}}>
+>>>>>>> 41a7926 (minor edits)
             <div className='flex flex-row justify-between space-x-3'>
                 <div>
                     <p className='subHeader'>Project Name</p>
@@ -81,11 +89,15 @@ const AddProject = async () => {
 const page = async ({searchParams} : SearchParamProps) => {
     const display = await getProjects();
     const show = searchParams?.show;
+    const edit = searchParams?.edit;
     
   return (
         <main className='flex'>
             {show && <Modal returnLink={'/Projects'} name={'Add Project'}>
                 <AddProject />
+            </Modal>}
+            {edit && <Modal returnLink={'/Projects'} name={'Edit Project'}>
+                <EditProject />
             </Modal>}
             <div>
                 <Navbar />
