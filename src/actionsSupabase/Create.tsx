@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Build, Design, DesignBuild } from "./TypeTemp";
 import { supabase } from "../lib/supabase";
+import { useOptimistic } from "react";
 
 export async function createProject(FormData : FormData) {
     console.log(FormData)
@@ -40,14 +41,12 @@ export async function createProject(FormData : FormData) {
         //     Design(proj.id)
         // }
 
-        
+        revalidatePath('/Project');
+        revalidatePath('/Projects?show=true');
         
     } catch (err) {
         console.log(err)
-    } finally {
-        revalidatePath('/Project', "page");
-        revalidatePath('/Projects?show=true', "page");
-    }
+    };
 }
 
 export async function addPhase(FormData : FormData, id: any) {
