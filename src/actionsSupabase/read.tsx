@@ -1,29 +1,38 @@
+import { supabase } from "@/lib/supabase";
 import prisma from "../lib/db";
 
 export async function getProjects() {
-    const data = await prisma.project.findMany({
-        include: {
-            client: {
-                select: {
-                    lastname: true,
-                    firstname: true,
-                    middlename: true,
-                    contactNum: true,
-                    emailAdd: true
-                }
-            }
-        },
-    });
+    const { data, error } = await supabase
+        .from('project')
+        .select(`
+            *,
+            client (
+                lastname,
+                firstname,
+                middlename,
+                contactNum,
+                emailAdd
+            )
+        `);
+
+    if (error) {
+        console.error('Error fetching projects:', error);
+        return;
+    }
 
     return data;
 }
 
 export async function getClients() {
-    const data = await prisma.client.findMany({
-        orderBy: {
-            id: 'asc'
-        }
-    });
+    const { data, error } = await supabase
+        .from('client') // Replace with your actual table name
+        .select('*') // You can specify specific columns if needed
+        .order('id', { ascending: true });
+
+    if (error) {
+        console.error('Error fetching clients:', error);
+        return;
+    }
 
     return data;
 }

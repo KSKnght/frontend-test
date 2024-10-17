@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import Navbar from '../components/Navbar'
 import {getClients, getProjects} from '@/actionsSupabase/read'
-import {createProject} from '../../actionsSupaBase/Create'
+import {createProject} from '../../actionsSupabase/Create'
 import ProjectsCard from '../components/Cards/ProjectsCard'
 import Link from 'next/link'
 import Modal from '../components/Modal'
