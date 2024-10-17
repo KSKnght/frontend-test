@@ -22,13 +22,15 @@ export async function createProject(FormData : FormData) {
             endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
             progress: 'NOT_STARTED',
             clientID: Number(FormData.get('id')) // Assuming this is the foreign key in your projects table
-            }
-        ]);
+            
+        }
+        ])
+        .select();
 
         if (error) {
         console.error('Error creating project:', error);
         } else {
-        console.log('Project created:', data);
+        console.log('Project created:' + data[0].id);
         }
 
         // if (FormData.get('type') == 'BUILD') {
