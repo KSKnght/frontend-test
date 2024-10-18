@@ -33,17 +33,17 @@ export async function createProject(FormData : FormData) {
         console.log('Project created:' + data[0].id);
         }
 
-        // if (FormData.get('type') == 'BUILD') {
-        //     Build(proj.id);
-        // }
-        // else if (FormData.get('type') == 'DESIGN_BUILD') {
-        //     DesignBuild(proj.id)
-        // }
-        // else {
-        //     Design(proj.id)
-        // }
+        if (FormData.get('type') == 'BUILD') {
+            Build(data[0].id);
+        }
+        else if (FormData.get('type') == 'DESIGN_BUILD') {
+            DesignBuild(data[0].id)
+        }
+        else {
+            Design(data[0].id)
+        }
 
-        revalidatePath('/Project');
+        revalidatePath('/Projects');
         revalidatePath('/Projects?show=true');
         
     } catch (err) {
