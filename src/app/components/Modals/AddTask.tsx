@@ -1,9 +1,9 @@
-import { createTask } from '@/actionsSupaBase/Create';
+import { createTask } from '@/actionsSupabase/Create';
 import React from 'react'
 
-const AddTask = async ({data}) => {
+const AddTask = async ({data, projID}) => {
     return (
-        <form action={async e => {'use server'; await createTask(e, data)}}>
+        <form action={async e => {'use server'; await createTask(e, data, projID)}}>
         <div className='flex flex-row justify-evenly space-x-3'>
             <div>
                 <p className='text-xs font-bold flex mb-1'>Priority</p>

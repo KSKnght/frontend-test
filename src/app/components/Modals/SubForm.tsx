@@ -1,11 +1,11 @@
-import { addSubCom } from '@/actionsSupaBase/Update';
+import { addSubCom } from '@/actionsSupabase/Update';
 import { revalidatePath } from 'next/cache';
 import SubConCard from '../Cards/SubConCard'
 import React from 'react'
 
 const SubForm = ({subCon, taskID, projID}) => {
   return (
-    <form action={async (e) => {'use server'; addSubCom(e, Number(taskID)); revalidatePath('/Project/'+projID+'/view');}}>
+    <form action={async (e) => {'use server'; await addSubCom(e, Number(taskID)); revalidatePath('/Projects/'+projID+'/view');}}>
         <div>
           <p className='flex text-xs font-bold mb-1'>Subcontractor Name</p>
           <input className='w-full flex border border-slate-200 focus:outline-pink-600 rounded-lg pl-1 text-sm'

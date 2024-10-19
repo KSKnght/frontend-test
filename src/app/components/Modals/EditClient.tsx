@@ -1,6 +1,6 @@
 import { revalidatePath } from 'next/cache';
-import { updateClient } from '@/actions/Update';
-import { showClient } from '@/actionsPrisma/read';
+import { updateClient } from '@/actionsSupabase/Update';
+import { showClient } from '@/actionsSupabase/read';
 import React from 'react'
 
 const EditClient = async ({data}) => {

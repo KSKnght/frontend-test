@@ -1,5 +1,5 @@
 import React from 'react';
-import { getMaterials, getSubcontracts, getTask } from '@/actionsPrisma/read'
+import { getMaterials, getSubcontracts, getTask } from '@/actionsSupabase/read'
 import AddMatSub from '../Modals/AddMatSub'
 
 const TaskDetails = async ({data, state, projID}) => {

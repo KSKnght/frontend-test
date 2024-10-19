@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react'
 import Navbar from '../components/Navbar'
 // import ClientsCard from '../components/Cards/ClientsCard'
-import { getClients } from '@/actionsPrisma/read';
+import { getClients } from '@/actionsSupabase/read';
 import Link from 'next/link';
 import Modal from '../components/Modal';
-import { createClient } from '@/actions/Create';
+import { createClient } from '@/actionsSupabase/Create';
 import { revalidatePath } from 'next/cache';
 import EditClient from '../components/Modals/EditClient'
 import { IoIosAddCircle } from 'react-icons/io';
@@ -24,7 +24,7 @@ type SearchParamProps = {
 
 const AddClient = async () => {
   return ( 
-    <form action={async (e) =>{'use server'; createClient(e); revalidatePath('/Clients')}}>
+    <form action={async (e) =>{'use server'; await createClient(e); revalidatePath('/Clients')}}>
       <div className='flex flex-row justify-evenly space-x-3'>
         <div>
           <p className='text-xs font-bold flex mb-1'>First Name</p>

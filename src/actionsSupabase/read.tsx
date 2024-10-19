@@ -17,7 +17,6 @@ export async function getProjects() {
 
     if (error) {
         console.error('Error fetching projects:', error);
-        return;
     }
 
     return data;
@@ -31,104 +30,126 @@ export async function getClients() {
 
     if (error) {
         console.error('Error fetching clients:', error);
-        return;
     }
 
     return data;
 }
 
 export async function getInfoProject(id:number) {
-    const data = await prisma.project.findFirst({
-        where: {
-            id
-        },
-        include: {
-            client: {
-                select: {
-                    lastname: true,
-                    firstname: true,
-                    middlename: true,
-                    contactNum: true,
-                    emailAdd: true
-                }
-            }
-        },
-    });
+    const { data, error } = await supabase
+    .from('project') // Replace 'projects' with your actual table name
+    .select(`
+        *,
+        client (
+            lastname,
+            firstname,
+            middlename,
+            contactNum,
+            emailAdd
+        )
+    `)
+    .eq('id', id) // Assuming 'id' is the project ID
+    .single(); // Use .single() if you expect only one record
+
+    if (error) {
+    console.error('Error fetching project:', error);
+    } else {
+    // console.log('Project data:', data);
+    }
     return data
 }
 
 export async function getPhases(id:number) {
-    const data = await prisma.phase.findMany({
-        where: {
-            project: {
-                id
-            }
-        },
-        include: {
-            phaseTasks: {
-                select: {
-                    id: true,
-                    taskName: true,
-                    description: true,
-                    progress: true,
-                    deadline: true,
+    const { data, error } = await supabase
+    .from('phase') // Replace 'phases' with your actual table name
+    .select(`
+        *,
+        phaseTasks: phaseTasks (
+            id,
+            taskName,
+            description,
+            progress,
+            deadline,
+            _phaseTasksTosubCon ( 
+                B: subCon (
+                    Name
+                )
+            ),
+            taskMat: taskMat (
+                qty,
+                unit,
+                materials (
+                name
+                )
+            )
+        )
+    `)
+    .eq('projectID', id) // Adjust if 'project_id' is not the actual foreign key column name
+    .order('priority', { ascending: true });
 
-                    subCon: {
-                        select: {
-                            Name: true
-                        }
-                    },
+    if (error) {
+    console.error('Error fetching phases:', error);
+    } else {
+    // console.log('Phases data:', data);
+    }
 
-                    taskMat: {
-                        select: {
-                            qty: true,
-                            unit: true,
-
-                            materials: {
-                                select: {
-                                    name: true,
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-    
-        },
-        orderBy: {
-            priority: 'asc'
-        }
-    });
     return data
 };
 
 export async function getTask(id:number) {
-    const data = await prisma.phaseTasks.findFirst({
-        where: {
-            id: id
-        }
-    });
+    const { data, error } = await supabase
+    .from('phaseTasks') // Replace 'phase_tasks' with your actual table name
+    .select('*') // Select all columns, or specify the columns you need
+    .eq('id', id) // Use the ID to filter the record
+    .single(); // Use .single() since you expect one record
+
+    if (error) {
+    console.error('Error fetching phase task:', error);
+    }
     return data;
 }
 
 export async function getMaterials() {
-    const data = await prisma.materials.findMany();
+    // const data = await prisma.materials.findMany();
+    const { data, error } = await supabase
+    .from('materials')
+    .select('*');
+
+    if (error) { 
+        console.log('Error fetching materials:', error)
+    }
 
     return data;
 }
 
 export async function getSubcontracts() {
-    const data = await prisma.subCon.findMany();
+    // const data = await prisma.subCon.findMany();
+
+    const { data, error } = await supabase
+    .from('subCon')
+    .select('*');
+
+    if (error) { 
+        console.log('Error fetching subCon:', error)
+    }
 
     return data;
 }
 
 export async function showClient(id: number) {
-    const data = await prisma.client.findFirst({
-        where: {
-            id: id
-        },
-    });
+    // const data = await prisma.client.findFirst({
+    //     where: {
+    //         id: id
+    //     },
+    // });
+    const { data, error } = await supabase
+    .from('client')
+    .select('*')
+    .eq('id', id)
+
+    if (error) { 
+        console.log('Error fetching client:', error)
+    }
 
     return data
 }

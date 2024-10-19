@@ -1,12 +1,12 @@
 import React  from 'react'
 import MatCard from '../Cards/MatCard'
-import { addMaterial } from '@/actionsSupaBase/Update'
+import { addMaterial } from '@/actionsSupabase/Update'
 import { revalidatePath } from 'next/cache'
 
 
 const MaterialsForm = ({materials, taskID, projID}) => {
     return (
-        <form action={async (e) => {'use server'; addMaterial(e, Number(taskID)); revalidatePath('/Project/'+projID+'/view');}}>
+        <form action={async (e) => {'use server'; await addMaterial(e, Number(taskID)); revalidatePath('/Projects/'+projID+'/view');}}>
             <div>
                 <p className='flex text-xs font-bold'>Material Name</p>
                 <input className='mt-1 w-full flex border border-slate-200 focus:outline-pink-600 rounded-lg pl-1 text-sm'

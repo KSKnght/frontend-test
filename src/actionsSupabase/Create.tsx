@@ -22,7 +22,6 @@ export async function createProject(FormData : FormData) {
             endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
             progress: 'NOT_STARTED',
             clientID: Number(FormData.get('id')) // Assuming this is the foreign key in your projects table
-            
         }
         ])
         .select();
@@ -53,18 +52,20 @@ export async function createProject(FormData : FormData) {
 
 export async function addPhase(FormData : FormData, id: any) {
     try {
-        await prisma.phase.create({
-            data: {
-                priority: Number(FormData.get('priority')),
-                phaseName: FormData.get('phaseName') as string,
-                progress: 'NOT_STARTED',
-                project: {
-                    connect: {
-                        id: id
-                    }
-                }
-            }
-        })
+        const { data, error } = await supabase
+        .from('phase')
+        .insert({
+            priority: Number(FormData.get('priority')),
+            phaseName: FormData.get('phaseName'),
+            progress: 'NOT_STARTED',
+            projectID: id
+        });
+
+        if (error) {
+        console.error('Error inserting phase:', error);
+        } else {
+        console.log('Phase created:', data);
+        }
     }
     catch (err) {
         console.log(err)
@@ -72,45 +73,54 @@ export async function addPhase(FormData : FormData, id: any) {
     revalidatePath('/Projects/' + id + '/view');
 };
 
-export async function createTask(FormData : FormData, id: any) {
+export async function createTask(FormData : FormData, id: any, projID: number) {
     try {
-        await prisma.phaseTasks.create({
-            data: {
-                priority: Number(FormData.get('priority')),
-                taskName: FormData.get('taskName') as string,
-                description: FormData.get('description') as string,
-                deadline: FormData.get('deadline') + 'T00:00:00.000Z',
-                progress: 'NOT_STARTED',
-                phase: {
-                    connect: {
-                        id: Number(id)
-                    }
-                }
-            }
-        })
+        const { data, error } = await supabase
+        .from('phaseTasks') // Replace 'phase_tasks' with your actual table name
+        .insert({
+            priority: Number(FormData.get('priority')),
+            taskName: FormData.get('taskName'), // Use snake_case for column names
+            description: FormData.get('description'),
+            deadline: FormData.get('deadline') + 'T00:00:00.000Z', // Format the deadline
+            progress: 'NOT_STARTED',
+            phaseID: Number(id) // Replace with the actual foreign key column name
+        });
+
+        if (error) {
+        console.error('Error inserting phase task:', error);
+        } else {
+        console.log('Phase task created:', data);
+        }
     }
     catch (err) {
         console.log(err)
     }
 
-    revalidatePath('/Projects/' + id + '/view');
+    revalidatePath('/Projects/' + projID + '/view');
+    redirect('/Projects/' + projID + '/view')
 }
 
 export async function createClient(FormData : FormData) {
     try {
-        await prisma.client.create({
-            data: {
-                lastname: FormData.get('lastname') as string,
-                firstname: FormData.get('firstname') as string,
-                middlename: FormData.get('middlename') as string,
-                contactNum: FormData.get('contactNum') as string,
-                emailAdd: FormData.get('emailAdd') as string
-            }
-        })
+        const { data, error } = await supabase
+        .from('client') // Replace 'clients' with your actual table name
+        .insert({
+            lastname: FormData.get('lastname'),
+            firstname: FormData.get('firstname'),
+            middlename: FormData.get('middlename'),
+            contactNum: FormData.get('contactNum'), // Use snake_case for column names
+            emailAdd: FormData.get('emailAdd') // Use snake_case for column names
+        });
+
+        if (error) {
+        console.error('Error inserting client:', error);
+        } else {
+        console.log('Client created:', data);
+        }
     }
     catch (err) {
         console.log(err)
     };
 
-    revalidatePath('/Clients')
+    revalidatePath('/Clients');
 }

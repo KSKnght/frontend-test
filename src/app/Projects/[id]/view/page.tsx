@@ -1,5 +1,5 @@
 
-import { getInfoProject, getPhases } from '@/actionsPrisma/read'
+import { getInfoProject, getPhases } from '@/actionsSupabase/read'
 import Link from 'next/link'
 import React, { Suspense } from 'react'
 import ProjectsSidebar from '../../../components/ProjectsSidebar'
@@ -22,13 +22,6 @@ type SearchParamProps = {
   searchParams: Record<string, string> | null | undefined;
 };
 
-const EdiTask = async ({addPhase}) => {
-  console.log(addPhase)
-  return (
-    <div>Edit Task</div>
-  )
-}
-
 const page = async ({params, searchParams}:{ params: { id: string }, searchParams : SearchParamProps}) => {
   const id = params.id;
   const addPhase = searchParams?.addPhase;
@@ -49,7 +42,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
             </Modal>}
 
       {phase && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Add Task'}>
-                <AddTask data={phase} />
+                <AddTask data={phase} projID={project.id} />
             </Modal>}
       {edittask && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Edit Task'}>
                 <EditTask data={edittask} project={project.id}/>

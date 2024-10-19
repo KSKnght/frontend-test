@@ -1,5 +1,5 @@
-import { getTask } from '@/actionsPrisma/read'
-import { updateTask } from '@/actionsSupaBase/Update';
+import { getTask } from '@/actionsSupabase/read'
+import { updateTask } from '@/actionsSupabase/Update';
 import { redirect } from 'next/navigation';
 import React from 'react'
 
@@ -16,7 +16,7 @@ const EditTask = async ({data, project}) => {
                 <div>
                     <p className='text-xs font-bold flex mb-1'>Deadline</p>
                     <input className='w-30 flex border border-slate-200 focus:outline-pink-600 rounded-lg pl-1 text-sm'
-                           type="date" name='deadline' defaultValue={task.deadline.toISOString().slice(0,10)}/>
+                           type="date" name='deadline' defaultValue={new Date(task.deadline).toISOString().slice(0,10)}/>
                 </div>
             </div>
             <div>

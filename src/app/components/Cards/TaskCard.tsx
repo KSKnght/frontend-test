@@ -27,7 +27,7 @@ const SubConList = ({subcon}) => {
     <div>
       <h3 className='mt-3 text-xs font-bold'>Subcontractors</h3>
       {subcon.map((sub, i) => {
-        return <li className='text-xs' key={i}>{sub.Name}</li>
+        return <li className='text-xs' key={i}>{sub.B.Name}</li>
       })}
     </div>
   )
@@ -64,7 +64,7 @@ const TaskCard = ({tasks, data}) => {
           
         </div>
         <MatList tasks={tasks.taskMat} />
-        <SubConList subcon={tasks.subCon} />
+        <SubConList subcon={tasks._phaseTasksTosubCon} />
     </div>
   )
 }
