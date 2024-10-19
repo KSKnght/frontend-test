@@ -6,7 +6,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Router } from "next/router";
 
-
 export async function updateProject(FormData : FormData, id: number) {
     await prisma.project.update({
         where: {id},
