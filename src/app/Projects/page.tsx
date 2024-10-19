@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/Sidebar'
 import {getClients, getProjects} from '@/actions/read'
 import {createProject} from '../../actions/Create'
 import ProjectsCard from '../components/Cards/ProjectsCard'

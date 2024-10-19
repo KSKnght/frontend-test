@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -20,8 +20,8 @@ model client {
 
 model materials {
   id      Int       @id @default(autoincrement())
-  name    String    @db.VarChar(40) @unique
-  unit     unit
+  name    String    @unique @db.VarChar(40)
+  unit    unit
   taskMat taskMat[]
 }
 
@@ -42,10 +42,10 @@ model phaseTasks {
   phaseID     Int
   progress    progessField
   deadline    DateTime     @db.Date
-  phase       phase        @relation(fields: [phaseID], references: [id])
   priority    Int
+  phase       phase        @relation(fields: [phaseID], references: [id])
   taskMat     taskMat[]
-  subCon      subCon[]
+  subCon      subCon[]     @relation("phaseTasksTosubCon")
 }
 
 model projMat {
@@ -71,8 +71,8 @@ model project {
 
 model subCon {
   id         Int          @id @default(autoincrement())
-  Name       String       @db.VarChar(40) @unique
-  phaseTasks phaseTasks[]
+  Name       String       @unique @db.VarChar(40)
+  phaseTasks phaseTasks[] @relation("phaseTasksTosubCon")
 }
 
 model taskMat {
