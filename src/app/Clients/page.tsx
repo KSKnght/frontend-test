@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/Sidebar'
 // import ClientsCard from '../components/Cards/ClientsCard'
 import { getClients } from '@/actionsSupabase/read';
 import Link from 'next/link';

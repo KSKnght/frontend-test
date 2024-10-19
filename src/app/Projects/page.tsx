@@ -1,7 +1,13 @@
 import React, { Suspense } from 'react'
+<<<<<<< HEAD
 import Navbar from '../components/Navbar'
 import {getClients, getProjects} from '@/actionsSupabase/read'
 import {createProject} from '../../actionsSupabase/Create'
+=======
+import Navbar from '../components/Sidebar'
+import {getClients, getProjects} from '@/actions/read'
+import {createProject} from '../../actions/Create'
+>>>>>>> d051dc5 (Collapsible Sidebar)
 import ProjectsCard from '../components/Cards/ProjectsCard'
 import Link from 'next/link'
 import Modal from '../components/Modal'

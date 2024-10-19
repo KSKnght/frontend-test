@@ -42,10 +42,10 @@ model phaseTasks {
   phaseID     Int
   progress    progessField
   deadline    DateTime     @db.Date
-  phase       phase        @relation(fields: [phaseID], references: [id])
   priority    Int
+  phase       phase        @relation(fields: [phaseID], references: [id])
   taskMat     taskMat[]
-  subCon      subCon[]
+  subCon      subCon[]     @relation("phaseTasksTosubCon")
 }
 
 model projMat {
@@ -72,7 +72,11 @@ model project {
 model subCon {
   id         Int          @id @default(autoincrement())
   Name       String       @unique @db.VarChar(40)
+<<<<<<< HEAD
   phaseTasks phaseTasks[]
+=======
+  phaseTasks phaseTasks[] @relation("phaseTasksTosubCon")
+>>>>>>> d051dc5 (Collapsible Sidebar)
 }
 
 model taskMat {
