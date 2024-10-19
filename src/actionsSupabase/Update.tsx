@@ -27,16 +27,29 @@ export async function updateProject(FormData : FormData, id: number) {
     redirect('/Project');
 };
 export async function updateTask(FormData : FormData, id: number, projID: number) {
-    await prisma.phaseTasks.update({
-        where: {id},
-        data: {
-            taskName: FormData.get('taskName') as string,
-            description: FormData.get('description') as string,
-            deadline: FormData.get('deadline') + 'T00:00:00.000Z',
-        }
-    });
-    revalidatePath('/Project');
-    redirect('/Project');
+    try {
+        console.log('Updating task with ID:', id);
+        console.log('FormData:', {
+            taskName: FormData.get('taskName'),
+            description: FormData.get('description'),
+            deadline: FormData.get('deadline')
+        });
+
+        await prisma.phaseTasks.update({
+            where: {id},
+            data: {
+                taskName: FormData.get('taskName') as string,
+                description: FormData.get('description') as string,
+                deadline: FormData.get('deadline') + 'T00:00:00.000Z',
+            }
+        });
+
+    } catch (err) {
+        console.error('Error updating task:', err);
+    }
+
+    await revalidatePath('/Projects/' + projID + '/view');
+    redirect('/Projects/' + projID + '/view')
 };
 
 export async function addMaterial(FormData : FormData, taskID : number) {

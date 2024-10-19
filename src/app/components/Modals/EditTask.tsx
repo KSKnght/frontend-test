@@ -6,7 +6,7 @@ import React from 'react'
 const EditTask = async ({data, project}) => {
     const task = await getTask(Number(data));
     return (
-        <form action={async e => {'use server'; updateTask(e, task.id, project); redirect('/Projects/' + project + '/view')}}>
+        <form action={async e => {'use server'; await updateTask(e, task.id, project); redirect('/Projects/' + project + '/view')}}>
             <div className='flex flex-row justify-evenly space-x-3'>
                 <div>
                     <p className='text-xs font-bold flex mb-1'>Task Name</p>
