@@ -21,7 +21,7 @@ const TaskDetails = async ({data, state, projID}) => {
                 </div>
                 <div className='mt-3'>
                     <p className='text-xs font-bold flex mb-1'>Deadline</p>
-                    <label className='w-64 h-auto flex rounded-lg pl-1 text-sm'>{task.deadline.toISOString().slice(0,10)}</label>
+                    <label className='w-64 h-auto flex rounded-lg pl-1 text-sm'>{new Date(task.deadline).toISOString().slice(0,10)}</label>
                 </div>
             </div>
         </div>
