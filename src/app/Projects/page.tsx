@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react'
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Navbar from '../components/Navbar'
 import {getClients, getProjects} from '@/actionsSupabase/read'
 import {createProject} from '../../actionsSupabase/Create'
@@ -8,17 +9,39 @@ import Navbar from '../components/Sidebar'
 import {getClients, getProjects} from '@/actions/read'
 import {createProject} from '../../actions/Create'
 >>>>>>> d051dc5 (Collapsible Sidebar)
+=======
+
+import Navbar from '../components/Sidebar'
+>>>>>>> 01fbe5d (UI Update 5)
 import ProjectsCard from '../components/Cards/ProjectsCard'
 import Link from 'next/link'
 import Modal from '../components/Modal'
+import EditProject from '../components/Modals/EditProject'
+
+import {getClients, getProjects} from '@/actions/read'
+import {createProject} from '../../actions/Create'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+
 import { HiDocumentText } from "react-icons/hi2"
 import { FaFilter } from "react-icons/fa6";
+<<<<<<< HEAD
 import { redirect } from 'next/navigation'
 <<<<<<< HEAD
 =======
 import EditProject from '../components/Modals/EditProject'
 >>>>>>> 41a7926 (minor edits)
+=======
+import { HiPlusCircle } from "react-icons/hi";
+
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+
+
+
+
+>>>>>>> 01fbe5d (UI Update 5)
 
 
 
@@ -36,10 +59,9 @@ const AddProject = async () => {
         <form action={async (e) => {'use server'; createProject(e); revalidatePath('/Projects'); redirect('/Projects')}}>
 >>>>>>> 41a7926 (minor edits)
             <div className='flex flex-row justify-between space-x-3'>
-                <div>
-                    <p className='subHeader'>Project Name</p>
-                    <input className='inputSubHeader inputSubHeader:focus w-[22rem]'
-                           type="text" name='name' placeholder=''/>
+                <div className="grid w-full gap-1.5">
+                    <Label className='font-bold text-xs flex'>Project Name</Label>
+                    <Input type='text' name='name' />
                 </div>
                 <div>
                     <p className='subHeader'>Project Type</p>
@@ -58,9 +80,9 @@ const AddProject = async () => {
             </div>
             
             <div className='flex flex-row justify-between space-x-3 mt-3'>
-                <div>
-                    <p className='subHeader'>Address</p>
-                    <input className='inputSubHeader inputSubHeader:focus w-[22rem]' type="text" name='address' placeholder='Address'/>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Label className='font-bold text-xs flex'>Project Address</Label>
+                    <Input type='text' name='address' className='w-80' />
                 </div>
                 <div>
                     <p className='subHeader'>Client</p>
@@ -77,7 +99,6 @@ const AddProject = async () => {
                 </div>
             </div>
             
-
             <button className='submitButton' type='submit'>
                 Create Project
             </button>
@@ -102,13 +123,13 @@ const page = async ({searchParams} : SearchParamProps) => {
             <div>
                 <Navbar />
             </div>
-            <div className='pt-2 h-screen w-full pr-16'>
+            <div className='h-screen w-full'>
                 <div className='mb-6 mt-4 space-x-56 flex justify-between'>
                     <div className='flex flex-row ml-10'>
-                        <HiDocumentText className='w-10 h-10 mr-5 translate-y-[1rem] text-pink-600'/>
-                        <h1 className='text-5xl font-bold mt-3 text-pink-600'>PROJECTS</h1>
+                        <HiDocumentText className='w-7 h-7 mr-3 translate-y-[1rem] text-pink-600'/>
+                        <h1 className='text-3xl font-black mt-3 text-pink-600'>PROJECTS</h1>
                     </div>
-                    <div className='flex flex-row space-x-4 items-center'>
+                    <div className='flex flex-row space-x-4 items-center pr-11'>
                         <div className='flex flex-row space-x-1'>
                             <div>
                                 <button className='p-[13px] bg-slate-100 hover:bg-slate-200 rounded-lg'>
@@ -116,17 +137,15 @@ const page = async ({searchParams} : SearchParamProps) => {
                                 </button>
                             </div>
                             <div>
-                                <input type='text' placeholder='Search Projects' className='w-72 px-3 py-2 rounded-lg border focus:outline-pink-500'>
-                                </input>
+                                <Input placeholder='Search Project' className='w-96'/>
                             </div>
                         </div>
-                        <div className='px-2 w-36 py-2 rounded-xl bg-pink-600 text-white'>
-                            <i className="fi fi-rr-add pr-2 align-middle justify-center"></i>
-                            <Link 
-                                href={'/Projects/?show=true'}
-                                >Create Project
+                        <Button asChild className='bg-pink-600 hover:bg-pink-700'>
+                            <Link href='/Projects/?show=true'>
+                                <HiPlusCircle />
+                                Create Project
                             </Link>
-                        </div>
+                        </Button>
                     </div>
                 </div>
                 

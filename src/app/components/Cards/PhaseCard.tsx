@@ -1,10 +1,8 @@
+
 import React from 'react'
 import TaskCard from './TaskCard'
 import Link from 'next/link'
 import { IoIosAddCircle } from "react-icons/io";
-import { MdEdit } from "react-icons/md";
-import Popover from "../Submenu/Project_Popover"
-import { Button } from "../ui/button"
 
 const PhaseCard = ({Phase}) => {
   return (

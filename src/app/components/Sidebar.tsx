@@ -5,12 +5,9 @@ import React, {useState } from 'react'
 import { HiUser } from "react-icons/hi";
 import { HiDocumentText } from "react-icons/hi2";
 import { HiOutlineMenu } from "react-icons/hi";
-import { createContext } from 'react';
 
-const SideBarContext = createContext
 export default function Navbar() {
   const [expanded, setExpanded] = useState(true)
-  const [active] = useState(false)
 
   return(
     <aside className="h-screen">
@@ -30,8 +27,7 @@ export default function Navbar() {
         </div>
         
         <div className='px-3'>
-          <li className={`${active ? 'bg-pink-100 text-pink-800' : 'hover:bg-slate-100 text-slate-800'}
-             relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors`}>
+          <li className='relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer text-slate-800 transition-colors hover:bg-slate-100'>
               <Link href='/Projects' className='flex'>
                 <HiDocumentText className='w-5 h-5'/>
                 <span className={`${expanded ? 'w-0' : 'w-[11rem] ml-5'}
@@ -40,8 +36,7 @@ export default function Navbar() {
                 </span>
               </Link>
           </li>
-          <li className={`${active ? 'bg-pink-100 text-pink-800' : 'hover:bg-slate-100 text-slate-800'}
-             relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors`}>
+          <li className='relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer text-slate-800 transition-colors hover:bg-slate-100'>
               <Link href='/Clients' className='flex'>
                 <HiUser className='w-5 h-5'/>
                 <span className={`${expanded ? 'w-0' : 'w-[11rem] ml-5'}

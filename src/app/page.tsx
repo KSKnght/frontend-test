@@ -9,7 +9,6 @@ export default async function Home() {
   return (
     <main className='flex flex-row'>
       <div className="flex flex-col">
-        <Navbar />
       </div>
       
     </main>
