@@ -26,7 +26,7 @@ export default function Navbar() {
           </button>
         </div>
         
-        <div className='px-3'>
+        <div className='px-3'>  
           <li className='relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer text-slate-800 transition-colors hover:bg-slate-100'>
               <Link href='/Projects' className='flex'>
                 <HiDocumentText className='w-5 h-5'/>

@@ -23,7 +23,7 @@ const PhaseCard = ({Phase}) => {
           <h2>{Phase.progress}</h2>
         </div>
         
-        <div>
+        <div className='w-auto h-auto'>
           {
               Phase.phaseTasks.map((task, i) => {
                 return <TaskCard tasks={task} data={Phase.projectID} key={i}/>

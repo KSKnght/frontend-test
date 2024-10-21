@@ -36,7 +36,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
 
   console.log()
   return (
-    <div className=' flex flex-row overflow-x-auto'>
+    <div className=' flex flex-row overflow-x-auto h-screen'>
       {addPhase && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Add Phase'}>
                 <AddPhase data={project.id} />
             </Modal>}
@@ -69,7 +69,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
         </div>
         
         <Suspense fallback={'loading'}>
-          <div className='flex flex-row w-screen overflow-x-scroll no-scrollbar mt-20'>
+          <div className='flex flex-row w-screen overflow-x-scroll no-scrollbar mt-[4.8025rem] '>
             {phaseTasks.map((phase, i) => {
                 return <PhaseCard Phase={phase} key={i}/>
             })}

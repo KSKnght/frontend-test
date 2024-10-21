@@ -21,6 +21,9 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 
 
+
+
+
 type SearchParamProps = {
     searchParams: Record<string, string> | null | undefined;
   };
@@ -96,10 +99,10 @@ const page = async ({searchParams} : SearchParamProps) => {
                 <Navbar />
             </div>
             <div className='h-screen w-full'>
-                <div className='mb-6 mt-4 space-x-56 flex justify-between'>
-                    <div className='flex flex-row ml-10'>
-                        <HiDocumentText className='w-7 h-7 mr-3 translate-y-[1rem] text-pink-600'/>
-                        <h1 className='text-3xl font-black mt-3 text-pink-600'>PROJECTS</h1>
+                <div className='mb-5 space-x-56 flex justify-between border-b py-5'>
+                    <div className='flex flex-row ml-10 -translate-y-1'>
+                        <HiDocumentText className='w-8 h-8 mr-3 translate-y-[1rem] text-pink-600'/>
+                        <h1 className='text-4xl font-black mt-3 text-pink-600'>PROJECTS</h1>
                     </div>
                     <div className='flex flex-row space-x-4 items-center pr-11'>
                         <div className='flex flex-row space-x-1'>
@@ -122,8 +125,8 @@ const page = async ({searchParams} : SearchParamProps) => {
                 </div>
                 
                 <Suspense>
-                    <div className='h-[calc(100vh-130px)] overflow-y-scroll'>
-                        <ul className='grid grid-cols-2 pr-8'>
+                    <div className='h-[calc(100vh-130px)] overflow-y-scroll -translate-y-5'>
+                        <ul className='grid grid-cols-2 gap-6 p-6'>
                             {display.map((display, i) => {
                                 return <li key={i}><ProjectsCard data={display}/></li>
                             })}
