@@ -22,7 +22,7 @@ import Popover from "../Submenu/Project_Popover"
 const ProjectsCard = ({data}) => {
   const router = useRouter()
   return (
-    <div className='mt-4 mb-6 ml-12 w-auto h-64 items-center bg-slate-100 rounded-3xl p-7 shadow-sm border 
+    <div className='mt-4 mb-6 ml-12 w-auto h-64 items-center bg-slate-100 rounded-md p-7 shadow-sm border 
                     hover:border-pink-600 hover:border-opacity-50 transition-colors ease-in-out' onClick={(e) => {e.stopPropagation(); e.preventDefault(); router.push('/Projects/'+ data.id+'/view')}}>
       <div className='flex flex-row items-center w-auto justify-between'>
         <h1 className=' w-full text-3xl font-semibold text-pink-600'>
