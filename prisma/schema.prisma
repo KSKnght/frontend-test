@@ -11,7 +11,11 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
   // directUrl = env("DIRECT_URL")
+<<<<<<< HEAD
 >>>>>>> fae810b (gi fix lng nko kay syntax error sa linux)
+=======
+>>>>>>> fae810b823fb8076fa4fb4a6b1e96babb568f037
+>>>>>>> bf73afc77bb7730d1ae5b97948bbbbdf3dcd948e
 }
 
 model client {
@@ -79,10 +83,14 @@ model subCon {
   id         Int          @id @default(autoincrement())
   Name       String       @unique @db.VarChar(40)
 <<<<<<< HEAD
+<<<<<<< HEAD
   phaseTasks phaseTasks[]
 =======
   phaseTasks phaseTasks[] @relation("phaseTasksTosubCon")
 >>>>>>> d051dc5 (Collapsible Sidebar)
+=======
+  phaseTasks phaseTasks[] @relation("phaseTasksTosubCon")
+>>>>>>> bf73afc77bb7730d1ae5b97948bbbbdf3dcd948e
 }
 
 model taskMat {

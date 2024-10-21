@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Navbar from '../components/Navbar'
 import {getClients, getProjects} from '@/actionsSupabase/read'
 import {createProject} from '../../actionsSupabase/Create'
@@ -13,6 +14,10 @@ import {createProject} from '../../actions/Create'
 
 import Navbar from '../components/Sidebar'
 >>>>>>> 01fbe5d (UI Update 5)
+=======
+
+import Navbar from '../components/Sidebar'
+>>>>>>> bf73afc77bb7730d1ae5b97948bbbbdf3dcd948e
 import ProjectsCard from '../components/Cards/ProjectsCard'
 import Link from 'next/link'
 import Modal from '../components/Modal'
@@ -26,12 +31,15 @@ import { redirect } from 'next/navigation'
 import { HiDocumentText } from "react-icons/hi2"
 import { FaFilter } from "react-icons/fa6";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { redirect } from 'next/navigation'
 <<<<<<< HEAD
 =======
 import EditProject from '../components/Modals/EditProject'
 >>>>>>> 41a7926 (minor edits)
 =======
+=======
+>>>>>>> bf73afc77bb7730d1ae5b97948bbbbdf3dcd948e
 import { HiPlusCircle } from "react-icons/hi";
 
 import { Input } from "@/components/ui/input"
@@ -41,7 +49,10 @@ import { Label } from "@/components/ui/label"
 
 
 
+<<<<<<< HEAD
 >>>>>>> 01fbe5d (UI Update 5)
+=======
+>>>>>>> bf73afc77bb7730d1ae5b97948bbbbdf3dcd948e
 
 
 
@@ -54,10 +65,14 @@ const AddProject = async () => {
 
     return (
 <<<<<<< HEAD
+<<<<<<< HEAD
         <form action={async (e) => {'use server'; await createProject(e); redirect('/Projects')}}>
 =======
         <form action={async (e) => {'use server'; createProject(e); revalidatePath('/Projects'); redirect('/Projects')}}>
 >>>>>>> 41a7926 (minor edits)
+=======
+        <form action={async (e) => {'use server'; createProject(e); revalidatePath('/Projects'); redirect('/Projects')}}>
+>>>>>>> bf73afc77bb7730d1ae5b97948bbbbdf3dcd948e
             <div className='flex flex-row justify-between space-x-3'>
                 <div className="grid w-full gap-1.5">
                     <Label className='font-bold text-xs flex'>Project Name</Label>
