@@ -30,7 +30,7 @@ export async function createProject(FormData : FormData) {
         console.error('Error creating project:', error);
         } else {
         console.log('Project created:' + data[0].id);
-        }
+        } 
 
         if (FormData.get('type') == 'BUILD') {
             Build(data[0].id);
@@ -100,27 +100,67 @@ export async function createTask(FormData : FormData, id: any, projID: number) {
     redirect('/Projects/' + projID + '/view')
 }
 
-export async function createClient(FormData : FormData) {
+export async function createClient(FormData: FormData) {
     try {
+        const lastname = FormData.get('lastname');
+        const firstname = FormData.get('firstname');
+        const middlename = FormData.get('middlename');
+        const contactNum = FormData.get('contactNum');
+        const emailAdd = FormData.get('emailAdd');
+
+        // Validate required fields
+        const validationError = validateRequiredFields({ lastname, firstname, contactNum, emailAdd });
+        if (validationError) {
+            console.error(validationError);
+            return; // Exit the function if validation fails
+        }
+
+        // Additional validation (example: email format)
+        const emailError = validateEmail(emailAdd);
+        if (emailError) {
+            console.error(emailError);
+            return; // Exit if email is invalid
+        }
+
+        // Insert into the database
         const { data, error } = await supabase
-        .from('client') // Replace 'clients' with your actual table name
-        .insert({
-            lastname: FormData.get('lastname'),
-            firstname: FormData.get('firstname'),
-            middlename: FormData.get('middlename'),
-            contactNum: FormData.get('contactNum'), // Use snake_case for column names
-            emailAdd: FormData.get('emailAdd') // Use snake_case for column names
-        });
+            .from('client') // Replace 'client' with your actual table name
+            .insert({
+                lastname,
+                firstname,
+                middlename,
+                contactNum, // Use snake_case for column names
+                emailAdd // Use snake_case for column names
+            });
 
         if (error) {
-        console.error('Error inserting client:', error);
+            console.error('Error inserting client:', error);
         } else {
-        console.log('Client created:', data);
+            console.log('Client created:', data);
         }
+    } catch (err) {
+        console.log(err);
     }
-    catch (err) {
-        console.log(err)
-    };
 
     revalidatePath('/Clients');
 }
+
+function validateRequiredFields({ lastname, firstname, contactNum, emailAdd }) {
+    let errors = [];
+    
+    if (!lastname) errors.push('Last name is required');
+    if (!firstname) errors.push('First name is required');
+    if (!contactNum) errors.push('Contact number is required');
+    if (!emailAdd) errors.push('Email address is required');
+
+    return errors.length > 0 ? errors.join('. ') : null; // Join errors into a single message
+}
+
+function validateEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        return 'Invalid email format';
+    }
+    return null; // No errors
+}
+
