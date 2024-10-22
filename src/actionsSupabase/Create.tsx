@@ -115,6 +115,13 @@ export async function createClient(FormData: FormData) {
             return; // Exit the function if validation fails
         }
 
+        // Validate contact number
+        const contactError = validateContactNumber(contactNum);
+        if (contactError) {
+            console.error(contactError);
+            return; // Exit if contact number is invalid
+        }
+        
         // Additional validation (example: email format)
         const emailError = validateEmail(emailAdd);
         if (emailError) {
@@ -156,6 +163,14 @@ function validateRequiredFields({ lastname, firstname, contactNum, emailAdd }) {
     return errors.length > 0 ? errors.join('. ') : null; // Join errors into a single message
 }
 
+function validateContactNumber(contactNum) {
+    const contactPattern = /^\d{11}$/; // Example: Validate for exactly 10 digits
+    if (!contactPattern.test(contactNum)) {
+        return 'Contact number must be a 11-digit number';
+    }
+    return null; // No errors
+}
+
 function validateEmail(email) {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
@@ -163,4 +178,5 @@ function validateEmail(email) {
     }
     return null; // No errors
 }
+
 
