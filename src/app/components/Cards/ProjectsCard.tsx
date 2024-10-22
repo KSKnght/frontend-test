@@ -29,7 +29,7 @@ const ProjectsCard = ({data}) => {
   return (
 
     <div>
-        <Card className='bg-slate-100 rounded-md shadow-sm border hover:border-pink-600 hover:border-opacity-50 transition-colors ease-in-out'
+        <Card className='bg-slate-100 rounded-xl shadow-sm border hover:border-pink-600 hover:border-opacity-50 transition-colors ease-in-out'
               onClick={(e) => {e.stopPropagation(); e.preventDefault(); router.push('/Projects/'+ data.id+'/view')}}>
           <CardHeader>
             <CardTitle>
@@ -38,7 +38,7 @@ const ProjectsCard = ({data}) => {
                   {data.name}
                 </h1>
                 <div>
-                  <p className='text-sm bg-red-400 text-red-900 px-3 py-2 rounded-full'>{data.progress}</p>
+                  <p className='text-sm bg-red-400 text-red-900 px-3 py-2 rounded-full ml-8'>{data.progress}</p>
                 </div>
                 <Popover />
               </div>
