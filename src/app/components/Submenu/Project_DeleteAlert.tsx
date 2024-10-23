@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { startTransition } from 'react'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -11,9 +11,10 @@ import {
     AlertDialogTrigger,
   } from "../ui/alertdialog"
 import { Button } from "../ui/button";
+import { softdelProject } from '@/actionsSupabase/Delete';
   
 
-const Project_DeleteAlert = () => {
+const Project_DeleteAlert = ({id}) => {
   return (
     <div>
       <AlertDialog>
@@ -30,7 +31,9 @@ const Project_DeleteAlert = () => {
             </AlertDialogHeader>
             <AlertDialogFooter>
             <AlertDialogCancel onClick={(e) => {e.stopPropagation()}}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={(e) => {e.stopPropagation()}} className='text-red-500 bg-red-50 hover:bg-red-100'>
+            <AlertDialogAction onClick={(e) => {e.stopPropagation(); startTransition(async () => {
+             await softdelProject(id);
+           })}} className='text-red-500 bg-red-50 hover:bg-red-100'>
               Delete
             </AlertDialogAction>
             </AlertDialogFooter>

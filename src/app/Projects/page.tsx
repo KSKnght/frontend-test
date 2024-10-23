@@ -143,6 +143,7 @@ const page = async ({searchParams} : SearchParamProps) => {
                     <div className='h-[calc(100vh-130px)] overflow-y-scroll -translate-y-5'>
                         <ul className='grid gap-6 p-6 min-[800px]:grid-cols-2 max-[1920px]:grid-cols-1'>
                             {display.map((display, i) => {
+                                if (display.isDeleted == false)
                                 return <li key={i}><ProjectsCard data={display}/></li>
                             })}
                         </ul>
