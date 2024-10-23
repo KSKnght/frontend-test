@@ -1,113 +1,159 @@
 'use server';
 
-import { type, unit } from "@prisma/client";
-import prisma from "../lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { Router } from "next/router";
+import { supabase } from "@/lib/supabase";
 
 
 export async function updateProject(FormData : FormData, id: number) {
-    await prisma.project.update({
-        where: {id},
-        data: {
-            name: FormData.get('name') as string,
-            type: FormData.get('type') as type,
-            projectAddress: FormData.get('address') as string,
-            startDate: FormData.get('startDate') + 'T00:00:00.000Z',
-            endDate: FormData.get('endDate') + 'T00:00:00.000Z',
-            client: {
-                connect: {
-                    id: Number(FormData.get('id'))
-                }
-            }
-        }
-    });
+    const { data, error } = await supabase
+    .from('project')
+    .update({
+        name: FormData.get('name'),
+        type: FormData.get('type'),
+        projectAddress: FormData.get('address'),
+        startDate: new Date(FormData.get('startDate') + 'T00:00:00.000Z'),
+        endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
+        client_id: Number(FormData.get('id')) // Assuming you have a client_id column
+    })
+    .eq('id', id);
+
+    if (error) {
+    console.error('Error updating project:', error);
+    } else {
+    console.log('Project updated successfully:', data);
+    }
     revalidatePath('/Project');
     redirect('/Project');
 };
 export async function updateTask(FormData : FormData, id: number, projID: number) {
     try {
-        console.log('Updating task with ID:', id);
-        console.log('FormData:', {
+        const { data, error } = await supabase
+        .from('phaseTasks') // Make sure to match your table name
+        .update({
             taskName: FormData.get('taskName'),
             description: FormData.get('description'),
-            deadline: FormData.get('deadline')
-        });
+            deadline: new Date(FormData.get('deadline') + 'T00:00:00.000Z'),
+        })
+        .eq('id', id);
 
-        await prisma.phaseTasks.update({
-            where: {id},
-            data: {
-                taskName: FormData.get('taskName') as string,
-                description: FormData.get('description') as string,
-                deadline: FormData.get('deadline') + 'T00:00:00.000Z',
-            }
-        });
+        if (error) {
+        console.error('Error updating phase task:', error);
+        } else {
+        console.log('Phase task updated successfully:', data);
+        }
 
     } catch (err) {
         console.error('Error updating task:', err);
     }
 
-    await revalidatePath('/Projects/' + projID + '/view');
+    revalidatePath('/Projects/' + projID + '/view');
     redirect('/Projects/' + projID + '/view')
 };
 
 export async function addMaterial(FormData : FormData, taskID : number) {
-    await prisma.taskMat.create({
-        data: {
-            phaseTasks: {
-                connect: {
-                    id: taskID
-                }
-            },
-            qty: Number(FormData.get('qty')),
-            unit: FormData.get('unit') as unit,
-            materials: {
-                connectOrCreate: {
-                    where: {
-                        name: FormData.get('name') as string
-                    },
-                    create: {
-                        name: FormData.get('name') as string,
-                        unit: FormData.get('unit') as unit
-                    }
-                }
-            }
-        }
-    })
+    const { data: materialData, error: materialError } = await supabase
+  .from('materials')
+  .select('*')
+  .eq('name', FormData.get('name'))
+  .single();
+
+let materialID;
+
+if (materialError) {
+  // Create the material if it doesn't exist
+  const { data: newMaterial, error: newMaterialError } = await supabase
+        .from('materials')
+        .insert([
+        {
+            name: FormData.get('name'),
+            unit: FormData.get('unit'),
+        },
+        ])
+        .single();
+
+    if (newMaterialError) {
+        console.error(newMaterialError);
+    } else {
+        materialID = newMaterial[0].id;
+    }
+    } else {
+        materialID = materialData.id;
+    }
+
+    // Create the taskMat entry
+    const { error: taskMatError } = await supabase
+    .from('taskMat')
+    .insert([
+        {
+        taskId: taskID, // Replace with the correct foreign key if needed
+        qty: Number(FormData.get('qty')),
+        unit: FormData.get('unit'),
+        matId: materialID, // Assuming there's a foreign key relationship
+        },
+    ]);
+
+    if (taskMatError) {
+    console.error(taskMatError);
+    }
 }
 
 export async function addSubCom(FormData : FormData, taskID : number) {
-    await prisma.phaseTasks.update({
-        where: {
-            id: Number(taskID)
-        },
-        data: {
-            subCon: {
-                connectOrCreate: {
-                    where: {
-                        Name: FormData.get('name') as string
-                    },
-                    create: {
-                        Name: FormData.get('name') as string
-                    }
-                }
-            }
+    let subCon
+    
+    const {data: checkSubcon , error } = await supabase
+    .from('subCon')
+    .select('*')
+    .eq('Name', FormData.get('name'));
+
+    console.log(checkSubcon)
+
+    if (checkSubcon.length == 0) {
+        const {data: newSubCon, error: erNewSubCon} = await supabase
+        .from('subCon')
+        .insert({
+            Name: FormData.get('name')
+        })
+        .select();
+
+        if (erNewSubCon) {
+            console.log(erNewSubCon)
+        } else {
+            subCon = newSubCon[0]
         }
+        
+    } else (
+        subCon = checkSubcon[0]
+    )
+
+
+    const { error: connectData} = await supabase
+    .from('_phaseTasksTosubCon')
+    .insert({
+        A: taskID,
+        B: subCon.id
     })
+
+    if (connectData) { 
+        console.log(connectData)
+    }
 }
 
 export async function updateClient(FormData : FormData, id: number) {
-    await prisma.client.update({
-        where: {
-            id
-        },
-        data: {
-            lastname: FormData.get('lastname') as string,
-            firstname: FormData.get('firstname') as string,
-            middlename: FormData.get('middlename') as string,
-            contactNum: FormData.get('contactNum') as string,
-            emailAdd: FormData.get('emailAdd') as string
-        }
+    const { error } = await supabase
+    .from('client')
+    .update({
+        lastname: FormData.get('lastname'),
+        firstname: FormData.get('firstname'),
+        middlename: FormData.get('middlename'),
+        contactNum: FormData.get('contactNum'),
+        emailAdd: FormData.get('emailAdd')
     })
+    .eq('id', id);
+
+    if (error) {
+        console.error('Error updating client:', error);
+    } else {
+        console.log('Client updated!');
+    }
 }

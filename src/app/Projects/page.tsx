@@ -19,6 +19,8 @@ import { HiPlusCircle } from "react-icons/hi";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { supabase } from '@/lib/supabase'
+import router from 'next/router'
 
 
 
@@ -86,7 +88,20 @@ const page = async ({searchParams} : SearchParamProps) => {
     const display = await getProjects();
     const show = searchParams?.show;
     const edit = searchParams?.edit;
-    
+    const channel = supabase.channel("realtime project").on("postgres_changes",
+    {
+      event: "*",
+      schema: "public",
+      table: "project",
+    },
+    (payload) => {
+      revalidatePath("/Projects");
+    }
+  )
+  .subscribe();
+
+ 
+  
   return (
         <main className='flex'>
             {show && <Modal returnLink={'/Projects'} name={'Add Project'}>
