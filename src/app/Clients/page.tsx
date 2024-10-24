@@ -10,11 +10,15 @@ import EditClient from '../components/Modals/EditClient'
 import { IoIosAddCircle } from 'react-icons/io';
 import { MdEdit } from "react-icons/md";
 
-
-
-
-
-
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 
 
@@ -22,7 +26,10 @@ type SearchParamProps = {
   searchParams: Record<string, string> | null | undefined;
 };
 
+
+
 const AddClient = async () => {
+  
   return ( 
     <form action={async (e) =>{'use server'; await createClient(e); revalidatePath('/Clients')}}>
       <div className='flex flex-row justify-evenly space-x-3'>
@@ -30,6 +37,7 @@ const AddClient = async () => {
           <p className='text-xs font-bold flex mb-1'>First Name</p>
           <input className='h-6 w-full flex border border-slate-200 focus:outline-pink-600 rounded-lg pl-1 text-sm'
                 type="text" name='firstname' placeholder=''/>
+          <span></span>
         </div>
         <div>
           <p className='text-xs font-bold flex mb-1'>Middle Name</p>
@@ -78,54 +86,57 @@ const page = async ({searchParams} : SearchParamProps) => {
         <Navbar />
       </div>
       <div className='pt-2 h-screen'>
-        <div className='pr-20 mb-6 mt-4 space-x-56 flex justify-between'>
-          <h1 className='px-10 text-5xl font-bold mt-3 text-pink-600'>CLIENTS</h1>
+        <div className='px-[3rem] mb-6 mt-4 space-x-56 flex justify-between'>
+          <h1 className='text-5xl font-bold mt-3 text-pink-600'>CLIENTS</h1>
           <Link className='flex flex-row w-32 rounded-lg px-3 py-1 mt-6 -translate-y-2 text-white bg-pink-600' href={'/Clients/?show=true'}>
             <IoIosAddCircle className='mt-1 mr-1'/>
             Add Client
           </Link>
         </div>
         <Suspense>
-          <div className='px-8'>
-            <table className='px-8 table-fixed w-full'>
-              <thead className='border-b-2 border-slate-200 text-center h-10'>
-                <tr className='text-pink-600'>
-                  <th>Client Name</th>
-                  <th>Email Address</th>
-                  <th>Contact Number</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody className=''>
+          <div className='mt-8 px-[3rem]'>
+            <Table className='w-full table-fixed'>
+              <TableCaption>A list of your clients.</TableCaption>
+              <TableHeader>
+                <TableRow> 
+                  <TableHead className='font-bold text-slate-600 w-[25rem]'>Client Name</TableHead>
+                  <TableHead className='font-bold text-slate-600 w-[25rem]'>Email Address</TableHead>
+                  <TableHead className='font-bold text-slate-600'>Contact Number</TableHead>
+                  <TableHead className='font-bold text-slate-600 text-right'>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {data.map((data, i) => {
-                  // return <ClientsCard data={data} key={i}/>
                   return (
-                    <tr className='text-center h-8' key={i}>
-                    <td>
-                        {data.lastname + ' ' + data.firstname + ' ' + data.middlename}
-                    </td>
-                    <td>
-                        {data.emailAdd}
-                    </td>
-                    <td>
-                        {data.contactNum}
-                    </td>
-                    <td>
-                      <Link className='hover:text-pink-600 hover:font-bold transition-all ease-out flex flex-row text-sm' href={'/Clients/?edit='+data.id}>
-                        <MdEdit className='mt-1 ml-10 mr-1'/>
-                        <p >Edit</p>
+                    <TableRow key={i}>
+                    <TableCell className='w-[25rem]'>
+                      {data.lastname + ' ' + data.firstname + ' ' + data.middlename}
+                    </TableCell>
+                    <TableCell>
+                      {data.emailAdd}
+                    </TableCell>
+                    <TableCell>
+                      {data.contactNum}
+                    </TableCell>
+                    <TableCell className='text-right'>
+                      <Link className='hover:text-pink-600 transition-all ease-out flex flex-row justify-end text-sm' href={'/Clients/?edit='+data.id}>
+                          <MdEdit className='mt-1 ml-10 mr-1'/>
+                          <p >Edit</p>
                       </Link>
-                    </td>
-                </tr> )
+                    </TableCell>
+                  </TableRow>
+                  )
                 })}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
+
+
+
           </div>
 
 
           <div>
-
-          </div>
+        </div>
             
 
 

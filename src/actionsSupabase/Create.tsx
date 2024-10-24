@@ -8,70 +8,125 @@ import { Build, Design, DesignBuild } from "./TypeTemp";
 import { supabase } from "../lib/supabase";
 import { useOptimistic } from "react";
 
-export async function createProject(FormData : FormData) {
-    console.log(FormData)
+export async function createProject(FormData: FormData) {
     try {
-        const { data, error } = await supabase
-        .from('project')
-        .insert([
-            {
-            name: FormData.get('name'),
-            type: FormData.get('type'),
-            projectAddress: FormData.get('address'), // Use the appropriate column name from your table
-            startDate: new Date(FormData.get('startDate') + 'T00:00:00.000Z'),
-            endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
-            progress: 'NOT_STARTED',
-            clientID: Number(FormData.get('id')) // Assuming this is the foreign key in your projects table
+        // Extract values from FormData
+        const name = FormData.get('name');
+        const type = FormData.get('type');
+        const projectAddress = FormData.get('address');
+        const startDate = FormData.get('startDate');
+        const endDate = FormData.get('endDate');
+        const clientID = Number(FormData.get('id'));
+
+        // Validate project inputs
+        const projectError = validateProjectInputs({ name, type, projectAddress, startDate, endDate, clientID });
+        if (projectError) {
+            console.error(projectError);
+            return; // Exit if validation fails
         }
-        ])
-        .select();
+
+        // Insert project into the database
+        const { data, error } = await supabase
+            .from('project')
+            .insert([
+                {
+                    name,
+                    type,
+                    projectAddress,
+                    startDate: new Date(startDate + 'T00:00:00.000Z'),
+                    endDate: new Date(endDate + 'T00:00:00.000Z'),
+                    progress: 'NOT_STARTED',
+                    clientID
+                }
+            ])
+            .select();
 
         if (error) {
-        console.error('Error creating project:', error);
+            console.error('Error creating project:', error);
         } else {
-        console.log('Project created:' + data[0].id);
-        } 
+            console.log('Project created:', data[0].id);
 
-        if (FormData.get('type') == 'BUILD') {
-            Build(data[0].id);
-        }
-        else if (FormData.get('type') == 'DESIGN_BUILD') {
-            DesignBuild(data[0].id)
-        }
-        else {
-            Design(data[0].id)
-        }
+            // Call appropriate function based on project type
+            if (type === 'BUILD') {
+                Build(data[0].id);
+            } else if (type === 'DESIGN_BUILD') {
+                DesignBuild(data[0].id);
+            } else {
+                Design(data[0].id);
+            }
 
-        revalidatePath('/Projects');
-        revalidatePath('/Projects?show=true');
-        
+            revalidatePath('/Projects');
+            revalidatePath('/Projects?show=true');
+        }
     } catch (err) {
-        console.log(err)
-    };
+        return { success: false, message: 'An error occurred: ' + err.message };
+    }
 }
 
-export async function addPhase(FormData : FormData, id: any) {
+export async function addPhase(FormData: FormData, id: any) {
     try {
+        // Extract values from FormData
+        const priority = Number(FormData.get('priority'));
+        const phaseName = FormData.get('phaseName');
+
+        // Validate phase inputs
+        const phaseError = validatePhaseInputs({ priority, phaseName });
+        if (phaseError) {
+            console.error(phaseError);
+            return; // Exit if validation fails
+        }
+
+        // Insert phase into the database
         const { data, error } = await supabase
-        .from('phase')
-        .insert({
-            priority: Number(FormData.get('priority')),
-            phaseName: FormData.get('phaseName'),
-            progress: 'NOT_STARTED',
-            projectID: id
-        });
+            .from('phase')
+            .insert({
+                priority,
+                phaseName,
+                progress: 'NOT_STARTED',
+                projectID: id
+            });
 
         if (error) {
-        console.error('Error inserting phase:', error);
+            console.error('Error inserting phase:', error);
         } else {
-        console.log('Phase created:', data);
+            console.log('Phase created:', data);
         }
+    } catch (err) {
+        return { success: false, message: 'An error occurred: ' + err.message };
     }
-    catch (err) {
-        console.log(err)
-    };
     revalidatePath('/Projects/' + id + '/view');
-};
+}
+
+// Validation functions
+function validateProjectInputs({ name, type, projectAddress, startDate, endDate, clientID }) {
+    let errors = [];
+
+    if (!name) errors.push('Project name is required');
+    if (!type) errors.push('Project type is required');
+    if (!projectAddress) errors.push('Project address is required');
+    if (!startDate) errors.push('Start date is required');
+    if (!endDate) errors.push('End date is required');
+    if (isNaN(clientID) || clientID <= 0) errors.push('Valid client ID is required');
+
+    // Check if end date is after start date and vice versa
+    if (new Date(endDate) <= new Date(startDate)) {
+        errors.push('End date must be after start date');
+    } else if (new Date(startDate) >= new Date(endDate)) {
+        errors.push('Start date must be before end date')
+    }
+
+    return errors.length > 0 ? errors.join('. ') : null; // Join errors into a single message
+}
+
+function validatePhaseInputs({ priority, phaseName }) {
+    let errors = [];
+
+    if (isNaN(priority) || priority <= 0) errors.push('Priority must be a positive number');
+    if (!phaseName) errors.push('Phase name is required');
+
+    return errors.length > 0 ? errors.join('. ') : null; // Join errors into a single message
+}
+
 
 export async function createTask(FormData : FormData, id: any, projID: number) {
     try {
@@ -93,7 +148,7 @@ export async function createTask(FormData : FormData, id: any, projID: number) {
         }
     }
     catch (err) {
-        console.log(err)
+        return { success: false, message: 'An error occurred: ' + err.message };
     }
 
     revalidatePath('/Projects/' + projID + '/view');
@@ -146,7 +201,7 @@ export async function createClient(FormData: FormData) {
             console.log('Client created:', data);
         }
     } catch (err) {
-        console.log(err);
+        return { success: false, message: 'An error occurred: ' + err.message };
     }
 
     revalidatePath('/Clients');

@@ -3,6 +3,7 @@ import React from 'react'
 import TaskCard from './TaskCard'
 import Link from 'next/link'
 import { IoIosAddCircle } from "react-icons/io";
+import { HiTrash } from "react-icons/hi";
 
 const PhaseCard = ({Phase}) => {
   return (
