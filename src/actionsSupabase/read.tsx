@@ -65,6 +65,7 @@ export async function getPhases(id:number) {
     .select(`
         *,
         phaseTasks: phaseTasks (
+            isDeleted,
             id,
             taskName,
             description,

@@ -4,7 +4,7 @@ import TaskCard from './TaskCard'
 import Link from 'next/link'
 import { IoIosAddCircle } from "react-icons/io";
 
-const PhaseCard = ({Phase}) => {
+const PhaseCard = ({Phase, proj}) => {
   return (
     <div className='h-auto w-full rounded-lg bg-slate-100 ml-5 mt-2 mb-auto p-4 shadow-sm border'>
         <div className='flex flex-row justify-between'>
@@ -26,7 +26,8 @@ const PhaseCard = ({Phase}) => {
         <div className='w-auto h-auto'>
           {
               Phase.phaseTasks.map((task, i) => {
-                return <TaskCard tasks={task} data={Phase.projectID} key={i}/>
+                console.log(task.isDeleted)
+                if (task.isDeleted == false) return <TaskCard tasks={task} proj={proj} data={Phase.projectID} key={i}/>
               })
           }
         </div>
