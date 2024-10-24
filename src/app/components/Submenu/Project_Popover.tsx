@@ -11,7 +11,7 @@ import { IoEllipsisVerticalSharp } from "react-icons/io5";
 
   
 
-const ProjectList_Popover = () => {
+const ProjectList_Popover = ({id}) => {
   return (
     <div>
         <Popover>
@@ -23,7 +23,7 @@ const ProjectList_Popover = () => {
             <PopoverContent className='w-25 translate-x-[5.5rem] -translate-y-12'>
                 <div className='flex flex-col h-auto'>
                     <Button className='h-8' onClick={(e) => {e.stopPropagation()}} variant='ghost'>Edit</Button>
-                    <Alert />
+                    <Alert id={id}/>
                 </div>
             </PopoverContent>
         </Popover>

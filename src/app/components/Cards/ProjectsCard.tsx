@@ -40,7 +40,7 @@ const ProjectsCard = ({data}) => {
                 <div>
                   <p className='text-sm bg-red-400 text-red-900 px-3 py-2 rounded-full ml-8'>{data.progress}</p>
                 </div>
-                <Popover />
+                <Popover id={data.id}/>
               </div>
               <Separator className='bg-slate-300 mt-2'/>
             </CardTitle>

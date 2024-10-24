@@ -19,6 +19,8 @@ import { HiPlusCircle } from "react-icons/hi";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { supabase } from '@/lib/supabase'
+import router from 'next/router'
 
 
 
@@ -86,7 +88,20 @@ const page = async ({searchParams} : SearchParamProps) => {
     const display = await getProjects();
     const show = searchParams?.show;
     const edit = searchParams?.edit;
-    
+    const channel = supabase.channel("realtime project").on("postgres_changes",
+    {
+      event: "*",
+      schema: "public",
+      table: "project",
+    },
+    (payload) => {
+      revalidatePath("/Projects");
+    }
+  )
+  .subscribe();
+
+ 
+  
   return (
         <main className='flex'>
             {show && <Modal returnLink={'/Projects'} name={'Add Project'}>
@@ -128,6 +143,7 @@ const page = async ({searchParams} : SearchParamProps) => {
                     <div className='h-[calc(100vh-130px)] overflow-y-scroll -translate-y-5'>
                         <ul className='grid gap-6 p-6 min-[800px]:grid-cols-2 max-[1920px]:grid-cols-1'>
                             {display.map((display, i) => {
+                                if (display.isDeleted == false)
                                 return <li key={i}><ProjectsCard data={display}/></li>
                             })}
                         </ul>

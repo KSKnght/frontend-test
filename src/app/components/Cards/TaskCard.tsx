@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { startTransition } from 'react'
 import { MdEdit } from "react-icons/md";
 import { IoTime } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
+import { softDelTasks } from '@/actionsSupabase/Delete';
 
 
 
@@ -34,7 +35,7 @@ const SubConList = ({subcon}) => {
 }
 
 
-const TaskCard = ({tasks, data}) => {
+const TaskCard = ({tasks, data, proj}) => {
   const router = useRouter()
   return (
     <div className='my-3 w-full items-center bg-slate-300 rounded-md p-3 cursor-pointer border border-slate-300 hover:border-pink-600 transition-colors' onClick={() => {router.push('/Projects/'+ data+'/view/?viewtask='+tasks.id+'&state=Mat')}}>
@@ -45,7 +46,9 @@ const TaskCard = ({tasks, data}) => {
               <button className='text-slate-600 w-6 h-6 hover:text-pink-600 transition-colors' onClick={(e) => {e.stopPropagation(); router.push('/Projects/'+ data+'/view/?edittask='+tasks.id)}}>
                 <MdEdit />
               </button>
-              <button className='text-slate-600 w-6 h-6 hover:text-pink-600 transition-colors' onClick={(e) => {e.stopPropagation()}}>
+              <button className='text-slate-600 w-6 h-6 hover:text-pink-600 transition-colors' onClick={(e) => {e.stopPropagation(); startTransition(async () => {
+             await softDelTasks(tasks.id, proj);
+           })}}>
                 <MdDelete />
               </button>
             </div>
