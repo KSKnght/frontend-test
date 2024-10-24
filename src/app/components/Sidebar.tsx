@@ -5,6 +5,7 @@ import React, {useState } from 'react'
 import { HiUser } from "react-icons/hi";
 import { HiDocumentText } from "react-icons/hi2";
 import { HiOutlineMenu } from "react-icons/hi";
+import { Separator } from '@radix-ui/react-separator';
 
 export default function Navbar() {
   const [expanded, setExpanded] = useState(true)
@@ -25,6 +26,7 @@ export default function Navbar() {
             <HiOutlineMenu className='w-6 h-6'/>
           </button>
         </div>
+        
         
         <div className='px-3'>  
           <li className='relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer text-white transition-colors hover:bg-pink-600'>

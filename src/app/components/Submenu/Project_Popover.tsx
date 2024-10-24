@@ -20,7 +20,7 @@ const ProjectList_Popover = ({id}) => {
                     <IoEllipsisVerticalSharp className='text-lg'/>
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className='w-25 translate-x-[5.5rem] -translate-y-12'>
+            <PopoverContent className='w-25'>
                 <div className='flex flex-col h-auto'>
                     <Button className='h-8' onClick={(e) => {e.stopPropagation()}} variant='ghost'>Edit</Button>
                     <Alert id={id}/>
