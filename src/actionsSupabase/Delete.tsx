@@ -18,7 +18,6 @@ export async function softdelProject(id: Number) {
 }
 
 export async function softDelTasks(id: Number, projID: Number) {
-    console.log('id: ' + id + ', projID: ' + projID)
     const { error } = await supabase
     .from('phaseTasks')
     .update({
@@ -28,6 +27,17 @@ export async function softDelTasks(id: Number, projID: Number) {
 
     if (error) console.log('Error deleting Tasks:', error)
     
+    revalidatePath('/Projects/' + projID + '/view')
+}
+
+export async function softDelPhase(id: Number, projID: Number) {
+    const { error } = await supabase
+    .from('phase')
+    .update({
+        isDeleted: true
+    })
+    .eq('id', id)
+
     revalidatePath('/Projects/' + projID + '/view')
 }
 
