@@ -101,7 +101,9 @@ export async function addPhase(FormData: FormData, id: any) {
 function validateProjectInputs({ name, type, projectAddress, startDate, endDate, clientID }) {
     let errors = [];
 
-    if (!name) errors.push('Project name is required');
+    if (!name) {
+        errors.push('Project name is required');
+    }
     if (!type) errors.push('Project type is required');
     if (!projectAddress) errors.push('Project address is required');
     if (!startDate) errors.push('Start date is required');
