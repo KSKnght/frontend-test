@@ -27,7 +27,6 @@ const PhaseCard = ({Phase, proj}) => {
         <div className='w-auto h-auto'>
           {
               Phase.phaseTasks.map((task, i) => {
-                console.log(task.isDeleted)
                 if (task.isDeleted == false) return <TaskCard tasks={task} proj={proj} data={Phase.projectID} key={i}/>
               })
           }
