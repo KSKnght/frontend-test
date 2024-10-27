@@ -1,9 +1,11 @@
-
-import React from 'react'
+'use client';
+import React, { startTransition } from 'react'
 import TaskCard from './TaskCard'
 import Link from 'next/link'
 import { IoIosAddCircle } from "react-icons/io";
 import { HiTrash } from "react-icons/hi";
+import { softDelPhase } from '@/actionsSupabase/Delete';
+import { ppid } from 'process';
 
 const PhaseCard = ({Phase, proj}) => {
   return (
@@ -16,7 +18,7 @@ const PhaseCard = ({Phase, proj}) => {
             <Link href={'/Projects/'+Phase.projectID+'/view?phase='+Phase.id}>
               <IoIosAddCircle className='w-5 h-5 text-slate-500 hover:text-slate-600 transition-colors ease-out'/>
             </Link>
-            <button>
+            <button onClick={(e) => {e.stopPropagation(); startTransition(async () => (await softDelPhase(Phase.id, Phase.projectID)))}}>
               <HiTrash className='w-5 h-5 text-slate-500 hover:text-red-600 transition-colors ease-out'/>
             </button>
         </div>

@@ -71,6 +71,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
         <Suspense fallback={'loading'}>
           <div className='flex flex-row w-screen overflow-x-scroll no-scrollbar mt-[4.8025rem] '>
             {phaseTasks.map((phase, i) => {
+                if (phase.isDeleted == false)
                 return <PhaseCard Phase={phase} proj={id} key={i}/>
             })}
           </div>
