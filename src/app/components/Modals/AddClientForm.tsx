@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { createClient } from '@/actionsSupabase/Create';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/dist/server/api-utils';
 
 const AddClientForm = () => {
   const [formData, setFormData] = useState({
@@ -38,7 +39,9 @@ const AddClientForm = () => {
     if (!data.firstname) newErrors.firstname = 'First name is required';
     if (!data.lastname) newErrors.lastname = 'Last name is required';
     if (!data.middlename) newErrors.middlename = 'Middle name is required';
-    if (!/^\d{11}$/.test(data.contactNum)) newErrors.contactNum = 'Contact number must contain 11 digits';
+    if (!data.contactNum) newErrors.contactNum = 'Contact number is required';
+    if (!data.emailAdd) newErrors.emailAdd = 'Email address is required';
+    if (!/^\d{11}$/.test(data.contactNum)) newErrors.contactNum = 'Contact number must be 11 digits';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.emailAdd)) newErrors.emailAdd = 'Invalid email format';
 
     return newErrors;
@@ -53,13 +56,20 @@ const AddClientForm = () => {
     }
 
     // Reset errors and proceed with the submission
+    const formDataToSend = new FormData(e.currentTarget);
     setErrors({});
-    const response = await createClient(new FormData(e.currentTarget)); // pass FormData for server action
-    if (response.success) {
-      revalidatePath('/Clients');
-    } else {
-      // Handle server errors if needed
+    
+    try {
+      const response = await createClient(formDataToSend); // pass FormData for server action
+      if (response.success) {
+        revalidatePath('/Clients');
+      } else {
+        setErrors({ submit: 'Failed to create client. Please try again.' }); // Handle error from server
+      }
+    } catch (error) {
+      setErrors({ submit: 'An unexpected error occurred. Please try again.' }); // Catch any unexpected errors
     }
+    
   };
 
   const hasErrors = Object.keys(errors).length > 0; // Check if there are any errors
@@ -71,7 +81,7 @@ const AddClientForm = () => {
         <div>
           <p className='text-xs font-bold flex mb-1'>First Name</p>
           <input
-            className={`h-6 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.firstname && errors.firstname ? 'border-red-500' : 'border-slate-200'}`}
+            className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.firstname && errors.firstname ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='firstname' value={formData.firstname} onChange={handleChange} onBlur={() => handleBlur('firstname')}
           />
           {touched.firstname && errors.firstname && <p className='text-red-500 text-xs mt-1 text-left'>{errors.firstname}</p>}
@@ -79,7 +89,7 @@ const AddClientForm = () => {
         <div>
           <p className='text-xs font-bold flex mb-1'>Middle Name</p>
           <input
-            className={`h-6 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.middlename && errors.middlename ? 'border-red-500' : 'border-slate-200'}`}
+            className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.middlename && errors.middlename ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='middlename' value={formData.middlename} onChange={handleChange} onBlur={() => handleBlur('middlename')}
           />
           {touched.middlename && errors.middlename && <p className='text-red-500 text-xs mt-1 text-left'>{errors.middlename}</p>}
@@ -87,7 +97,7 @@ const AddClientForm = () => {
         <div>
           <p className='text-xs font-bold flex mb-1'>Last Name</p>
           <input
-            className={`h-6 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.lastname && errors.lastname ? 'border-red-500' : 'border-slate-200'}`}
+            className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.lastname && errors.lastname ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='lastname' value={formData.lastname} onChange={handleChange} onBlur={() => handleBlur('lastname')}
           />
           {touched.lastname && errors.lastname && <p className='text-red-500 text-xs mt-1 text-left'>{errors.lastname}</p>}
@@ -98,7 +108,7 @@ const AddClientForm = () => {
         <div>
           <p className='text-xs font-bold flex mb-1'>Contact Number</p>
           <input
-            className={`h-6 w-72 flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.contactNum && errors.contactNum ? 'border-red-500' : 'border-slate-200'}`}
+            className={`h-8 w-72 flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.contactNum && errors.contactNum ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='contactNum' value={formData.contactNum} onChange={handleChange} onBlur={() => handleBlur('contactNum')}
           />
           {touched.contactNum && errors.contactNum && <p className='text-red-500 text-xs mt-1 text-left'>{errors.contactNum}</p>}
@@ -106,7 +116,7 @@ const AddClientForm = () => {
         <div>
           <p className='text-xs font-bold flex mb-1'>Email Address</p>
           <input
-            className={`h-6 w-72 flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.emailAdd && errors.emailAdd ? 'border-red-500' : 'border-slate-200'}`}
+            className={`h-8 w-72 flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.emailAdd && errors.emailAdd ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='emailAdd' value={formData.emailAdd} onChange={handleChange} onBlur={() => handleBlur('emailAdd')}
             placeholder='e.g. user@email.com'
           />

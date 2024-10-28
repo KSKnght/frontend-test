@@ -207,6 +207,7 @@ export async function createClient(FormData: FormData) {
     }
 
     revalidatePath('/Clients');
+    redirect('/Clients');
 }
 
 function validateRequiredFields({ lastname, firstname, contactNum, emailAdd }) {
