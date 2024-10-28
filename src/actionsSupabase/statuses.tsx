@@ -34,9 +34,6 @@ export async function statusPhase(phaseID: Number) {
     .eq('phaseID', phaseID)
     .eq('progress', true)
     .eq('isDeleted', false)
-
-
-    if (completedError) console.log('error looking for Complete: ', completedError)
     
     const { data: incomplete, error: incompleteError } = await supabase
     .from('phaseTasks')
@@ -45,8 +42,6 @@ export async function statusPhase(phaseID: Number) {
     .eq('progress', false)
     .eq('isDeleted', false)
 
-
-    if (incompleteError) console.log('error looking for Incomplete:', incompleteError)
 
     // if theres atleast one incomplete = phase in progress
     if (incomplete.length < total.length && completed.length < total.length) {
