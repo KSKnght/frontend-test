@@ -71,6 +71,7 @@ export async function getPhases(id:number) {
             description,
             progress,
             deadline,
+            phaseID,
             _phaseTasksTosubCon ( 
                 B: subCon (
                     Name

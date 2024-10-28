@@ -10,6 +10,7 @@ import { softDelTasks } from '@/actionsSupabase/Delete';
 
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { MdCheckBox } from "react-icons/md";
+import { statusTask } from '@/actionsSupabase/statuses';
 
 
 
@@ -41,11 +42,10 @@ const SubConList = ({subcon}) => {
 
 const TaskCard = ({tasks, data, proj}) => {
   const router = useRouter()
-  const [isChecked, setIsChecked] = useState(tasks.progress);
-  
+
   const handleCheck = (e) => {
     e.stopPropagation();
-    setIsChecked((prev) => !prev);
+    startTransition(async () => {statusTask(tasks.id,!tasks.progress,tasks.phaseID,proj)})
   }
 
   return (
@@ -54,7 +54,7 @@ const TaskCard = ({tasks, data, proj}) => {
           <div className='flex flex-row justify-between'>
             <div className='flex flex-row justify-between items-center gap-1.5'>
               <button onClick={handleCheck} className='hover:text-pink-600'>
-                {isChecked ? <MdCheckBox /> : <MdOutlineCheckBoxOutlineBlank />}
+                {tasks.progress === true ? <MdCheckBox /> : <MdOutlineCheckBoxOutlineBlank />}
               </button>
               <h1 className='font-bold text-slate-800 leading-tight truncate'>{tasks.taskName}</h1>
             </div>

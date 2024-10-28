@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { Build, Design, DesignBuild } from "./TypeTemp";
 import { supabase } from "../lib/supabase";
 import { useOptimistic } from "react";
+import { statusPhase } from "./statuses";
 
 export async function createProject(FormData: FormData) {
     try {
@@ -139,9 +140,11 @@ export async function createTask(FormData : FormData, id: any, projID: number) {
             taskName: FormData.get('taskName'), // Use snake_case for column names
             description: FormData.get('description'),
             deadline: FormData.get('deadline') + 'T00:00:00.000Z', // Format the deadline
-            progress: 'NOT_STARTED',
+            progress: false,
             phaseID: Number(id) // Replace with the actual foreign key column name
         });
+
+        await statusPhase(id)
 
         if (error) {
         console.error('Error inserting phase task:', error);

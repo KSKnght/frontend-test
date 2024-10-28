@@ -1,10 +1,9 @@
 'use server';
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-export async function statusTask(id: Number, status: boolean, phaseID: Number) {
+export async function statusTask(id: Number, status: boolean, phaseID: Number, projID: Number) {
     // update for the status of current task
     const { error: updateStatus } = await supabase
     .from('phaseTasks')
@@ -15,28 +14,43 @@ export async function statusTask(id: Number, status: boolean, phaseID: Number) {
     
     if (updateStatus) console.log('Error updating task status', updateStatus)
 
+    await statusPhase(phaseID)
+    
+    revalidatePath('/Projects/' + projID + '/view')
+}
+
+export async function statusPhase(phaseID: Number) {
+    const { data: total, error: totalError } = await supabase
+    .from('phaseTasks')
+    .select('progress, taskName')
+    .eq('phaseID', phaseID)
+    .eq('isDeleted', false)
+
+
     // check for other task in the phase
     const { data: completed, error: completedError } = await supabase
     .from('phaseTasks')
-    .select('progress')
+    .select('progress, taskName')
     .eq('phaseID', phaseID)
     .eq('progress', true)
+    .eq('isDeleted', false)
+
 
     if (completedError) console.log('error looking for Complete: ', completedError)
     
     const { data: incomplete, error: incompleteError } = await supabase
     .from('phaseTasks')
-    .select('progress')
+    .select('progress, taskName')
     .eq('phaseID', phaseID)
     .eq('progress', false)
+    .eq('isDeleted', false)
+
 
     if (incompleteError) console.log('error looking for Incomplete:', incompleteError)
-    
-    let updPhaseStatusError;
 
     // if theres atleast one incomplete = phase in progress
-    if (incomplete.length != 0) {
-        updPhaseStatusError = await supabase
+    if (incomplete.length < total.length && completed.length < total.length) {
+        await supabase
         .from('phase')
         .update({
             progress: 'IN_PROGRESS'
@@ -45,8 +59,8 @@ export async function statusTask(id: Number, status: boolean, phaseID: Number) {
     }
 
     // if all task in the phase is incomplete = phase not started
-    else if (incomplete.length != 0 && completed == null)
-        updPhaseStatusError = await supabase
+    else if (incomplete.length == total.length)
+        await supabase
         .from('phase')
         .update({
             progress: 'NOT_STARTED'
@@ -54,13 +68,12 @@ export async function statusTask(id: Number, status: boolean, phaseID: Number) {
         .eq('id', phaseID)
 
     // if all task is complete = phase complete
-    else if (incomplete.length == 0 && completed.length != 0)
-        updPhaseStatusError = await supabase
+    else if (completed.length == total.length)
+        await supabase
         .from('phase')
         .update({
-            progress: 'NOT_STARTED'
+            progress: 'COMPLETE'
         })
         .eq('id', phaseID)
 
-    if (updPhaseStatusError) console.log('error updating phase status:', updPhaseStatusError)
 }

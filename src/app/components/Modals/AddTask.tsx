@@ -1,5 +1,7 @@
+'use client'
+
 import { createTask } from '@/actionsSupabase/Create';
-import React, { useState } from 'react'
+import React, { startTransition, useState } from 'react'
 import { revalidatePath } from 'next/cache';
 
 const AddTask = async ({data, projID}) => {
@@ -39,7 +41,7 @@ const AddTask = async ({data, projID}) => {
 
 
     return (
-        <form action={async e => {'use server'; await createTask(e, data, projID)}}>
+        <form action={e => {startTransition(async () => {await createTask(e, data, projID)})}}>
         <div className='flex flex-row justify-evenly space-x-3'>
             <div>
                 <p className='text-xs font-bold flex mb-1'>Priority</p>
