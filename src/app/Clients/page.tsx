@@ -1,11 +1,9 @@
-// src/app/Clients/page.tsx
-
 import React, { Suspense } from 'react';
 import Navbar from '../components/Sidebar';
 import { getClients } from '@/actionsSupabase/read';
 import Link from 'next/link';
 import Modal from '../components/Modal';
-import AddClientForm from '../components/Modals/AddClientForm'; // Import the new component
+import AddClientForm from '../components/Modals/AddClientForm';
 import EditClient from '../components/Modals/EditClient';
 import { IoIosAddCircle } from 'react-icons/io';
 import { MdEdit } from "react-icons/md";
@@ -18,6 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { HiUser } from "react-icons/hi";
+
 
 type SearchParamProps = {
   searchParams: Record<string, string> | null | undefined;
@@ -40,23 +40,26 @@ const page = async ({ searchParams }: SearchParamProps) => {
         <Navbar />
       </div>
       <div className='pt-2 h-screen'>
-        <div className='px-[3rem] mb-6 mt-4 space-x-56 flex justify-between'>
-          <h1 className='text-5xl font-bold mt-3 text-pink-600'>CLIENTS</h1>
+        <div className='px-[3rem] mb-5 space-x-56 flex justify-between border-b py-3'>
+          <div className='flex flex-row -translate-y-1'>
+            <HiUser className='w-8 h-8 mr-3 translate-y-[1rem] text-pink-600'/>
+            <h1 className='text-4xl font-black mt-3 text-pink-600'>CLIENTS</h1>
+          </div>
           <Link className='flex flex-row w-32 rounded-lg px-3 py-1 mt-6 -translate-y-2 text-white bg-pink-600' href={'/Clients/?show=true'}>
             <IoIosAddCircle className='mt-1 mr-1'/>
             Add Client
           </Link>
         </div>
         <Suspense>
-          <div className='mt-8 px-[3rem]'>
+          <div className='mt-8 px-[3rem] overflow-auto' style={{ maxHeight: 'calc(103vh - 200px)' }}>
             <Table className='w-full table-fixed'>
               <TableCaption>A list of your clients.</TableCaption>
               <TableHeader>
-                <TableRow>
+                <TableRow className=''>  
                   <TableHead className='font-bold text-slate-600 w-[25rem]'>Client Name</TableHead>
                   <TableHead className='font-bold text-slate-600 w-[25rem]'>Email Address</TableHead>
                   <TableHead className='font-bold text-slate-600'>Contact Number</TableHead>
-                  <TableHead className='font-bold text-slate-600 text-right'>Actions</TableHead>
+                  <TableHead className='font-bold text-slate-600 text-right'></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -67,8 +70,8 @@ const page = async ({ searchParams }: SearchParamProps) => {
                     </TableCell>
                     <TableCell>{client.emailAdd}</TableCell>
                     <TableCell>{client.contactNum}</TableCell>
-                    <TableCell className='text-right'>
-                      <Link className='hover:text-pink-600 transition-all ease-out flex flex-row justify-end text-sm' href={'/Clients/?edit=' + client.id}>
+                    <TableCell className='text-left'>
+                      <Link className='hover:text-pink-600 transition-all ease-out flex flex-row justify-left text-sm' href={'/Clients/?edit=' + client.id}>
                           <MdEdit className='mt-1 ml-10 mr-1'/>
                           <p>Edit</p>
                       </Link>
