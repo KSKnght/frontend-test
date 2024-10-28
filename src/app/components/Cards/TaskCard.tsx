@@ -2,11 +2,15 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
-import React, { startTransition } from 'react'
+import React, { startTransition, useState } from 'react'
 import { MdEdit } from "react-icons/md";
 import { IoTime } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { softDelTasks } from '@/actionsSupabase/Delete';
+
+import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
+import { MdCheckBox } from "react-icons/md";
+
 
 
 
@@ -37,12 +41,24 @@ const SubConList = ({subcon}) => {
 
 const TaskCard = ({tasks, data, proj}) => {
   const router = useRouter()
+  const [isChecked, setIsChecked] = useState(tasks.progress);
+  
+  const handleCheck = (e) => {
+    e.stopPropagation();
+    setIsChecked((prev) => !prev);
+  }
+
   return (
     <div className='my-3 w-full items-center bg-slate-300 rounded-md p-3 cursor-pointer border border-slate-300 hover:border-pink-600 transition-colors' onClick={() => {router.push('/Projects/'+ data+'/view/?viewtask='+tasks.id+'&state=Mat')}}>
         <div>
           <div className='flex flex-row justify-between'>
-            <h1 className='font-bold text-slate-800 leading-tight'>{tasks.taskName}</h1>
-            <div className='flex flex-row justify-between -translate-y-1 translate-x-2 -space-x-[5px]'>
+            <div className='flex flex-row justify-between items-center gap-1.5'>
+              <button onClick={handleCheck} className='hover:text-pink-600'>
+                {isChecked ? <MdCheckBox /> : <MdOutlineCheckBoxOutlineBlank />}
+              </button>
+              <h1 className='font-bold text-slate-800 leading-tight truncate'>{tasks.taskName}</h1>
+            </div>
+            <div className='flex flex-row justify-between items-center -translate-y-1 translate-x-2 -space-x-[5px]'>
               <button className='text-slate-600 w-6 h-6 hover:text-pink-600 transition-colors' onClick={(e) => {e.stopPropagation(); router.push('/Projects/'+ data+'/view/?edittask='+tasks.id)}}>
                 <MdEdit />
               </button>
