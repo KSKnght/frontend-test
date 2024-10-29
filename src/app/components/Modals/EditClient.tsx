@@ -81,10 +81,26 @@ const EditClient = ({ data }) => {
     if (!data.firstname) newErrors.firstname = 'First name is required';
     if (!data.lastname) newErrors.lastname = 'Last name is required';
     if (!data.middlename) newErrors.middlename = 'Middle name is required';
-    if (!data.contactNum) newErrors.contactNum = 'Contact number is required';
-    if (!data.emailAdd) newErrors.emailAdd = 'Email address is required';
-    if (!/^\d{11}$/.test(data.contactNum)) newErrors.contactNum = 'Contact number must be 11 digits';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.emailAdd)) newErrors.emailAdd = 'Invalid email format';
+    if (!data.contactNum) {
+      newErrors.contactNum = 'Contact number is required';
+    } else {
+      if (!/^09|^\+63/.test(data.contactNum)) {
+        newErrors.contactNum = 'Contact number must start with "09" or "+63"';
+      } else {
+        if (data.contactNum.startsWith("09") && data.contactNum.length !== 11) {
+          newErrors.contactNum = 'Contact number must be 11 digits if starting with "09"';
+        } else if (data.contactNum.startsWith("+63") && data.contactNum.length !== 13) {
+          newErrors.contactNum = 'Contact number must be 13 digits if starting with "+63"';
+        }
+      }
+    }
+    
+    if (!data.emailAdd) {
+      newErrors.emailAdd = 'Email address is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.emailAdd)) {
+      newErrors.emailAdd = 'Invalid email format';
+    }
+
     return newErrors;
   };
 
@@ -105,6 +121,7 @@ const EditClient = ({ data }) => {
       try {
         console.log('Sending data to update client:', formDataToSend);
         await updateClient(formDataToSend, client.id); // Update client details
+
       } catch (error) {
         setErrors({ submit: error.message || 'Failed to update client. Please try again.' });
       }

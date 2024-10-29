@@ -36,13 +36,29 @@ const AddClientForm = () => {
 
   const validateInputs = (data: typeof formData) => {
     const newErrors: { [key: string]: string } = {};
+
     if (!data.firstname) newErrors.firstname = 'First name is required';
     if (!data.lastname) newErrors.lastname = 'Last name is required';
     if (!data.middlename) newErrors.middlename = 'Middle name is required';
-    if (!data.contactNum) newErrors.contactNum = 'Contact number is required';
-    if (!data.emailAdd) newErrors.emailAdd = 'Email address is required';
-    if (!/^\d{11}$/.test(data.contactNum)) newErrors.contactNum = 'Contact number must be 11 digits';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.emailAdd)) newErrors.emailAdd = 'Invalid email format';
+    if (!data.contactNum) {
+      newErrors.contactNum = 'Contact number is required';
+    } else {
+      if (!/^09|^\+63/.test(data.contactNum)) {
+        newErrors.contactNum = 'Contact number must start with "09" or "+63"';
+      } else {
+        if (data.contactNum.startsWith("09") && data.contactNum.length !== 11) {
+          newErrors.contactNum = 'Contact number must be 11 digits if starting with "09"';
+        } else if (data.contactNum.startsWith("+63") && data.contactNum.length !== 13) {
+          newErrors.contactNum = 'Contact number must be 13 digits if starting with "+63"';
+        }
+      }
+    }
+  
+    if (!data.emailAdd) {
+      newErrors.emailAdd = 'Email address is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.emailAdd)) {
+      newErrors.emailAdd = 'Invalid email format';
+    }
 
     return newErrors;
   };
@@ -111,7 +127,7 @@ const AddClientForm = () => {
             className={`h-8 w-72 flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.contactNum && errors.contactNum ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='contactNum' value={formData.contactNum} onChange={handleChange} onBlur={() => handleBlur('contactNum')}
           />
-          {touched.contactNum && errors.contactNum && <p className='text-red-500 text-xs mt-1 text-left'>{errors.contactNum}</p>}
+          {touched.contactNum && errors.contactNum && <p className='text-red-500 text-xs mt-1 text-left text-wrap'>{errors.contactNum}</p>}
         </div>
         <div>
           <p className='text-xs font-bold flex mb-1'>Email Address</p>

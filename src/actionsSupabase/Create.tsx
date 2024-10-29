@@ -68,7 +68,8 @@ export async function addPhase(FormData: FormData, id: any) {
     try {
         // Extract values from FormData
         const priority = Number(FormData.get('priority'));
-        const phaseName = FormData.get('phaseName');
+        const phaseName = FormData.get('phasename');
+        console.log(FormData)
 
         // Validate phase inputs
         const phaseError = validatePhaseInputs({ priority, phaseName });
@@ -96,6 +97,7 @@ export async function addPhase(FormData: FormData, id: any) {
         return { success: false, message: 'An error occurred: ' + err.message };
     }
     revalidatePath('/Projects/' + id + '/view');
+    redirect('/Projects/' + id + '/view');
 }
 
 // Validation functions
