@@ -24,8 +24,6 @@ import router from 'next/router'
 
 
 
-
-
 type SearchParamProps = {
     searchParams: Record<string, string> | null | undefined;
   };
