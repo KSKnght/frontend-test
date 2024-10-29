@@ -73,7 +73,7 @@ const isEmpty = Object.values(formData).every(field => field === '');
     <form onSubmit={handleSubmit}>
         <div className='flex flex-row space-x-4'>
             <div>
-              <p className='text-slate-700 flex text-xs font-bold mb-1'>Phase Name</p>
+              <p className='text-slate-700 flex text-xs font-bold mb-1'>Phase Name*</p>
               <input 
                 className={`h-6 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.phasename && errors.phasename ? 'border-red-500' : 'border-slate-200'}`}
                 type="text"
@@ -86,7 +86,7 @@ const isEmpty = Object.values(formData).every(field => field === '');
             </div>
             
             <div>
-              <p className='text-slate-700 flex text-xs font-bold mb-1'>Priority</p>
+              <p className='text-slate-700 flex text-xs font-bold mb-1'>Priority*</p>
                 <input 
                   className={`h-6 w-auto flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.priority && errors.priority ? 'border-red-500' : 'border-slate-200'}`}
                   type="number"

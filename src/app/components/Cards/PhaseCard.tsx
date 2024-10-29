@@ -30,7 +30,7 @@ const PhaseCard = ({Phase, proj}) => {
         </div>
         </div>
 
-        <div className={`mt-2 mb-8 text-xs px-2 py-1 rounded-xl w-auto text-center transition-colors duration-100 ${statusColors[Phase.progress]}`}>
+        <div className={`mt-2 mb-8 text-xs px-2 py-1 rounded-xl w-auto text-center transition-colors duration-500 ${statusColors[Phase.progress]}`}>
           <h2 className='text-white font-semibold'>{Phase.progress}</h2>
         </div>
         
