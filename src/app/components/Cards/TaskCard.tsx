@@ -45,7 +45,7 @@ const TaskCard = ({tasks, data, proj}) => {
 
   const handleCheck = (e) => {
     e.stopPropagation();
-    startTransition(async () => {statusTask(tasks.id,!tasks.progress,tasks.phaseID,proj)})
+    startTransition(async () => {await statusTask(tasks.id,!tasks.progress,tasks.phaseID,proj)})
   }
 
   return (

@@ -108,7 +108,7 @@ const page = async ({searchParams} : SearchParamProps) => {
                 <AddProject />
             </Modal>}
             {edit && <Modal returnLink={'/Projects'} name={'Edit Project'}>
-                <EditProject />
+                <EditProject data={edit}/>
             </Modal>}
             <div>
                 <Navbar />

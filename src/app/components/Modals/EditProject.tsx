@@ -1,23 +1,62 @@
+import { getClients, getInfoProject } from '@/actionsSupabase/read';
+import { updateProject } from '@/actionsSupabase/Update';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { redirect } from 'next/navigation';
 import React from 'react'
 
-const EditProject = () => {
-  return (
-    <form action={async e => {'use server'; await addPhase(e, data)}}>
-        <div className='flex flex-row space-x-4'>
-            <div>
-              <p className='text-slate-700 flex text-xs font-bold mb-1'>Phase Name</p>
-              <input className='border rounded-md pl-2 focus:outline-pink-600' type="text" name='phaseName' placeholder=''/>
+const EditProject = async ({data}) => {
+  const project = await getInfoProject(data);
+  const clients = await getClients()
+
+    return (
+        <form action={async (e) => {'use server'; await updateProject(e, data); redirect('/Projects')}}>
+            <div className='flex flex-row justify-between space-x-3'>
+                <div className="grid w-full gap-1.5">
+                    <Label className='font-bold text-xs flex'>Project Name</Label>
+                    <Input defaultValue={project.name} type='text' name='name' />
+                </div>
+                <div>
+                    <p className='subHeader'>Project Type</p>
+                    <select className='inputSubHeader inputSubHeader:focus w-[10rem]'
+                        defaultValue={project.type} name='type'>
+                            <option value={'Select'} disabled={true}>Select type</option>
+                            <option value={'BUILD'}>Build</option>
+                            <option value={'DESIGN_BUILD'}>Design + Build</option>
+                            <option value={'DESIGN'}>Design</option>
+                    </select>
+                </div>
+                <div>
+                    <p className='subHeader'>Start Date</p>
+                    <input defaultValue={project.startDate} className='inputSubHeader inputSubHeader:focus w-[10rem]' type="date" name='startDate'/>
+                </div>
             </div>
             
-            <div>
-              <p className='text-slate-700 flex text-xs font-bold mb-1'>Priority</p>
-              <input className=' w-16 border rounded-md pl-2 focus:outline-pink-600' type="number" name='priority' defaultValue={0} />
+            <div className='flex flex-row justify-between space-x-3 mt-3'>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Label className='font-bold text-xs flex'>Project Address</Label>
+                    <Input defaultValue={project.projectAddress} type='text' name='address' className='w-80' />
+                </div>
+                <div>
+                    <p className='subHeader'>Client</p>
+                    <select className='inputSubHeader inputSubHeader:focus w-[10rem]' defaultValue={project.clientID} name='id'>
+                        <option value={'Select'} disabled={true}>Select Client</option>
+                        {clients.map((clients, i) => {
+                            return <option key={i} value={clients.id}>{clients.lastname + ', ' + clients.firstname+ ' ' + clients.middlename}</option>
+                        })}
+                    </select>
+                </div>
+                <div>
+                    <p className='subHeader'>End Date</p>
+                    <input defaultValue={project.endDate} className='inputSubHeader inputSubHeader:focus w-[10rem]' type="date" name='endDate'/>
+                </div>
             </div>
             
-        </div>
-        <button className='mt-8 text-sm px-4 py-1 bg-pink-600 rounded-lg text-white' type="submit">Submit</button>
-    </form>
-  )
+            <button className='submitButton' type='submit'>
+                Create Project
+            </button>
+        </form>
+    )
 }
 
 export default EditProject

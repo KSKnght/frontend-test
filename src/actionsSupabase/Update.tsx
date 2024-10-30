@@ -14,7 +14,7 @@ export async function updateProject(FormData : FormData, id: number) {
         projectAddress: FormData.get('address'),
         startDate: new Date(FormData.get('startDate') + 'T00:00:00.000Z'),
         endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
-        client_id: Number(FormData.get('id')) // Assuming you have a client_id column
+        clientID: Number(FormData.get('id')) // Assuming you have a client_id column
     })
     .eq('id', id);
 
@@ -23,8 +23,8 @@ export async function updateProject(FormData : FormData, id: number) {
     } else {
     console.log('Project updated successfully:', data);
     }
-    revalidatePath('/Project');
-    redirect('/Project');
+    revalidatePath('/Projects');
+    redirect('/Projects');
 };
 export async function updateTask(FormData : FormData, id: number, projID: number) {
     try {

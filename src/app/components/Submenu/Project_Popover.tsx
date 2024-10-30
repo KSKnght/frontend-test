@@ -16,13 +16,13 @@ const ProjectList_Popover = ({id}) => {
     <div>
         <Popover>
             <PopoverTrigger asChild>
-                <Button onClick={(e) => {e.stopPropagation()}}  className='hover:bg-slate-200 rounded-full ml-2' variant="ghost">
+                <Button onClick={(e) => {e.stopPropagation();}}  className='hover:bg-slate-200 rounded-full ml-2' variant="ghost">
                     <IoEllipsisVerticalSharp className='text-lg'/>
                 </Button>
             </PopoverTrigger>
             <PopoverContent className='w-25'>
-                <div className='flex flex-col h-auto'>
-                    <Button className='h-8' onClick={(e) => {e.stopPropagation()}} variant='ghost'>Edit</Button>
+                <div className='flex flex-col h-auto' onClick={(e) => {e.stopPropagation()}}>
+                    <Button className='h-8' onClick={(e) => {e.stopPropagation(); location.href='/Projects?edit='+id;}} variant='ghost'>Edit</Button>
                     <Alert id={id}/>
                 </div>
             </PopoverContent>
