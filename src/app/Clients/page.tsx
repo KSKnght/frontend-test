@@ -1,4 +1,6 @@
-import React, { Suspense } from 'react';
+'use client';
+
+import React, { useState, Suspense } from 'react';
 import Navbar from '../components/Sidebar';
 import { getClients } from '@/actionsSupabase/read';
 import Link from 'next/link';
@@ -18,15 +20,22 @@ import {
 } from "@/components/ui/table";
 import { HiUser } from "react-icons/hi";
 
-
 type SearchParamProps = {
-  searchParams: Record<string, string> | null | undefined;
+  show?: boolean;
+  edit?: string;
 };
 
-const page = async ({ searchParams }: SearchParamProps) => {
-  const data = await getClients();
+const ClientsPage = ({ clients, searchParams }: { clients: any[], searchParams: Record<string, string> | null | undefined }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const show = searchParams?.show;
   const edit = searchParams?.edit;
+
+  // Filtered data based on search term
+  const filteredClients = clients.filter((client) =>
+    `${client.lastname} ${client.firstname} ${client.middlename}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
 
   return (
     <main className='flex'>
@@ -50,10 +59,26 @@ const page = async ({ searchParams }: SearchParamProps) => {
             Add Client
           </Link>
         </div>
+        
+        {/* Search bar */}
+        <div className='px-[3rem] mb-3'>
+          <input
+            type='text'
+            placeholder='Search clients...'
+            className='w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-pink-600'
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
         <Suspense>
           <div className='mt-8 px-[3rem] overflow-auto' style={{ maxHeight: 'calc(103vh - 200px)' }}>
             <Table className='w-full table-fixed'>
-              <TableCaption>A list of your clients.</TableCaption>
+              <TableCaption>
+                {filteredClients.length > 0 
+                  ? 'A list of your clients.'
+                  : 'No clients matched.'}
+              </TableCaption>
               <TableHeader>
                 <TableRow className=''>  
                   <TableHead className='font-bold text-slate-600 w-[25rem]'>Client Name</TableHead>
@@ -63,7 +88,7 @@ const page = async ({ searchParams }: SearchParamProps) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((client, i) => (
+                {filteredClients.map((client, i) => (
                   <TableRow key={i}>
                     <TableCell className='w-[25rem]'>
                       {client.lastname + ' ' + client.firstname + ' ' + client.middlename}
@@ -85,6 +110,12 @@ const page = async ({ searchParams }: SearchParamProps) => {
       </div>
     </main>
   );
+}
+
+// Fetch data and render the main component
+const page = async ({ searchParams }: { searchParams: Record<string, string> | null | undefined }) => {
+  const clients = await getClients();
+  return <ClientsPage clients={clients} searchParams={searchParams} />;
 }
 
 export default page;
