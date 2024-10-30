@@ -156,4 +156,6 @@ export async function updateClient(FormData : FormData, id: number) {
     } else {
         console.log('Client updated!');
     }
+    revalidatePath('/Clients');
+    redirect('/Clients')
 }

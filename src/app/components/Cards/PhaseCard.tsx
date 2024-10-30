@@ -7,9 +7,15 @@ import { HiTrash } from "react-icons/hi";
 import { softDelPhase } from '@/actionsSupabase/Delete';
 import { ppid } from 'process';
 
+const statusColors = {
+  NOT_STARTED: 'bg-red-500',    
+  IN_PROGRESS: 'bg-yellow-500', 
+  COMPLETE: 'bg-green-500',     
+};
+
 const PhaseCard = ({Phase, proj}) => {
   return (
-    <div className='h-auto w-full rounded-lg bg-slate-100 ml-5 mt-2 mb-auto p-4 shadow-sm border transition-all'>
+    <div className='h-auto w-[20rem] rounded-lg bg-slate-100 ml-5 mt-2 mb-auto p-4 shadow-sm border transition-all'>
         <div className='flex flex-row justify-between'>
           <div className='flex flex-row justify-between'>
             <h1 className='mt-1 text-xl font-semibold text-pink-600 leading-tight'>{Phase.phaseName}</h1>
@@ -24,8 +30,8 @@ const PhaseCard = ({Phase, proj}) => {
         </div>
         </div>
 
-        <div className='mt-2 mb-8 text-xs px-2 py-1 bg-slate-400 rounded-xl w-[8rem]'>
-          <h2>{Phase.progress}</h2>
+        <div className={`mt-2 mb-8 text-xs px-2 py-1 rounded-xl w-auto text-center transition-colors duration-500 ${statusColors[Phase.progress]}`}>
+          <h2 className='text-white font-semibold'>{Phase.progress}</h2>
         </div>
         
         <div className='w-auto h-auto'>
@@ -34,6 +40,7 @@ const PhaseCard = ({Phase, proj}) => {
                 if (task.isDeleted == false) return <TaskCard tasks={task} proj={proj} data={Phase.projectID} key={i}/>
               })
           }
+          
         </div>
     </div>
   )

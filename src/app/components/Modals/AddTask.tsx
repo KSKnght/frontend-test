@@ -1,73 +1,145 @@
-'use client'
+'use client';
 
 import { createTask } from '@/actionsSupabase/Create';
 import React, { startTransition, useState } from 'react'
 import { revalidatePath } from 'next/cache';
 
-const AddTask = async ({data, projID}) => {
+const AddTask = ({data, projID}) => {
+
     const [formData, setFormData] = useState({
-        priority: '',
         taskname: '',
+        priority: '',
         deadline: '',
-    })
+        description: ''
+      })
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData({...formData, [name]: value});
+        setFormData({ ...formData, [name]: value });
 
-        //Validate input on change
+            // Validate input on change
         if (touched[name]) {
-            const newErrors = validateInputs({...formData, [name]: value});
-            setErrors(newErrors);
-        }
-    };
+            const newErrors = validateInputs({ ...formData, [name]: value });
+            setErrors(newErrors); // Update errors state
+            }
+        };
 
     const handleBlur = (name: string) => {
-        setTouched({...touched, [name]: true}) //Mark field as touched on blur
+        setTouched({ ...touched, [name]: true }); // Mark field as touched on blur
         const newErrors = validateInputs(formData);
-        setErrors(newErrors); //Validate inputs when user leaves the field
-    };
+        setErrors(newErrors); // Validate inputs when user leaves the field
+  };
 
     const validateInputs = (data: typeof formData) => {
         const newErrors: {[key: string]: string} = {};
-        const priorityValue = Number(data.priority);
-        if (priorityValue <= 0) newErrors.priority = 'Priority should be more than 0';
-        if (!data.taskname) newErrors.taskname = 'Task name is required';
-        if (!data.deadline) newErrors.deadline = 'Deadline is required';
+        if (!data.taskname) {
+            newErrors.taskname = 'Task name is required';
+          } else if (data.taskname.length < 3) {
+            newErrors.taskname = 'Task name must be at least 3 characters long';
+          }
+        
+          if (!data.priority) {
+            newErrors.priority = 'Priority is required';
+          } else if (Number(data.priority) <= 0) {
+            newErrors.priority = 'Priority must be over 0';
+          }
+        
+          if (!data.deadline) {
+            newErrors.deadline = 'Deadline is required';
+          } else if (isNaN(new Date(data.deadline).getTime())) {
+            newErrors.deadline = 'Invalid date format';
+          }
+
+        return newErrors;
     }
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const validationErrors = validateInputs(formData);
+        if (Object.keys(validationErrors).length > 0) {
+          setErrors(validationErrors);
+          return;
+        }
+
+        const formDataToSend = new FormData(e.currentTarget);
+        setErrors({});
+        
+        startTransition(async () => {
+          try {
+            console.log('Sending data to create phase:', formDataToSend);
+            await createTask(formDataToSend, data, projID);
+          } catch (error) {
+            setErrors({ submit: error.message || 'Failed to create phase. Please try again.' });
+          }
+        });
+
+        
+    };
+    
+    const hasErrors = Object.keys(errors).length > 0;
+    const isEmpty = Object.values(formData).every(field => field === '');
+
 
 
     return (
-        <form action={e => {startTransition(async () => {await createTask(e, data, projID)})}}>
+        <form onSubmit={handleSubmit}>
         <div className='flex flex-row justify-evenly space-x-3'>
             <div>
-                <p className='text-xs font-bold flex mb-1'>Priority</p>
-                <input className='w-16 flex border border-slate-200 focus:outline-pink-600 rounded-lg pl-1 text-sm' 
-                       type="number" name='priority' defaultValue={0} />
+                <p className='text-xs font-bold flex mb-1'>Priority*</p>
+                <input 
+                    className={`h-6 w-auto flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.priority && errors.priority ? 'border-red-500' : 'border-slate-200'}`}
+                    type="number" 
+                    name='priority' 
+                    value={formData.priority} 
+                    onChange={handleChange}
+                    onBlur={() => handleBlur('priority')}
+                />
+                {touched.priority && errors.priority && <p className='text-red-500 text-xs mt-1 text-left'>{errors.priority}</p>} 
             </div>
             
             <div>
-                <p className='text-xs font-bold flex mb-1'>Task Name</p>
-                <input className='w-64 flex border border-slate-200 focus:outline-pink-600 rounded-lg pl-1 text-sm' 
-                       type="text" name='taskName' placeholder=''/>
+                <p className='text-xs font-bold flex mb-1'>Task Name*</p>
+                <input 
+                    className={`h-6 w-auto flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.taskname && errors.taskname ? 'border-red-500' : 'border-slate-200'}`}
+                    type="text" 
+                    name='taskname' 
+                    value={formData.taskname} 
+                    onChange={handleChange}
+                    onBlur={() => handleBlur('taskname')}
+                />
+                {touched.taskname && errors.taskname && <p className='text-red-500 text-xs mt-1 text-left'>{errors.taskname}</p>} 
             </div>
             
             <div>
-                <p className='text-xs font-bold flex mb-1'>Deadline</p>
-                <input className='w-30 flex border border-slate-200 focus:outline-pink-600 rounded-lg pl-1 text-sm' 
-                       type="date" name='deadline'/>
+                <p className='text-xs font-bold flex mb-1'>Deadline*</p>
+                <input 
+                    className={`h-6 w-auto flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.deadline && errors.deadline ? 'border-red-500' : 'border-slate-200'}`}
+                    type="date" 
+                    name='deadline'
+                    value={formData.deadline} 
+                    onChange={handleChange}
+                    onBlur={() => handleBlur('deadline')}
+                />
+                {touched.deadline && errors.deadline && <p className='text-red-500 text-xs mt-1 text-left'>{errors.deadline}</p>} 
             </div>
         </div>
         <div className='mt-3'>
             <p className='text-xs font-bold flex mb-1'>Description</p>
             <textarea className='resize-none w-full flex border border-slate-200 focus:outline-pink-600 rounded-lg pl-1 text-sm h-20'
-                    name='description' placeholder='Description'/>
+                    name='description' placeholder='Add description of the task'/>
         </div>
 
-        <button className='mt-8 text-sm px-4 py-1 bg-pink-600 rounded-lg text-white' type="submit">Add</button>
+        <button 
+          className={`mt-8 text-sm px-4 py-1 rounded-lg text-white ${hasErrors || isEmpty ? 'bg-gray-400 cursor-not-allowed' : 'bg-pink-600'}`}
+          type="submit"
+          disabled={hasErrors || isEmpty}
+          >
+            Add Task
+          </button>
+        {errors.submit && <p className='text-red-500 text-xs mt-1 text-left'>{errors.submit}</p>}
     </form>
     )
   }

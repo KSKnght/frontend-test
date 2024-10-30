@@ -36,13 +36,29 @@ const AddClientForm = () => {
 
   const validateInputs = (data: typeof formData) => {
     const newErrors: { [key: string]: string } = {};
+
     if (!data.firstname) newErrors.firstname = 'First name is required';
     if (!data.lastname) newErrors.lastname = 'Last name is required';
     if (!data.middlename) newErrors.middlename = 'Middle name is required';
-    if (!data.contactNum) newErrors.contactNum = 'Contact number is required';
-    if (!data.emailAdd) newErrors.emailAdd = 'Email address is required';
-    if (!/^\d{11}$/.test(data.contactNum)) newErrors.contactNum = 'Contact number must be 11 digits';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.emailAdd)) newErrors.emailAdd = 'Invalid email format';
+    if (!data.contactNum) {
+      newErrors.contactNum = 'Contact number is required';
+    } else {
+      if (!/^09|^\+63/.test(data.contactNum)) {
+        newErrors.contactNum = 'Contact number must start with "09" or "+63"';
+      } else {
+        if (data.contactNum.startsWith("09") && data.contactNum.length !== 11) {
+          newErrors.contactNum = 'Contact number must be 11 digits if starting with "09"';
+        } else if (data.contactNum.startsWith("+63") && data.contactNum.length !== 13) {
+          newErrors.contactNum = 'Contact number must be 13 digits if starting with "+63"';
+        }
+      }
+    }
+  
+    if (!data.emailAdd) {
+      newErrors.emailAdd = 'Email address is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.emailAdd)) {
+      newErrors.emailAdd = 'Invalid email format';
+    }
 
     return newErrors;
   };
@@ -79,7 +95,7 @@ const AddClientForm = () => {
     <form onSubmit={handleSubmit}>
       <div className='flex flex-row justify-evenly space-x-3'>
         <div>
-          <p className='text-xs font-bold flex mb-1'>First Name</p>
+          <p className='text-xs font-bold flex mb-1'>First Name*</p>
           <input
             className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.firstname && errors.firstname ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='firstname' value={formData.firstname} onChange={handleChange} onBlur={() => handleBlur('firstname')}
@@ -87,7 +103,7 @@ const AddClientForm = () => {
           {touched.firstname && errors.firstname && <p className='text-red-500 text-xs mt-1 text-left'>{errors.firstname}</p>}
         </div>
         <div>
-          <p className='text-xs font-bold flex mb-1'>Middle Name</p>
+          <p className='text-xs font-bold flex mb-1'>Middle Name*</p>
           <input
             className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.middlename && errors.middlename ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='middlename' value={formData.middlename} onChange={handleChange} onBlur={() => handleBlur('middlename')}
@@ -95,7 +111,7 @@ const AddClientForm = () => {
           {touched.middlename && errors.middlename && <p className='text-red-500 text-xs mt-1 text-left'>{errors.middlename}</p>}
         </div>
         <div>
-          <p className='text-xs font-bold flex mb-1'>Last Name</p>
+          <p className='text-xs font-bold flex mb-1'>Last Name*</p>
           <input
             className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.lastname && errors.lastname ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='lastname' value={formData.lastname} onChange={handleChange} onBlur={() => handleBlur('lastname')}
@@ -106,15 +122,15 @@ const AddClientForm = () => {
 
       <div className='flex flex-row justify-between space-x-3 mt-3'>
         <div>
-          <p className='text-xs font-bold flex mb-1'>Contact Number</p>
+          <p className='text-xs font-bold flex mb-1'>Contact Number*</p>
           <input
             className={`h-8 w-72 flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.contactNum && errors.contactNum ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='contactNum' value={formData.contactNum} onChange={handleChange} onBlur={() => handleBlur('contactNum')}
           />
-          {touched.contactNum && errors.contactNum && <p className='text-red-500 text-xs mt-1 text-left'>{errors.contactNum}</p>}
+          {touched.contactNum && errors.contactNum && <p className='text-red-500 text-xs mt-1 text-left text-wrap'>{errors.contactNum}</p>}
         </div>
         <div>
-          <p className='text-xs font-bold flex mb-1'>Email Address</p>
+          <p className='text-xs font-bold flex mb-1'>Email Address*</p>
           <input
             className={`h-8 w-72 flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.emailAdd && errors.emailAdd ? 'border-red-500' : 'border-slate-200'}`}
             type="text" name='emailAdd' value={formData.emailAdd} onChange={handleChange} onBlur={() => handleBlur('emailAdd')}
