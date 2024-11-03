@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { supabase } from '@/lib/supabase'
-import router from 'next/router'
+import ProjectsList from '../components/ProjectsList'
 
 
 
@@ -32,7 +32,7 @@ const AddProject = async () => {
     const clients = await getClients()
 
     return (
-        <form action={async (e) => {'use server'; await createProject(e); redirect('/Projects')}}>
+        <form action={async (e) => {'use server'; await createProject(e); redirect('/Projects');}}>
             <div className='flex flex-row justify-between space-x-3'>
                 <div className="grid w-full gap-1.5">
                     <Label className='font-bold text-xs flex'>Project Name</Label>
@@ -74,7 +74,7 @@ const AddProject = async () => {
                 </div>
             </div>
             
-            <button className='submitButton' type='submit'>
+            <button className='submitButton' name='submit' type='submit'>
                 Create Project
             </button>
         </form>
@@ -86,17 +86,7 @@ const page = async ({searchParams} : SearchParamProps) => {
     const display = await getProjects();
     const show = searchParams?.show;
     const edit = searchParams?.edit;
-    const channel = supabase.channel("realtime project").on("postgres_changes",
-    {
-      event: "*",
-      schema: "public",
-      table: "project",
-    },
-    (payload) => {
-      revalidatePath("/Projects");
-    }
-  )
-  .subscribe();
+    
 
  
   
@@ -136,8 +126,10 @@ const page = async ({searchParams} : SearchParamProps) => {
                         </Button>
                     </div>
                 </div>
+
                 
-                <Suspense>
+                <ProjectsList ProjectsData={display ?? []}/>
+                {/* <Suspense>
                     <div className='h-[calc(100vh-130px)] overflow-y-scroll -translate-y-5'>
                         <ul className='grid gap-6 p-6 min-[800px]:grid-cols-2 max-[1920px]:grid-cols-1'>
                             {display.map((display, i) => {
@@ -146,7 +138,7 @@ const page = async ({searchParams} : SearchParamProps) => {
                             })}
                         </ul>
                     </div>
-                </Suspense>
+                </Suspense> */}
             </div>
             
         </main>

@@ -13,7 +13,9 @@ export async function getProjects() {
                 contactNum,
                 emailAdd
             )
-        `);
+        `)
+        .order('id', { ascending: false });
+        
 
     if (error) {
         console.error('Error fetching projects:', error);
