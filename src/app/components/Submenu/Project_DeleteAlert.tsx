@@ -23,18 +23,17 @@ const Project_DeleteAlert = ({id}) => {
         </AlertDialogTrigger>
         <AlertDialogContent>
             <AlertDialogHeader>
-            <AlertDialogTitle>Delete this Project?</AlertDialogTitle>
+            <AlertDialogTitle>Cancel this Project?</AlertDialogTitle>
             <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the project
-                and its data will be removed from the system.
+                This project will be cancelled and be removed from the main view.
             </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-            <AlertDialogCancel onClick={(e) => {e.stopPropagation()}}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel onClick={(e) => {e.stopPropagation()}}>Sustain</AlertDialogCancel>
             <AlertDialogAction onClick={(e) => {e.stopPropagation(); startTransition(async () => {
              await softdelProject(id);
            })}} className='text-red-500 bg-red-50 hover:bg-red-100'>
-              Delete
+              Cancel Project
             </AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
