@@ -18,7 +18,7 @@ const PhaseCard = ({Phase, proj}) => {
     <div className='h-auto w-[20rem] rounded-lg bg-slate-100 ml-5 mt-2 mb-auto p-4 shadow-sm border transition-all'>
         <div className='flex flex-row justify-between'>
           <div className='flex flex-row justify-between'>
-            <h1 className='mt-1 text-xl font-semibold text-pink-600 leading-tight'>{Phase.phaseName}</h1>
+            <h1 className='mt-1 text-xl font-semibold text-pink-600 leading-tight text-nowrap'>{Phase.phaseName}</h1>
           </div>
         <div className='flex flex-row text-slate-600 ml-4 items-center gap-1'>
             <Link href={'/Projects/'+Phase.projectID+'/view?phase='+Phase.id}>

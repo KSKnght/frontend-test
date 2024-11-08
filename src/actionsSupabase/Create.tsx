@@ -54,14 +54,14 @@ export async function createProject(FormData: FormData) {
                 DesignBuild(data[0].id);
             } else {
                 Design(data[0].id);
-            }
-
-            revalidatePath('/Projects');
-            revalidatePath('/Projects?show=true');
+            };
+            
         }
     } catch (err) {
         return { success: false, message: 'An error occurred: ' + err.message };
     }
+
+    redirect('/Projects');
 }
 
 export async function addPhase(FormData: FormData, id: any) {
