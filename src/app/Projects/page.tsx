@@ -32,12 +32,12 @@ const AddProject = async () => {
     const clients = await getClients()
 
     return (
-        <form action={async (e) => {'use server'; await createProject(e); redirect('/Projects');}}>
+        <form action={async (e) => {'use server'; await createProject(e);}}>
             <div className='flex flex-row justify-between space-x-3'>
                 <div className="grid w-full gap-1.5">
                     <Label className='font-bold text-xs flex'>Project Name</Label>
                     <Input type='text' name='name' />
-                </div>
+                </div> 
                 <div>
                     <p className='subHeader'>Project Type</p>
                     <select className='inputSubHeader inputSubHeader:focus w-[10rem]'

@@ -10,6 +10,7 @@ import { useOptimistic } from "react";
 import { statusPhase } from "./statuses";
 
 export async function createProject(FormData: FormData) {
+    var success = false;
     try {
         // Extract values from FormData
         const name = FormData.get('name');
@@ -19,13 +20,6 @@ export async function createProject(FormData: FormData) {
         const endDate = FormData.get('endDate');
         const clientID = Number(FormData.get('id'));
 
-        // Validate project inputs
-        const projectError = validateProjectInputs({ name, type, projectAddress, startDate, endDate, clientID });
-        if (projectError) {
-            console.error(projectError);
-            return; // Exit if validation fails
-        }
-
         // Insert project into the database
         const { data, error } = await supabase
             .from('project')
@@ -34,8 +28,8 @@ export async function createProject(FormData: FormData) {
                     name,
                     type,
                     projectAddress,
-                    startDate: new Date(startDate + 'T00:00:00.000Z'),
-                    endDate: new Date(endDate + 'T00:00:00.000Z'),
+                    startDate: new Date(startDate as string),
+                    endDate: new Date(endDate as string),
                     progress: 'NOT_STARTED',
                     clientID
                 }
@@ -43,7 +37,7 @@ export async function createProject(FormData: FormData) {
             .select();
 
         if (error) {
-            console.error('Error creating project:', error);
+           throw error
         } else {
             console.log('Project created:', data[0].id);
 
@@ -56,12 +50,16 @@ export async function createProject(FormData: FormData) {
                 Design(data[0].id);
             };
             
+            success = true;
+
         }
     } catch (err) {
-        return { success: false, message: 'An error occurred: ' + err.message };
+        console.error('Error creating project:', err);
+        return err;
     }
-
-    redirect('/Projects');
+    
+    if (success == true)
+        redirect('/Projects');
 }
 
 export async function addPhase(FormData: FormData, id: any) {
