@@ -31,29 +31,24 @@ model phase {
   priority   Int
   phaseName  String       @db.VarChar(40)
   progress   progessField
+  isDeleted  Boolean      @default(false)
   project    project      @relation(fields: [projectID], references: [id])
   phaseTasks phaseTasks[]
 }
 
 model phaseTasks {
-  id          Int          @id @default(autoincrement())
-  taskName    String       @db.VarChar(100)
+  id          Int        @id @default(autoincrement())
+  taskName    String     @db.VarChar(100)
   description String
   phaseID     Int
-  progress    progessField
-  deadline    DateTime     @db.Date
+  deadline    DateTime   @db.Date
   priority    Int
-  phase       phase        @relation(fields: [phaseID], references: [id])
+  isDeleted   Boolean    @default(false)
+  progress    Boolean    @default(false)
+  status      taskStatus @default(NOT_STARTED)
+  phase       phase      @relation(fields: [phaseID], references: [id])
   taskMat     taskMat[]
-  subCon      subCon[]     @relation("phaseTasksTosubCon")
-}
-
-model projMat {
-  id       Int   @id @default(autoincrement())
-  projId   Int
-  matId    Int
-  totalQty Float
-  usedQty  Float
+  subCon      subCon[]   @relation("phaseTasksTosubCon")
 }
 
 model project {
@@ -65,6 +60,7 @@ model project {
   endDate        DateTime     @db.Date
   clientID       Int
   progress       progessField
+  isDeleted      Boolean      @default(false)
   phase          phase[]
   client         client       @relation(fields: [clientID], references: [id])
 }
@@ -72,7 +68,6 @@ model project {
 model subCon {
   id         Int          @id @default(autoincrement())
   Name       String       @unique @db.VarChar(40)
-
   phaseTasks phaseTasks[] @relation("phaseTasksTosubCon")
 }
 
@@ -103,4 +98,10 @@ enum unit {
   PC
   INCH
   METER
+}
+
+enum taskStatus {
+  NOT_STARTED
+  OVERDUE
+  COMPLETED
 }

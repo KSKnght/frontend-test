@@ -22,7 +22,7 @@ import { Label } from "@/components/ui/label"
 import { supabase } from '@/lib/supabase'
 import ProjectsList from '../components/ProjectsList'
 
-
+export const revalidate = 0;
 
 type SearchParamProps = {
     searchParams: Record<string, string> | null | undefined;

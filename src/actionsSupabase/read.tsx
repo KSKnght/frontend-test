@@ -1,6 +1,8 @@
 import { supabase } from "@/lib/supabase";
 import prisma from "../lib/db";
 
+export const revalidate = 0
+
 export async function getProjects() {
     const { data, error } = await supabase
         .from('project')
