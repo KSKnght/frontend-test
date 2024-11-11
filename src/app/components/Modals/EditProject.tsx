@@ -53,7 +53,7 @@ const EditProject = async ({data}) => {
             </div>
             
             <button className='submitButton' type='submit'>
-                Create Project
+                Update Project
             </button>
         </form>
     )

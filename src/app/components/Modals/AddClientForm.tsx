@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { createClient } from '@/actionsSupabase/Create';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/dist/server/api-utils';
+import { useRouter } from 'next/navigation';
 
 const AddClientForm = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +17,8 @@ const AddClientForm = () => {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({}); // Track if input has been touched
+
+  const route = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -79,6 +82,7 @@ const AddClientForm = () => {
       const response = await createClient(formDataToSend); // pass FormData for server action
       if (response.success) {
         revalidatePath('/Clients');
+        //redirect('/Clients')
       } else {
         setErrors({ submit: 'Failed to create client. Please try again.' }); // Handle error from server
       }
@@ -92,7 +96,7 @@ const AddClientForm = () => {
   const isEmpty = Object.values(formData).every(field => field === ''); // Check if all fields are empty
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) =>{handleSubmit(e); route.back()}}>
       <div className='flex flex-row justify-evenly space-x-3'>
         <div>
           <p className='text-xs font-bold flex mb-1'>First Name*</p>

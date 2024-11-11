@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useEffect } from 'react';
 import Navbar from '../components/Sidebar';
 import { getClients } from '@/actionsSupabase/read';
 import Link from 'next/link';
@@ -19,6 +19,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { HiUser } from "react-icons/hi";
+import { reloadPage } from '@/actionsSupabase/reload';
+import { supabase } from '@/lib/supabase';
 
 type SearchParamProps = {
   show?: boolean;
@@ -29,6 +31,27 @@ const ClientsPage = ({ clients, searchParams }: { clients: any[], searchParams: 
   const [searchTerm, setSearchTerm] = useState('');
   const show = searchParams?.show;
   const edit = searchParams?.edit;
+
+  useEffect(() => {
+    const channel = supabase.channel("realtime project").on("postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "client",
+      },
+      async (payload) => {
+       await reloadPage('/Clientss');
+       await reloadPage('/Clients?show=true');
+       await reloadPage('/Clients?edit=true');
+      }
+    )
+    .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [supabase])
+  
 
   // Filtered data based on search term
   const filteredClients = clients.filter((client) =>

@@ -211,7 +211,7 @@ export async function createClient(FormData: FormData) {
         return { success: false, message: 'An error occurred: ' + err.message };
     }
 
-    revalidatePath('/Clients');
+    
     redirect('/Clients');
 }
 
