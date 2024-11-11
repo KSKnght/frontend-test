@@ -12,9 +12,12 @@ import {
   } from "../ui/alertdialog"
 import { Button } from "../ui/button";
 import { softdelProject } from '@/actionsSupabase/Delete';
+import { toast } from 'react-toastify';
   
 
 const Project_DeleteAlert = ({id}) => {
+
+  
   return (
     <div>
       <AlertDialog>
@@ -32,6 +35,7 @@ const Project_DeleteAlert = ({id}) => {
             <AlertDialogCancel onClick={(e) => {e.stopPropagation()}}>Sustain</AlertDialogCancel>
             <AlertDialogAction onClick={(e) => {e.stopPropagation(); startTransition(async () => {
              await softdelProject(id);
+             toast.success("Project has been cancelled.");
            })}} className='text-red-500 bg-red-50 hover:bg-red-100'>
               Cancel Project
             </AlertDialogAction>

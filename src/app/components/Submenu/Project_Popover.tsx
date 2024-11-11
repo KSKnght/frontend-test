@@ -9,10 +9,13 @@ import Alert from "../Submenu/Project_DeleteAlert"
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 
 
+
+
   
 
 const ProjectList_Popover = ({id}) => {
-  return (
+  
+    return (
     <div>
         <Popover>
             <PopoverTrigger asChild>
@@ -23,7 +26,7 @@ const ProjectList_Popover = ({id}) => {
             <PopoverContent className='w-25'>
                 <div className='flex flex-col h-auto' onClick={(e) => {e.stopPropagation()}}>
                     <Button className='h-8' onClick={(e) => {e.stopPropagation(); location.href='/Projects?edit='+id;}} variant='ghost'>Edit</Button>
-                    <Alert id={id}/>
+                    <Alert id={id} />
                 </div>
             </PopoverContent>
         </Popover>
