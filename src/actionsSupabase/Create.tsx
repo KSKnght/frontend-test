@@ -68,13 +68,6 @@ export async function addPhase(FormData: FormData, id: any) {
         const phaseName = FormData.get('phasename');
         console.log(FormData)
 
-        // Validate phase inputs
-        const phaseError = validatePhaseInputs({ priority, phaseName });
-        if (phaseError) {
-            console.error(phaseError);
-            return; // Exit if validation fails
-        }
-
         // Insert phase into the database
         const { data, error } = await supabase
             .from('phase')
@@ -95,38 +88,6 @@ export async function addPhase(FormData: FormData, id: any) {
     }
     revalidatePath('/Projects/' + id + '/view');
     redirect('/Projects/' + id + '/view');
-}
-
-// Validation functions
-function validateProjectInputs({ name, type, projectAddress, startDate, endDate, clientID }) {
-    let errors = [];
-
-    if (!name) {
-        errors.push('Project name is required');
-    }
-    if (!type) errors.push('Project type is required');
-    if (!projectAddress) errors.push('Project address is required');
-    if (!startDate) errors.push('Start date is required');
-    if (!endDate) errors.push('End date is required');
-    if (isNaN(clientID) || clientID <= 0) errors.push('Valid client ID is required');
-
-    // Check if end date is after start date and vice versa
-    if (new Date(endDate) <= new Date(startDate)) {
-        errors.push('End date must be after start date');
-    } else if (new Date(startDate) >= new Date(endDate)) {
-        errors.push('Start date must be before end date')
-    }
-
-    return errors.length > 0 ? errors.join('. ') : null; // Join errors into a single message
-}
-
-function validatePhaseInputs({ priority, phaseName }) {
-    let errors = [];
-
-    if (isNaN(priority) || priority <= 0) errors.push('Priority must be a positive number');
-    if (!phaseName) errors.push('Phase name is required');
-
-    return errors.length > 0 ? errors.join('. ') : null; // Join errors into a single message
 }
 
 

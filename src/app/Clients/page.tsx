@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/table";
 import { HiUser } from "react-icons/hi";
 
-export const revalidate = 10;
 
 type SearchParamProps = {
   show?: boolean;
@@ -104,6 +103,8 @@ const ClientsPage = ({ clients, searchParams }: { clients: any[], searchParams: 
                       </Link>
                     </TableCell>
                   </TableRow>
+
+                  
                 ))}
               </TableBody>
             </Table>
