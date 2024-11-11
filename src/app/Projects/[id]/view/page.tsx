@@ -11,6 +11,8 @@ import EditTask from '@/app/components/Modals/EditTask'
 import TaskDetails from '@/app/components/Modals/TaskDetails'
 import { IoIosAddCircle } from "react-icons/io";
 
+export const revalidate = 0;
+
 type SearchParamProps = {
   addsub: any
   addmat: any

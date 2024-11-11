@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { statusPhase } from "./statuses";
 
 export async function softdelProject(id: Number) {
     const { error } = await supabase
@@ -26,8 +25,6 @@ export async function softDelTasks(id: Number, projID: Number) {
     })
     .eq('id', id)
     .select('phaseID')
-
-    await statusPhase(data[0].phaseID)
 
     if (error) console.log('Error deleting Tasks:', error)
     
