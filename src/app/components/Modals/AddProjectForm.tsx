@@ -11,9 +11,10 @@ type AddProjectFormProps = {}
 
 const AddProjectForm: React.FC<AddProjectFormProps> = async () => {
     const clients = await getClients()
+    
 
     return (
-        <form action={async (e) => {'use server'; await createProject(e); redirect('/Projects')}}>
+        <form action={async (e) => {'use server'; await createProject(e)}}>
             <div className='flex flex-row justify-between space-x-3'>
                 <div className="grid w-full gap-1.5">
                     <Label className='font-bold text-xs flex'>Project Name</Label>
