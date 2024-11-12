@@ -2,17 +2,6 @@
 
 import {z} from "zod"
 
-//Client Form - Duplication
-const emailDuplicationCheck = async (emailaddress: string) => {
-    const existingEmails = []
-    return existingEmails.includes(emailaddress);
-}
-
-const contactDuplicationCheck = async (contactnum: string) => {
-    const existingContacts = []
-    return existingContacts.includes(contactnum)
-}
-
 //Client Form - Input
 export const clientformSchema = z.object({
     firstname: z.string().min(1, {
@@ -44,12 +33,6 @@ export const clientformSchema = z.object({
 export type clientformData = z.infer<typeof clientformSchema>;
 
 
-//Project Form - Duplication
-const projectDuplicationCheck = async (projectName: string) => {
-    const existingProjects = []
-    return existingProjects.includes(projectName)
-}
-
 //Project Form - Input
 export enum clientOptions {
     SELECT = 'Select Client'
@@ -79,11 +62,6 @@ export const projectformSchema = z.object({
 })
 export type projectData = z.infer<typeof projectformSchema>
 
-//Phase Form - Duplication
-const phasenameDuplicationCheck = async (phaseName: string) => {
-    const existingPhaseNames = []
-    return existingPhaseNames.includes(phaseName);
-}
 
 //Phase Form - Input
 export const phaseSchema = z.object({
