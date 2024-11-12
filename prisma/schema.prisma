@@ -85,6 +85,8 @@ enum progessField {
   COMPLETE
   NOT_STARTED
   IN_PROGRESS
+  OVERDUE
+  CANCELLED
 }
 
 enum type {

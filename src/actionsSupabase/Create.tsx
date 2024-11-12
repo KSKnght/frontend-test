@@ -90,7 +90,6 @@ export async function addPhase(FormData: FormData, id: any) {
     redirect('/Projects/' + id + '/view');
 }
 
-
 export async function createTask(FormData : FormData, id: any, projID: number) {
     try {
         const { data, error } = await supabase
@@ -125,28 +124,6 @@ export async function createClient(FormData: FormData) {
         const middlename = FormData.get('middlename');
         const contactNum = FormData.get('contactNum');
         const emailAdd = FormData.get('emailAdd');
-
-        // Validate required fields
-        const validationError = validateRequiredFields({ lastname, firstname, contactNum, emailAdd });
-        if (validationError) {
-            console.error(validationError);
-            return; // Exit the function if validation fails
-        }
-
-        // Validate contact number
-        const contactError = validateContactNumber(contactNum);
-        if (contactError) {
-            console.error(contactError);
-            return; // Exit if contact number is invalid
-        }
-        
-        // Additional validation (example: email format)
-        const emailError = validateEmail(emailAdd);
-        if (emailError) {
-            console.error(emailError);
-            return; // Exit if email is invalid
-        }
-
         // Insert into the database
         const { data, error } = await supabase
             .from('client') // Replace 'client' with your actual table name
@@ -169,33 +146,6 @@ export async function createClient(FormData: FormData) {
 
     
     redirect('/Clients');
-}
-
-function validateRequiredFields({ lastname, firstname, contactNum, emailAdd }) {
-    let errors = [];
-    
-    if (!lastname) errors.push('Last name is required');
-    if (!firstname) errors.push('First name is required');
-    if (!contactNum) errors.push('Contact number is required');
-    if (!emailAdd) errors.push('Email address is required');
-
-    return errors.length > 0 ? errors.join('. ') : null; // Join errors into a single message
-}
-
-function validateContactNumber(contactNum) {
-    const contactPattern = /^\d{11}$/; // Example: Validate for exactly 10 digits
-    if (!contactPattern.test(contactNum)) {
-        return 'Contact number must be a 11-digit number';
-    }
-    return null; // No errors
-}
-
-function validateEmail(email) {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-        return 'Invalid email format';
-    }
-    return null; // No errors
 }
 
 

@@ -76,12 +76,15 @@ export async function getPhases(id:number) {
             progress,
             deadline,
             phaseID,
+            status,
             _phaseTasksTosubCon ( 
+                id,
                 B: subCon (
                     Name
                 )
             ),
             taskMat: taskMat (
+                id,
                 qty,
                 unit,
                 materials (
@@ -105,7 +108,21 @@ export async function getPhases(id:number) {
 export async function getTask(id:number) {
     const { data, error } = await supabase
     .from('phaseTasks') // Replace 'phase_tasks' with your actual table name
-    .select('*') // Select all columns, or specify the columns you need
+    .select(`
+        *,
+        _phaseTasksTosubCon ( 
+            B: subCon (
+                Name
+            )
+        ),
+        taskMat: taskMat (
+            qty,
+            unit,
+            materials (
+            name
+            )
+        )
+        `) // Select all columns, or specify the columns you need
     .eq('id', id) // Use the ID to filter the record
     .single(); // Use .single() since you expect one record
 
@@ -128,6 +145,16 @@ export async function getMaterials() {
     return data;
 }
 
+export async function getUnselectedMat(taskId:Number) {
+    const {data, error} = await supabase
+    .rpc('get_unconnected_materials_for_phase',{ 'phase_id': Number(taskId) })
+
+    if (error) {
+        console.log('Error fetching materials:', error)
+    } else 
+        return data;
+}
+
 export async function getSubcontracts() {
     // const data = await prisma.subCon.findMany();
 
@@ -140,6 +167,16 @@ export async function getSubcontracts() {
     }
 
     return data;
+}
+
+export async function getUnselectedSub(taskId:Number) {
+    const { data, error } = await supabase
+    .rpc('get_unconnected_subcontractors_for_phase', { 'phase_id': Number(taskId) })
+
+    if (error) {
+        console.log('Error fetching subCon:', error)
+    } else 
+        return data;
 }
 
 export async function showClient(id: number) {

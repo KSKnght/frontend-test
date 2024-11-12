@@ -1,12 +1,11 @@
 import React  from 'react'
-import MatCard from '../Cards/MatCard'
+import MatCard from '../../Cards/MatCard'
 import { addMaterial } from '@/actionsSupabase/Update'
 import { revalidatePath } from 'next/cache'
 
-
-const MaterialsForm = ({materials, taskID, projID}) => {
+const MaterialsForm = async ({materials, taskID, projID}) => {
     return (
-        <form action={async (e) => {'use server'; await addMaterial(e, Number(taskID)); revalidatePath('/Projects/'+projID+'/view');}}>
+        <form action={async (e) => {'use server'; await addMaterial(e, Number(taskID)); revalidatePath('/Projects/'+projID+'/view'); revalidatePath('/Projects/'+projID+'/view?viewtask=' + taskID + '&state=Mat')}}>
             <div>
                 <p className='flex text-xs font-bold'>Material Name</p>
                 <input className='mt-1 w-full flex border border-slate-200 focus:outline-pink-600 rounded-lg pl-1 text-sm'
@@ -33,9 +32,11 @@ const MaterialsForm = ({materials, taskID, projID}) => {
             {/* <input id='unit' type="text" name='unit' placeholder='unit'/> */}
             <div>
                 <p className='flex font-bold text-xs'>Select Material</p>
-                {materials.map((mat, i) => {
+                <div className=' h-12 overflow-scroll'>
+                    {materials.length === 0 ? (<p>All Materials Assigned Already</p>) : materials.map((mat, i) => {
                     return <MatCard data={mat} key={i}/>
-                })}
+                    })}
+                </div>
             </div>
         </form>
     )

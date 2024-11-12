@@ -75,6 +75,9 @@ const TaskCard = ({tasks, data, proj}) => {
             <IoTime className='mt-1 mr-1 w-3 h-3'/>
             {new Date(tasks.deadline).toDateString()}
           </h2>
+          <h3>
+            {tasks.status}
+          </h3>
           
           <div className='mt-4 border-t border-slate-400'>
             <p className='mt-2 text-xs font-bold'>Description</p>

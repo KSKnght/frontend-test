@@ -70,16 +70,16 @@ if (materialError) {
             unit: FormData.get('unit'),
         },
         ])
-        .single();
+        .select();
 
     if (newMaterialError) {
         console.error(newMaterialError);
     } else {
         materialID = newMaterial[0].id;
     }
-    } else {
-        materialID = materialData.id;
-    }
+} else {
+    materialID = materialData.id;
+}
 
     // Create the taskMat entry
     const { error: taskMatError } = await supabase

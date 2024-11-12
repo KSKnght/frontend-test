@@ -1,34 +1,16 @@
-<<<<<<< HEAD
-import React from 'react'
-import {getClients, getProjects} from '@/actionsSupabase/read'
-import Navbar from '../components/Sidebar'
-import Link from 'next/link'
-import Modal from '../components/Modal'
-import { EditProject, AddProject } from '../components/Modals/crudForms'
-import { HiDocumentText } from "react-icons/hi2"
-import { FaFilter } from "react-icons/fa6";
-=======
-import { getProjects } from '@/actionsSupabase/read';
+import { getClients, getProjects } from '@/actionsSupabase/read';
 import Navbar from '../components/Sidebar';
 import Link from 'next/link';
 import Modal from '../components/Modal';
-import EditProject from '../components/Modals/EditProject';
+import { EditProject} from '../components/Modals/crudForms';
 import ProjectsList from '../components/ProjectsList';
 import { HiDocumentText } from "react-icons/hi2";
 import { FaFilter, FaTimes } from "react-icons/fa"; // Import FaTimes for the "X" icon
->>>>>>> bc18ab3128bb34ce3759d4ac724d7a7dafa7af4e
 import { HiPlusCircle } from "react-icons/hi";
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-<<<<<<< HEAD
-import ProjectsList from '../components/ProjectsList'
-=======
-import { supabase } from '@/lib/supabase'
-import { createProject } from '@/actionsSupabase/Create';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import AddProjectForm from '../components/Modals/AddProjectForm';
 import { ToastContainer } from 'react-toastify';
->>>>>>> bc18ab3128bb34ce3759d4ac724d7a7dafa7af4e
 
 export const revalidate = 0;
 
@@ -36,26 +18,10 @@ type SearchParamProps = {
     searchParams: { search?: string; show?: string; edit?: string };
 };
 
-<<<<<<< HEAD
-const page = async ({searchParams} : SearchParamProps) => {
-    const display = await getProjects();
-    const clients = await getClients();
-    const show = searchParams?.show;
-    const edit = searchParams?.edit; 
-  
-  return (
-        <main className='flex'>
-            {show && <Modal returnLink={'/Projects'} name={'Add Project'}>
-                <AddProject clients={clients}/>
-            </Modal>}
-            {edit && <Modal returnLink={'/Projects'} name={'Edit Project'}>
-                <EditProject data={edit} clients={clients}/>
-            </Modal>}
-=======
 export default async function ProjectsPage({ searchParams }: SearchParamProps) {
     const searchTerm = searchParams.search || ''; // Get the search term from URL parameters
     const display = await getProjects(); // Fetch all projects
-
+    const clients = await getClients();
     // Filter projects based on search term
     const filteredProjects = (display ?? []).filter(project =>
         project.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -73,10 +39,9 @@ export default async function ProjectsPage({ searchParams }: SearchParamProps) {
             )}
             {editModal && (
                 <Modal returnLink={'/Projects'} name={'Edit Project'}>
-                    <EditProject data={editModal} />
+                    <EditProject data={editModal} clients={clients}/>
                 </Modal>
             )}
->>>>>>> bc18ab3128bb34ce3759d4ac724d7a7dafa7af4e
             <div>
                 <Navbar />
             </div>
@@ -118,12 +83,8 @@ export default async function ProjectsPage({ searchParams }: SearchParamProps) {
                     </div>
                 </div>
 
-<<<<<<< HEAD
-                <ProjectsList ProjectsData={display ?? []}/>
-=======
                 <ProjectsList ProjectsData={filteredProjects ?? []} />
                 <ToastContainer position='bottom-right'/>
->>>>>>> bc18ab3128bb34ce3759d4ac724d7a7dafa7af4e
             </div>
         </main>
     );

@@ -50,14 +50,6 @@ const EditProjectForm = async ({project, clients}) => {
                 </div>
             </div>
         </>
-            
-<<<<<<< HEAD
-=======
-            <button className='submitButton' type='submit'>
-                Update Project
-            </button>
-        </form>
->>>>>>> bc18ab3128bb34ce3759d4ac724d7a7dafa7af4e
     )
 }
 

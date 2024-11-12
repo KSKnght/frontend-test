@@ -8,7 +8,7 @@ import AddPhase from '../../../components/Modals/AddPhase'
 import AddTask from '../../../components/Modals/AddTask'
 import Modal from '@/app/components/Modal'
 import EditTask from '@/app/components/Modals/EditTask'
-import TaskDetails from '@/app/components/Modals/TaskDetails'
+import TaskDetails from '@/app/components/Modals/MatAndSubForm/TaskDetails'
 import { IoIosAddCircle } from "react-icons/io";
 
 export const revalidate = 0;

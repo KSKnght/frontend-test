@@ -2,9 +2,9 @@
 
 import React from 'react'
 import { getClients, getInfoProject } from '@/actionsSupabase/read';
-import { updateProject } from '@/actionsSupabase/Update';
+import { updateClient, updateProject } from '@/actionsSupabase/Update';
 import EditProjectForm from './EditProject';
-import { createProject } from '@/actionsSupabase/Create';
+import { createClient, createProject } from '@/actionsSupabase/Create';
 import AddProjectForm from './AddProject';
 
 export const EditProject = async ({data, clients}) => {
@@ -28,6 +28,31 @@ export const AddProject = async ({clients}) => {
             
             <button className='submitButton' name='submit' type='submit'>
                 Create Project
+            </button>
+        </form>
+    )
+}
+
+export const AddClients = async () => {
+    return (
+        <form action={async (e) => {'use server'; await createClient(e);}}>
+            
+
+
+            <button className='submitButton' name='submit' type='submit'>
+                Add Client
+            </button>
+        </form>
+    )
+}
+
+export const EditClients = async ({id}) => {
+    return (
+        <form action={async (e) => {'use server'; await updateClient(e, id);}}>
+
+
+            <button className='submitButton' name='submit' type='submit'>
+                Update Client
             </button>
         </form>
     )

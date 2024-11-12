@@ -1,6 +1,6 @@
 import { addSubCom } from '@/actionsSupabase/Update';
 import { revalidatePath } from 'next/cache';
-import SubConCard from '../Cards/SubConCard'
+import SubConCard from '../../Cards/SubConCard'
 import React from 'react'
 
 const SubForm = ({subCon, taskID, projID}) => {
