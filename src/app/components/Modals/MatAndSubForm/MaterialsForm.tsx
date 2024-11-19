@@ -30,12 +30,18 @@ const MaterialsForm = async ({materials, taskID, projID}) => {
             </div>
             <button  className='mt-5 text-sm px-4 py-1 bg-pink-600 rounded-lg text-white mb-3' type='submit'>Add Material</button>
             {/* <input id='unit' type="text" name='unit' placeholder='unit'/> */}
-            <div>
-                <p className='flex font-bold text-xs'>Select Material</p>
-                <div className=' h-12 overflow-scroll'>
-                    {materials.length === 0 ? (<p>All Materials Assigned Already</p>) : materials.map((mat, i) => {
-                    return <MatCard data={mat} key={i}/>
-                    })}
+            <div className='mt-4'>
+                <p className='flex font-bold text-xs mb-2'>Select Material</p>
+                <div className="relative bg-slate-300 h-[10.7rem]">
+                    <div className='h-[10.7rem] overflow-y-scroll'>
+                        {materials.length === 0 ? (
+                            <div className="relative h-[10.7rem] flex items-center justify-center">
+                                <p className="text-xs text-gray-500 italic">All materials have been assigned already.</p>
+                            </div>
+                        ) : materials.map((mat, i) => {
+                        return <MatCard data={mat} key={i}/>
+                        })}
+                    </div>
                 </div>
             </div>
         </form>

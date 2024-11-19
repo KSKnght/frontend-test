@@ -1,4 +1,3 @@
-
 import { getInfoProject, getPhases } from '@/actionsSupabase/read'
 import Link from 'next/link'
 import React, { Suspense } from 'react'
@@ -36,7 +35,17 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
   const phaseTasks = await getPhases(Number(id))
   const state = searchParams?.state;
 
-  console.log()
+  // Group the phases by their priority number
+  const groupedPhases = phaseTasks.reduce((acc, phase) => {
+    if (phase.isDeleted === false) {
+      if (!acc[phase.priority]) {
+        acc[phase.priority] = [];
+      }
+      acc[phase.priority].push(phase);
+    }
+    return acc;
+  }, {});
+
   return (
     <div className=' flex flex-row overflow-x-auto h-screen'>
       {addPhase && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Add Phase'}>
@@ -71,16 +80,22 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
         </div>
         
         <Suspense fallback={'loading'}>
-          <div className='flex flex-row w-screen overflow-x-scroll no-scrollbar mt-[4.8025rem] '>
-            {phaseTasks.map((phase, i) => {
-                if (phase.isDeleted == false)
-                return <PhaseCard Phase={phase} proj={id} key={i}/>
-            })}
+          <div className='flex flex-row w-screen mt-[4.8025rem]'>
+            {Object.keys(groupedPhases).map(priority => (
+              <div key={priority} className="mb-6">
+                <h2 className="text-md font-bold text-slate-600 translate-x-5">Priority {priority}</h2>
+                <div className="flex flex-row w-full overflow-x-auto mr-5 border-r border-slate-200 h-full">
+                  {groupedPhases[priority].map((phase, i) => (
+                    <PhaseCard Phase={phase} proj={id} key={i} />
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </Suspense>
       </div>
     </div>
-  )
+  );
 }
 
-export default page
+export default page;

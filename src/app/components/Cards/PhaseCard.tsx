@@ -8,9 +8,10 @@ import { softDelPhase } from '@/actionsSupabase/Delete';
 import { ppid } from 'process';
 
 const statusColors = {
-  NOT_STARTED: 'bg-red-500',    
-  IN_PROGRESS: 'bg-yellow-500', 
-  COMPLETE: 'bg-green-500',     
+  NOT_STARTED: 'bg-slate-500',    
+  IN_PROGRESS: 'bg-amber-500', 
+  COMPLETE: 'bg-green-500',
+  OVERDUE: 'bg-red-500'     
 };
 
 const PhaseCard = ({Phase, proj}) => {

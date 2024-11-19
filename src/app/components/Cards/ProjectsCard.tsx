@@ -24,7 +24,12 @@ import {
 } from "@/components/ui/card"
 
 
-
+const statusColors = {
+  NOT_STARTED: 'bg-slate-500',    
+  IN_PROGRESS: 'bg-amber-500', 
+  COMPLETED: 'bg-green-500',
+  OVERDUE: 'bg-red-500'     
+};
 
 
 const ProjectsCard = ({data}) => {
@@ -41,7 +46,9 @@ const ProjectsCard = ({data}) => {
                   {data.name}
                 </h1>
                 <div>
-                  <p className='text-sm bg-red-400 text-red-900 px-3 py-2 rounded-full ml-8'>{data.progress}</p>
+                  <p className={` text-white mt-2 mb-8 text-xs px-2 py-2 rounded-xl w-32 text-center transition-colors duration-500 ${statusColors[data.progress]}`}>
+                    {data.progress}
+                  </p>
                 </div>
                 <Popover id={data.id}/>
               </div>

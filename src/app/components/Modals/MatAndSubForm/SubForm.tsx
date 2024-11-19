@@ -13,12 +13,18 @@ const SubForm = ({subCon, taskID, projID}) => {
         </div>
         <button className='mt-5 text-sm px-4 py-1 bg-pink-600 rounded-lg text-white' 
                 type='submit'>Add Subcontractor</button>
-        <div className='mt-3'>
+        <div className='mt-4'>
           <p className='flex font-bold text-xs'>Select Subcontractor</p>
-          <div className='overflow-y-auto h-24 mt-1'>
-            {subCon.map((sub, i) => {
-              return <SubConCard data={sub} key={i}/>
-            })}
+          <div className="relative bg-slate-300 h-[14.9rem]">
+            <div className='overflow-y-auto h-[12rem] mt-1'>
+              {subCon.length === 0 ? (
+                  <div className="relative h-[10.7rem] flex items-center justify-center">
+                    <p className="text-xs text-gray-500 italic">All subcontractors have been assigned already.</p>
+                  </div>
+              ) : subCon.map((sub, i) => {
+                return <SubConCard data={sub} key={i}/>
+              })}
+            </div>
           </div>
         </div>
     </form>
