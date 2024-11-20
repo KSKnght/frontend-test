@@ -8,7 +8,6 @@ import { IoTime } from 'react-icons/io5';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'; // Adjust path as needed
 import { softDelTasks } from '@/actionsSupabase/Delete';
 import { statusTask } from '@/actionsSupabase/statuses';
-import { getSubcontracts } from '@/actionsSupabase/read';
 
 const statusColors = {
   NOT_STARTED: 'bg-slate-500',
@@ -51,6 +50,9 @@ const SubConList = ({ subcon }) => {
 
 const TaskCard = ({ tasks, data, proj }) => {
   const router = useRouter();
+  
+  // Check if the task is overdue
+  const isOverdue = new Date(tasks.deadline) < new Date() && !tasks.progress;
 
   const handleCheck = (e) => {
     e.stopPropagation();
@@ -100,16 +102,19 @@ const TaskCard = ({ tasks, data, proj }) => {
         </div>
 
         <h2 className="flex flex-row text-sm text-slate-600">
-          <IoTime className="mt-1 mr-1 w-3 h-3" />
-          {new Date(tasks.deadline).toDateString()}
+          <span className={isOverdue ? 'text-red-500' : 'text-slate-600'}>
+            <div className='flex flex-row'>
+              <IoTime className="mt-1 mr-1 w-3 h-3" />
+              {new Date(tasks.deadline).toDateString()}
+            </div>
+          </span>
         </h2>
+
         <h3 className={`mt-2 mb-8 text-xs px-2 py-1 rounded-xl w-32 text-center ${statusColors[tasks.status]}`}>
           <p className="text-white font-bold">{tasks.status}</p>
         </h3>
 
         <Accordion type="single" collapsible className="-mt-4 border-t border-slate-400">
-
-
           <AccordionItem value="materials">
             <div
                 onClick={(e) => {
@@ -122,7 +127,6 @@ const TaskCard = ({ tasks, data, proj }) => {
               <MatList tasks={tasks.taskMat} />
             </AccordionContent>
           </AccordionItem>
-
 
           <AccordionItem value="subcontractors">
             <div

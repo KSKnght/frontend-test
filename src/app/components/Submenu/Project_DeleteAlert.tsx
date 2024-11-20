@@ -11,9 +11,7 @@ import {
     AlertDialogTrigger,
   } from "../ui/alertdialog"
 import { Button } from "../ui/button";
-import { softdelProject } from '@/actionsSupabase/Delete';
-import { toast } from 'react-toastify';
-  
+import { softdelProject } from '@/actionsSupabase/Delete';  
 
 const Project_DeleteAlert = ({id}) => {
 
@@ -21,21 +19,20 @@ const Project_DeleteAlert = ({id}) => {
   return (
     <div>
       <AlertDialog>
-        <AlertDialogTrigger asChild>
-            <Button onClick={(e) => {e.stopPropagation()}} className='h-8 text-red-500 hover:text-red-500 hover:bg-red-50' variant='ghost'>Cancel</Button>
+        <AlertDialogTrigger asChild className='translate-x-[0.1rem]'>
+            <Button onClick={(e) => {e.stopPropagation()}} className='h-8 text-red-500 hover:text-red-500 hover:bg-red-50' variant='ghost'>Delete Project</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
             <AlertDialogHeader>
-            <AlertDialogTitle>Cancel this Project?</AlertDialogTitle>
+            <AlertDialogTitle>Delete this Project?</AlertDialogTitle>
             <AlertDialogDescription>
-                This project will be cancelled and be removed from the main view.
+                This project will be deleted and be removed from the main view.
             </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
             <AlertDialogCancel onClick={(e) => {e.stopPropagation()}}>Sustain</AlertDialogCancel>
             <AlertDialogAction onClick={(e) => {e.stopPropagation(); startTransition(async () => {
              await softdelProject(id);
-             toast.success("Project has been cancelled.");
            })}} className='text-red-500 bg-red-50 hover:bg-red-100'>
               Cancel Project
             </AlertDialogAction>

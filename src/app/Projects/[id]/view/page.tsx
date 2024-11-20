@@ -71,16 +71,21 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
 
       <div className='flex flex-col'>
         <div className=''>
-          <div className='ml-6 my-6 fixed'>
-              <Link className='flex flex-row w-32 rounded-lg px-3 py-1 text-white bg-pink-600 shadow-xl shadow-white' href={'/Projects/'+project.id+'/view?addPhase=true'}>
-                <IoIosAddCircle className='mt-1 mr-1'/>
-                <p>Add Phase</p>
-              </Link>
+          <div className='mb-6 fixed h-[5rem] w-full bg-white content-center z-[2]'>
+              <div className='flex flex-row space-x-[21.5rem]'>
+                <Link className='translate-x-5 flex flex-row w-32 rounded-lg px-3 py-1 text-white bg-pink-600 items-center' href={'/Projects/'+project.id+'/view?addPhase=true'}>
+                  <IoIosAddCircle className='mt-1 mr-1'/>
+                  <p>Add Phase</p>
+                </Link>
+                <div className='px-[3rem]'>
+                  <input className='w-[50rem] px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-pink-600' placeholder='Search Phase Name...'></input>
+                </div>
+              </div>
           </div>
         </div>
         
         <Suspense fallback={'loading'}>
-          <div className='flex flex-row w-screen mt-[4.8025rem]'>
+          <div className='flex flex-row w-screen mt-[6rem]'>
             {Object.keys(groupedPhases).map(priority => (
               <div key={priority} className="mb-6">
                 <h2 className="text-md font-bold text-slate-600 translate-x-5">Priority {priority}</h2>
