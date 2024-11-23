@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { IoIosAddCircle } from "react-icons/io";
 import { HiTrash } from "react-icons/hi";
 import { softDelPhase } from '@/actionsSupabase/Delete';
+import { updatePhaseName } from '@/actionsSupabase/Update';
 
 const statusColors = {
   NOT_STARTED: 'bg-slate-500',
@@ -13,7 +14,7 @@ const statusColors = {
   OVERDUE: 'bg-red-500'
 };
 
-const PhaseCard = ({ Phase, proj, updatePhaseName }) => {
+const PhaseCard = ({ Phase, proj}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [phaseName, setPhaseName] = useState(Phase.phaseName);
 

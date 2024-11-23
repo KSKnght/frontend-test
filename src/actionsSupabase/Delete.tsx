@@ -42,3 +42,20 @@ export async function softDelPhase(id: Number, projID: Number) {
     revalidatePath('/Projects/' + projID + '/view')
 }
 
+export async function hardDelMat(id: Number) {
+    const { error } = await supabase
+    .from('taskMat')
+    .delete()
+    .eq('id', id)
+
+    if (error) console.log('Error deleting mat:', error)
+}
+
+export async function hardDelSub(id: Number) {
+    const { error } = await supabase
+    .from('_phaseTasksTosubCon')
+    .delete()
+    .eq('id', id)
+
+    if (error) console.log('Error deleting sub:', error)
+}

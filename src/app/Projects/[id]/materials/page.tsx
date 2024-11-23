@@ -9,6 +9,16 @@ import Modal from '@/app/components/Modal'
 import EditTask from '@/app/components/Modals/EditTask'
 import TaskDetails from '@/app/components/Modals/MatAndSubForm/TaskDetails'
 import { IoIosAddCircle } from "react-icons/io";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 
 export const revalidate = 0;
 
@@ -22,6 +32,36 @@ type SearchParamProps = {
   state: any
   searchParams: Record<string, string> | null | undefined;
 };
+
+const MatCard = ({phase}) => {
+    return (
+      <div>
+        <div>
+          {phase.phaseTasks.map((tasks, i) => {
+            return (
+              tasks.isDeleted == false && tasks.taskMat.length ?
+              <div key={i}>
+                {tasks.taskName + ' from ' + phase.phaseName}
+                <div>
+                <Table className='w-full table-fixed'>
+                  <TableBody>
+                    {tasks.taskMat.map((mat, i) => (
+                      <TableRow key={i}>
+                        <TableCell>{mat.materials.name}</TableCell>
+                        <TableCell>{mat.qty +' '+mat.unit}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                </div>
+              </div> : <></>
+            )
+          })}
+        </div>
+      </div>
+    )
+}
+
 
 const page = async ({params, searchParams}:{ params: { id: string }, searchParams : SearchParamProps}) => {
   const id = params.id;
@@ -67,16 +107,12 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
         </div>
       </div>
 
-      <ProjectsSidebar project={project} currPage={false} id={Number(id)}/>
+      <ProjectsSidebar project={project} currPage={true} id={Number(id)}/>
 
       <div className='flex flex-col'>
         <div className=''>
           <div className='mb-6 fixed h-[5rem] w-full bg-white content-center z-[2]'>
               <div className='flex flex-row space-x-[21.5rem]'>
-                <Link className='translate-x-5 flex flex-row w-32 rounded-lg px-3 py-1 text-white bg-pink-600 items-center' href={'/Projects/'+project.id+'/view?addPhase=true'}>
-                  <IoIosAddCircle className='mt-1 mr-1'/>
-                  <p>Add Phase</p>
-                </Link>
                 <div className='px-[3rem]'>
                   <input className='w-[50rem] px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-pink-600' placeholder='Search Phase Name...'></input>
                 </div>
@@ -85,17 +121,12 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
         </div>
         
         <Suspense fallback={'loading'}>
-          <div className='flex flex-row w-screen mt-[6rem]'>
-            {Object.keys(groupedPhases).map(priority => (
-              <div key={priority} className="mb-6">
-                <h2 className="text-md font-bold text-slate-600 translate-x-5">Priority {priority}</h2>
-                <div className="flex flex-row w-full overflow-x-auto mr-5 border-r border-slate-200 h-full">
-                  {groupedPhases[priority].map((phase, i) => (
-                    <PhaseCard Phase={phase} proj={id} key={i} />
+          <div className='flex flex-col w-screen mt-[6rem]'>
+          <div className="flex flex-col w-full overflow-x-auto mr-5 border-r border-slate-200 h-full">
+                  {phaseTasks.map((phase) => (
+                    phase.isDeleted == false && <MatCard phase={phase}/>
                   ))}
                 </div>
-              </div>
-            ))}
           </div>
         </Suspense>
       </div>
