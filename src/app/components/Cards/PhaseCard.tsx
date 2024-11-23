@@ -6,6 +6,7 @@ import { IoIosAddCircle } from "react-icons/io";
 import { HiTrash } from "react-icons/hi";
 import { softDelPhase } from '@/actionsSupabase/Delete';
 import { updatePhaseName } from '@/actionsSupabase/Update';
+import { reloadPage } from '@/actionsSupabase/reload';
 
 const statusColors = {
   NOT_STARTED: 'bg-slate-500',
@@ -26,6 +27,7 @@ const PhaseCard = ({ Phase, proj}) => {
     setIsEditing(false);
     startTransition(async () => {
       await updatePhaseName(Phase.id, phaseName); // Call parent function to update name in database
+      reloadPage('Projects/'+proj+'/view');
     });
   };
 
@@ -38,6 +40,7 @@ const PhaseCard = ({ Phase, proj}) => {
       setIsEditing(false);
       startTransition(async () => {
         await updatePhaseName(Phase.id, phaseName); // Save on Enter key
+        reloadPage('Projects/'+proj+'/view');
       });
     }
   };
