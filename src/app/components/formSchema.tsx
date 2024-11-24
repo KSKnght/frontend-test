@@ -205,35 +205,28 @@ export const daterangeSchema = z.object({
 })
 export type dateData = z.infer<typeof daterangeSchema>;
 
-//Task Form - Input and Date Range 
-export const taskSchema = z.object({
-    taskName: z.string().min(1, {
-        message: "Task name is required"
-    }),
-    priority: z.number().positive({
-        message: "Priority should be more than 0"
-    }),
-    dueDate: z.date({
-        message: 'Due date is required'
-    }),
-    startDate: z.date({
-        message: 'Start date is required',
-      }),
-      endDate: z.date({
-        message: 'End date is required',
-      }),
-}).refine((data) => {
-    const {startDate, endDate} = data
-    if (startDate && endDate && data.dueDate) {
-        return data.dueDate >= startDate && data.dueDate <= endDate
-    }
-    return true;
-},{
-    message: 'Due date must be within the project date range',
-    path: ['dueDate'],
-})
 
-export type taskData = z.infer<typeof taskSchema>
+
+
+
+// Task Form Schema
+export const taskSchema = z.object({
+    taskname: z.string().min(1, 'Task name is required'),
+
+    priority: z.number().int().min(1, 'Priority must be a positive integer'),
+
+    deadline: z
+      .string()  // Assuming the deadline comes as a string from an input field
+      .refine((val) => !isNaN(Date.parse(val)), {
+        message: 'Invalid date format',
+      })
+      .refine((val) => Date.parse(val) >= Date.now(), {
+        message: 'Deadline cannot be in the past',
+      }),
+
+    description: z.string().optional(),
+  });
+
 
 
 

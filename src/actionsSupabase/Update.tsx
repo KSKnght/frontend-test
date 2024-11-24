@@ -26,12 +26,14 @@ export async function updateProject(FormData : FormData, id: number) {
     revalidatePath('/Projects');
     redirect('/Projects');
 };
+
+
 export async function updateTask(FormData : FormData, id: number, projID: number) {
     try {
         const { data, error } = await supabase
         .from('phaseTasks') // Make sure to match your table name
         .update({
-            taskName: FormData.get('taskName'),
+            taskName: FormData.get('taskname'),
             description: FormData.get('description'),
             deadline: new Date(FormData.get('deadline') + 'T00:00:00.000Z'),
         })
@@ -39,8 +41,10 @@ export async function updateTask(FormData : FormData, id: number, projID: number
 
         if (error) {
         console.error('Error updating phase task:', error);
+        return {success: false, error: error.message}
         } else {
         console.log('Phase task updated successfully:', data);
+        return {success: true}
         }
 
     } catch (err) {
@@ -50,6 +54,7 @@ export async function updateTask(FormData : FormData, id: number, projID: number
     revalidatePath('/Projects/' + projID + '/view');
     redirect('/Projects/' + projID + '/view')
 };
+
 
 export async function addMaterial(FormData : FormData, taskID : number) {
     const { data: materialData, error: materialError } = await supabase

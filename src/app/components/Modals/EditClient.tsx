@@ -106,8 +106,8 @@ const EditClient = ({ data }) => {
       const response = await updateClient(formDataToSend, formData.id);
 
       if (response.success) {
-        revalidatePath('/Clients');
-        router.push('/Clients')
+        router.push('/Clients');
+        revalidatePath('/Clients')
       } else {
         setErrors({ submit: 'Failed to create client. Please try again.' });
       }

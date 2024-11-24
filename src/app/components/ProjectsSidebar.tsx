@@ -75,8 +75,13 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
               </p>
               <p className='mb-3 text-slate-500'>{project.projectAddress}</p>
             </div>
-            <div className='ml-4 mt-[8rem] flex flex-col gap-3'> 
-              <button className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-left pl-6 hover:bg-slate-200 transition-colors'>View All Materials</button>
+            <div className='ml-4 mt-[8rem] flex flex-col gap-3'>
+              { currPage == false && 
+                  <button onClick={() => {router.push('materials')}} className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-left pl-6 hover:bg-slate-200 transition-colors'>View All Materials</button>
+              } 
+              { currPage == true && 
+                  <button onClick={() => {router.push('view')}} className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-left pl-6 hover:bg-slate-200 transition-colors'>View All Tasks</button>
+              } 
               <button className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-left pl-6 hover:bg-slate-200 transition-colors'>Extend Project Duration</button>
               <button className='bg-red-100 rounded-lg text-sm w-[16rem] py-3 text-left pl-6 hover:bg-red-500 hover:text-white transition-colors'>Cancel Project</button>
             </div>

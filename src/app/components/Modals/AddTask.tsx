@@ -3,80 +3,89 @@
 import { createTask } from '@/actionsSupabase/Create';
 import React, { startTransition, useState } from 'react'
 import { revalidatePath } from 'next/cache';
+import { useRouter } from 'next/navigation';
+import { taskSchema } from '../formSchema';
+import { z } from 'zod';
 
-const AddTask = ({data, projID}) => {
+const AddTask = ({data, projID, project}) => {
 
     const [formData, setFormData] = useState({
         taskname: '',
-        priority: '',
+        priority: 0,
         deadline: '',
         description: ''
       })
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
+    const route = useRouter();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-
-            // Validate input on change
-        if (touched[name]) {
-            const newErrors = validateInputs({ ...formData, [name]: value });
-            setErrors(newErrors); // Update errors state
-            }
-        };
+      const { name, value } = e.target;
+  
+      // Convert priority to a number, keep others as strings
+      setFormData({
+        ...formData,
+        [name]: name === 'priority' ? Number(value) : value,
+      });
+  
+      if (touched[name]) {
+        validateForm({ ...formData, [name]: name === 'priority' ? Number(value) : value });
+      }
+    };
 
     const handleBlur = (name: string) => {
         setTouched({ ...touched, [name]: true }); // Mark field as touched on blur
-        const newErrors = validateInputs(formData);
-        setErrors(newErrors); // Validate inputs when user leaves the field
-  };
+        validateForm(formData);
+    };
 
-    const validateInputs = (data: typeof formData) => {
-        const newErrors: {[key: string]: string} = {};
-        if (!data.taskname) {
-            newErrors.taskname = 'Task name is required';
-          } else if (data.taskname.length < 3) {
-            newErrors.taskname = 'Task name must be at least 3 characters long';
-          }
-        
-          if (!data.priority) {
-            newErrors.priority = 'Priority is required';
-          } else if (Number(data.priority) <= 0) {
-            newErrors.priority = 'Priority must be over 0';
-          }
-        
-          if (!data.deadline) {
-            newErrors.deadline = 'Deadline is required';
-          } else if (isNaN(new Date(data.deadline).getTime())) {
-            newErrors.deadline = 'Invalid date format';
-          }
-
-        return newErrors;
-    }
+    const validateForm = (data: typeof formData) => {
+      try {
+        taskSchema.parse(data); // Validate with Zod
+        setErrors({}); // Clear errors if valid
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          const fieldErrors: { [key: string]: string } = {};
+          error.errors.forEach((err) => {
+            if (err.path[0]) {
+              fieldErrors[err.path[0] as string] = err.message;
+            }
+          });
+          setErrors(fieldErrors); // Set errors from Zod validation
+        }
+      }
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const validationErrors = validateInputs(formData);
-        if (Object.keys(validationErrors).length > 0) {
-          setErrors(validationErrors);
-          return;
-        }
+      e.preventDefault();
+  
+
+    // Final validation on submit
+    try {
+        taskSchema.parse(formData); // Validate form data with Zod
+        setErrors({}); // Clear errors if valid
 
         const formDataToSend = new FormData(e.currentTarget);
-        setErrors({});
-        
-        startTransition(async () => {
-          try {
-            console.log('Sending data to create phase:', formDataToSend);
-            await createTask(formDataToSend, data, projID);
-          } catch (error) {
-            setErrors({ submit: error.message || 'Failed to create phase. Please try again.' });
-          }
-        });
+        const response = await createTask(formDataToSend, data, projID);
 
-        
+        if (response.success) {
+          revalidatePath('/Projects/' + project + '/view');
+        } else {
+          setErrors({ submit: 'Failed to create task. Please try again.' });
+        }
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          const fieldErrors: { [key: string]: string } = {};
+          error.errors.forEach((err) => {
+            if (err.path[0]) {
+              fieldErrors[err.path[0] as string] = err.message;
+            }
+          });
+          setErrors(fieldErrors); // Set errors from Zod validation
+        } else {
+          setErrors({ submit: 'An unexpected error occurred. Please try again.' });
+        }
+      }
     };
     
     const hasErrors = Object.keys(errors).length > 0;
