@@ -11,7 +11,12 @@ import { RiProgress2Fill } from "react-icons/ri";
 import { IoCalendarClear } from "react-icons/io5";
 
 
-
+const statusColors = {
+  NOT_STARTED: 'bg-slate-500',
+  IN_PROGRESS: 'bg-amber-500',
+  COMPLETE: 'bg-green-500',
+  OVERDUE: 'bg-red-500'
+};
 
 const ProjectsSidebar = ({project}) => {
   return (
@@ -25,15 +30,32 @@ const ProjectsSidebar = ({project}) => {
               </Link>
             </div>
 
-            <div className='ml-4 mt-6 font-bold text-xl text-slate-700'>
-              <h1>Project Information</h1>
+            
+            
+            <div className={`mt-4 mb-2 ml-3 text-xs px-2 py-1 rounded-xl w-[8rem] text-center transition-colors duration-500 ${statusColors[project.progress]}`}>
+              <h2 className='text-white font-semibold'>{project.progress}</h2>
+            </div>            
+            <div className='ml-4 mt-2 font-bold text-2xl text-slate-700'>
+              <h1>{project.name}</h1>
             </div>
+            <div className='text-sm text-slate-500 ml-4 mt-2'>
+              <p>
+                {new Date(project.startDate).toLocaleDateString('en-US', {
+                    month: 'long', 
+                    day: 'numeric',
+                    year: 'numeric',
+                })}                
+                -
+                {new Date(project.endDate).toLocaleDateString('en-US', {
+                    month: 'long', 
+                    day: 'numeric',
+                    year: 'numeric',
+                })}                
+              </p>
+            </div>
+
+            
             <div className='ml-4 mt-6 text-md text-slate-700'>    
-              <p className='font-semibold flex flex-row'>
-                <HiDocumentText className='mt-1 mr-1'/>
-                Project Name
-                </p>
-              <p className='mb-3 text-slate-500'>{project.name}</p>
               <p className='font-semibold flex flex-row'>
                 <MdDesignServices className='mt-1 mr-1'/>
                 Project Type
@@ -49,26 +71,12 @@ const ProjectsSidebar = ({project}) => {
                 Project Address
               </p>
               <p className='mb-3 text-slate-500'>{project.projectAddress}</p>
-              <p className='font-semibold flex flex-row'>
-                <RiProgress2Fill className='mt-1 mr-1'/>
-                Progress
-              </p>
-              <p className='mb-3 text-slate-500'>{project.progress}</p>
-              <p className='font-semibold flex flex-row'>
-                <IoCalendarClear className='mt-1 mr-1'/>
-                Date
-              </p>
-              <p className='text-slate-500'>
-                Start: {new Date(project.startDate).toUTCString().slice(0,16)}
-              </p>
-              <p className='text-slate-500'>
-                End: {new Date(project.endDate).toUTCString().slice(0,16)}
-              </p>
             </div>
-            <div className='ml-4 mt-[8rem] flex flex-col gap-3'> 
+
+            <div className='ml-4 mt-[16.8rem] flex flex-col gap-3'> 
               <button className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-left pl-6 hover:bg-slate-200 transition-colors'>View All Materials</button>
               <button className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-left pl-6 hover:bg-slate-200 transition-colors'>Extend Project Duration</button>
-              <button className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-left pl-6 hover:bg-red-500 hover:text-white transition-colors'>Cancel Project</button>
+              <button className='bg-red-100 rounded-lg text-sm w-[16rem] py-3 text-left pl-6 hover:bg-red-500 hover:text-white transition-colors'>Cancel Project</button>
             </div>
       </div>
       <div>

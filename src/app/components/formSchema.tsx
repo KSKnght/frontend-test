@@ -1,34 +1,149 @@
 'use client'
 
 import {z} from "zod"
+    
+//General Regex
+const numberRegex = /^\d+$/
+const alphabetRegex = /^[A-Za-z\s]+$/
+
+//Client-Specific Regex
+const middleInitialCheck = /^[a-zA-Z]$/
+const contactAlphabetCheck = /^[\d+]+$/
+const contactRegex = /^09|^\+63/
+const emailAdCheck = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+
 
 //Client Form - Input
 export const clientformSchema = z.object({
-    firstname: z.string().min(1, {
-        message: "First name is required"
-    }),
-    middleinitial: z.string().min(1, {
-        message: "Middle initial is required"
-    }).max(1, {
-        message: "Middle initial should contain one character only"
-    }),
-    lastname: z.string().min(1, {
-        message: "Last name is required"
-    }),
-    emailAddress: z.string().min(1, {
-        message: "Email address is required"
-    }).email({
-        message: "Invalid email address"
-    }),
-    contactNumber: z.string().min(1, {
-        message: "Contact number is required"
-    }).regex(
-        /^09|^\+63/, {message: "Invalid phone number format"
-    }).refine((value) => {
-        if (value.startsWith('09') && value.length === 11) return true;
-        if (value.startsWith('+63') && value.length === 13) return true;
-        return false;
-    }, {message: 'Contact number must be 11 digits if starting with "09" or 13 digits if starting with "+63"'}),
+    firstname: z
+        .string()
+        .superRefine((value, ctx) => {
+            if(value.length === 0) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'First name is required',
+                    path: ['firstname']
+                });
+                return;
+            }
+            if(!alphabetRegex.test(value)) {
+                ctx.addIssue ({
+                    code: z.ZodIssueCode.custom,
+                    message: 'First name should contain alphabets only',
+                    path: ['firstname']
+                })
+            }
+        }),
+
+    middlename: z
+        .string()
+        .superRefine((value, ctx) => {
+            if(value.length === 0) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Middle initial is required',
+                    path: ['middlename']
+                })
+                return;
+            }
+            if(!middleInitialCheck.test(value)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Middle initial should contain an alphabet only',
+                    path: ['middlename']
+                })
+            }
+            if(value.length > 1) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Middle initial should contain one character only',
+                    path: ['middlename']
+                })
+            }
+        }),
+
+    lastname: z
+        .string()
+        .superRefine((value, ctx) => {
+            if(value.length === 0) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Last name is required',
+                    path: ['lastname']
+                })
+                return;
+            }
+            if(!alphabetRegex.test(value)) {
+                ctx.addIssue ({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Last name should contain alphabets only',
+                    path: ['lastname']
+                })
+            }
+        }),
+
+    emailAdd: z
+        .string()
+        .superRefine((value, ctx) => {
+            if(value.length === 0) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Email address is required',
+                    path: ['emailAdd']
+                })
+                return;
+            }
+            if(!emailAdCheck.test(value)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Invalid email format',
+                    path: ['emailAdd']
+                })
+            }
+        }),
+
+
+    contactNum: z
+        .string()
+        .superRefine((value, ctx) => {
+            if (!contactRegex.test(value)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "Contact number must start with '09' or '+63'",
+                    path: ['contactNum']
+                });
+            }
+            if (!contactAlphabetCheck.test(value)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Contact number should contain numbers only',
+                    path: ['contactNum']
+                });
+            }
+            if (value.length === 0 ) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Contact number is required',
+                    path: ['contactNum'],
+                });
+                return;
+            }
+            if (value.startsWith('09') && value.length !== 11) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Contact number must be 11 digits if starting with "09"',
+                    path: ['contactNum'], 
+                });
+            }
+            if (value.startsWith('+63') && value.length !== 13) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Contact number must be 13 digits if starting with "+63"',
+                    path: ['contactNum'], 
+                });
+            }
+        }),
 });
 export type clientformData = z.infer<typeof clientformSchema>;
 

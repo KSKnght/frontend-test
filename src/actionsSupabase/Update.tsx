@@ -155,7 +155,9 @@ export async function updateClient(FormData : FormData, id: number) {
         console.error('Error updating client:', error);
     } else {
         console.log('Client updated!');
+        return {success: true}
     }
     
     redirect('/Clients')
 }
+  

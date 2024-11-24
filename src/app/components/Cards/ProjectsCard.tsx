@@ -37,7 +37,7 @@ const ProjectsCard = ({data}) => {
   return (
 
     <div>
-        <Card className='bg-slate-100 rounded-xl shadow-sm border hover:border-pink-600 hover:border-opacity-50 transition-colors ease-in-out'
+        <Card className='bg-slate-100 rounded-xl shadow-sm border hover:border-pink-600 hover:border-opacity-50 transition-colors ease-in-out cursor-pointer'
               onClick={(e) => {e.stopPropagation(); e.preventDefault(); router.push('/Projects/'+ data.id+'/view')}}>
           <CardHeader>
             <CardTitle>
@@ -85,7 +85,13 @@ const ProjectsCard = ({data}) => {
                 <FaCalendar className='w-auto h-4 translate-y-[0.25rem]' />
                 <p className='font-medium mx-2'>Start Date</p>
               </div>
-              <p className='font-medium mx-2'>{new Date(data.startDate).toDateString()}</p>
+              <p className='font-medium mx-2'>
+                {new Date(data.startDate).toLocaleDateString('en-US', {
+                    month: 'long', 
+                    day: 'numeric',
+                    year: 'numeric',
+                })}       
+              </p>
             </div>
 
             <div className='flex flex-row justify-between'>
@@ -93,7 +99,13 @@ const ProjectsCard = ({data}) => {
                 <FaCalendarCheck className='w-auto h-4 translate-y-[0.25rem]' />
                 <p className='font-medium mx-2'>End Date</p>
               </div>
-              <p className='font-medium mx-2'>{new Date(data.endDate).toDateString()}</p>
+              <p className='font-medium mx-2'>
+                {new Date(data.endDate).toLocaleDateString('en-US', {
+                      month: 'long', 
+                      day: 'numeric',
+                      year: 'numeric',
+                  })}  
+              </p>
             </div>
           </CardContent>
         </Card>

@@ -4,8 +4,10 @@ import React, { useState, useEffect, useTransition, startTransition } from 'reac
 import { revalidatePath } from 'next/cache';
 import { updateClient } from '@/actionsSupabase/Update';
 import { showClient } from '@/actionsSupabase/read';
-import { Router, useRouter } from 'next/router';
+import router, { Router, useRouter } from 'next/router';
 import { redirect } from 'next/dist/server/api-utils';
+import { z } from 'zod';
+import { clientformSchema } from '../formSchema';
 
 // Define the shape of the client data
 interface ClientData {
@@ -63,70 +65,65 @@ const EditClient = ({ data }) => {
 
     // Validate input on change if touched
     if (touched[name]) {
-      const newErrors = validateInputs({ ...formData, [name]: value });
-      setErrors(newErrors);
+      validateForm({ ...formData, [name]: value });
     }
   };
 
   // Mark input as touched on blur and validate
   const handleBlur = (name: keyof ClientData) => {
-    setTouched((prevTouched) => ({ ...prevTouched, [name]: true }));
-    const newErrors = validateInputs(formData);
-    setErrors(newErrors);
+    setTouched({ ...touched, [name]: true }); // Mark field as touched on blur
+    validateForm(formData); // Validate the entire form on blur
   };
 
   // Validation function
-  const validateInputs = (data: ClientData) => {
-    const newErrors: { [key: string]: string } = {};
-    if (!data.firstname) newErrors.firstname = 'First name is required';
-    if (!data.lastname) newErrors.lastname = 'Last name is required';
-    if (!data.middlename) newErrors.middlename = 'Middle name is required';
-    if (!data.contactNum) {
-      newErrors.contactNum = 'Contact number is required';
-    } else {
-      if (!/^09|^\+63/.test(data.contactNum)) {
-        newErrors.contactNum = 'Contact number must start with "09" or "+63"';
-      } else {
-        if (data.contactNum.startsWith("09") && data.contactNum.length !== 11) {
-          newErrors.contactNum = 'Contact number must be 11 digits if starting with "09"';
-        } else if (data.contactNum.startsWith("+63") && data.contactNum.length !== 13) {
-          newErrors.contactNum = 'Contact number must be 13 digits if starting with "+63"';
-        }
+  const validateForm = (data: typeof formData) => {
+    try {
+      clientformSchema.parse(data); // Validate with Zod
+      setErrors({}); // Clear errors if valid
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors: { [key: string]: string } = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            fieldErrors[err.path[0] as string] = err.message;
+          }
+        });
+        setErrors(fieldErrors); // Set errors from Zod validation
       }
     }
-    
-    if (!data.emailAdd) {
-      newErrors.emailAdd = 'Email address is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.emailAdd)) {
-      newErrors.emailAdd = 'Invalid email format';
-    }
-
-    return newErrors;
   };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const validationErrors = validateInputs(formData);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
 
     // Reset errors and proceed with submission
-    const formDataToSend = new FormData(e.currentTarget);
-    setErrors({});
+    try {
+      clientformSchema.parse(formData); // Validate form data with Zod
+      setErrors({}); // Clear errors if valid
 
-    startTransition(async () => {
-      try {
-        console.log('Sending data to update client:', formDataToSend);
-        await updateClient(formDataToSend, client.id); // Update client details
+      const formDataToSend = new FormData(e.currentTarget);
+      const response = await updateClient(formDataToSend, formData.id);
 
-      } catch (error) {
-        setErrors({ submit: error.message || 'Failed to update client. Please try again.' });
+      if (response.success) {
+        revalidatePath('/Clients');
+        router.push('/Clients')
+      } else {
+        setErrors({ submit: 'Failed to create client. Please try again.' });
       }
-    });
-
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors: { [key: string]: string } = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            fieldErrors[err.path[0] as string] = err.message;
+          }
+        });
+        setErrors(fieldErrors); // Set errors from Zod validation
+      } else {
+        setErrors({ submit: 'An unexpected error occurred. Please try again.' });
+      }
+    }
   };
 
   const hasErrors = Object.keys(errors).length > 0;

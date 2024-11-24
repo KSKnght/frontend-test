@@ -22,6 +22,7 @@ export default async function ProjectsPage({ searchParams }: SearchParamProps) {
     const searchTerm = searchParams.search || ''; // Get the search term from URL parameters
     const display = await getProjects(); // Fetch all projects
     const clients = await getClients();
+    
     // Filter projects based on search term
     const filteredProjects = (display ?? []).filter(project =>
         project.name.toLowerCase().includes(searchTerm.toLowerCase())
