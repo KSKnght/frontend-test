@@ -160,4 +160,19 @@ export async function updateClient(FormData : FormData, id: number) {
     
     redirect('/Clients')
 }
-  
+
+export async function updatePhaseName(id: number, name: string) {
+    const { error } = await supabase
+    .from('phase')
+    .update({
+        phaseName: name
+    })
+    .eq('id', id);
+
+    if (error) {
+        console.error('Error updating phase name:', error);
+    } else {
+        console.log('Phase name updated!');
+    }
+    
+}

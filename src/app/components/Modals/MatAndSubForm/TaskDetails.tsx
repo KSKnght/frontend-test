@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { startTransition } from 'react';
 import { getMaterials, getSubcontracts, getTask, getUnselectedMat, getUnselectedSub } from '@/actionsSupabase/read'
 import AddMatSub from './AddMatSub'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { HiTrash, HiClock } from "react-icons/hi";
+import { hardDelMat, hardDelSub } from '@/actionsSupabase/Delete';
+import { revalidatePath } from 'next/cache';
 
 
-const MatList = ({ tasks }) => {
+const MatList = ({ tasks, projID, taskId}) => {
   return (
     <div className="flex flex-col">
       <h3 className="text-xs font-semibold mb-2 text-left">Materials List</h3>
@@ -19,7 +21,11 @@ const MatList = ({ tasks }) => {
                     <TableCell className="text-xs py-1.5 px-2 leading-tight w-2/5">{mat.materials.name}</TableCell>
                     <TableCell className="text-xs py-1.5 px-2 leading-tight w-2/5">{mat.qty + ' ' + mat.unit}</TableCell>
                     <TableCell className="text-center py-1.5 px-1 w-1/5">
-                      <HiTrash className="text-slate-400 cursor-pointer hover:text-red-500" />
+                    <form action={async (e) => {'use server'; await hardDelMat(mat.id); revalidatePath('Projects/'+projID+'/view?viewtask='+taskId+'&state=Mat')}}>
+                      <button type='submit'>
+                        <HiTrash className="text-slate-400 cursor-pointer hover:text-red-500" />
+                      </button>
+                    </form>
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -38,7 +44,7 @@ const MatList = ({ tasks }) => {
   );
 };
 
-const SubConList = ({ subcon }) => {
+const SubConList = ({ subcon, projID, taskId }) => {
   return (
     <div className="flex flex-col">
       <h3 className="text-xs font-semibold mb-2 text-left">Subcontractors List</h3>
@@ -51,7 +57,11 @@ const SubConList = ({ subcon }) => {
                   <TableRow className="text-center bg-slate-100 hover:bg-slate-200">
                     <TableCell className="text-xs py-1.5 px-2 leading-tight w-2/5">{sub.B.Name}</TableCell>
                     <TableCell className="py-1.5 px-1 w-1/5">
-                      <HiTrash className="text-slate-400 cursor-pointer hover:text-red-500" />
+                      <form action={async (e) => {'use server'; await hardDelSub(sub.id); revalidatePath('Projects/'+projID+'/view?viewtask='+taskId+'&state=Sub')}}>
+                        <button type='submit'>
+                          <HiTrash className="text-slate-400 cursor-pointer hover:text-red-500" />
+                        </button>
+                      </form>
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -110,8 +120,8 @@ const TaskDetails = async ({data, state, projID}) => {
             </div>
             {task.status != 'COMPLETED' ? 
             <div>
-            {state === 'Mat' && <MatList tasks={task.taskMat} />}
-            {state === 'Sub' && <SubConList subcon={task._phaseTasksTosubCon} />}
+            {state === 'Mat' && <MatList tasks={task.taskMat} projID={projID} taskId={task.id}/>}
+            {state === 'Sub' && <SubConList subcon={task._phaseTasksTosubCon} projID={projID} taskId={task.id}/>}
             </div> : <div className=' items-center text-center mt-32'>
                 <p className='text-xs text-left font-bold text-red-500'>Note:</p>
                 <p className='w-48 text-xs text-left leading-4'>You can no longer edit when task is complete</p>

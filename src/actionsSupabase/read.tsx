@@ -111,11 +111,13 @@ export async function getTask(id:number) {
     .select(`
         *,
         _phaseTasksTosubCon ( 
+            id,
             B: subCon (
                 Name
             )
         ),
         taskMat: taskMat (
+            id,
             qty,
             unit,
             materials (
