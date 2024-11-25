@@ -2,7 +2,7 @@
 
 import { getTask } from '@/actionsSupabase/read';
 import { updateTask } from '@/actionsSupabase/Update';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { taskSchema } from '../formSchema';
 import { z } from 'zod';
@@ -28,7 +28,7 @@ const EditTask = ({ data, project }) => {
     description: '',
   });
 
-  const router = useRouter();
+  const route = useRouter();
 
   // Fetch task data
   useEffect(() => {
@@ -105,8 +105,9 @@ const EditTask = ({ data, project }) => {
       const response = await updateTask(formDataToSend, formData.id, project);
 
       if (response.success) {
-        router.push(`/Projects/${project}/view`);
-        revalidatePath(`/Projects/${project}/view`); 
+        await revalidatePath('/Projects/' + project + '/view');
+        await revalidatePath('/Projects/' + project + '/view??edittask='+formData.id);
+
       } else {
         setErrors({ submit: 'Failed to update task. Please try again.' });
       }
@@ -116,7 +117,9 @@ const EditTask = ({ data, project }) => {
         error.errors.forEach((err) => {
           if (err.path[0]) {
             fieldErrors[err.path[0] as string] = err.message;
+            console.log(err.message)
           }
+          
         });
         setErrors(fieldErrors);
       } else {
@@ -129,7 +132,7 @@ const EditTask = ({ data, project }) => {
   const isEmpty = Object.values(formData).every((field) => field === '');
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form action={async (e) => {handleSubmit}}>
         <div className='flex flex-row justify-evenly space-x-3'>
             <div>
                 <p className='text-xs font-bold flex mb-1'>Priority*</p>

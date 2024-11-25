@@ -213,8 +213,6 @@ export type dateData = z.infer<typeof daterangeSchema>;
 export const taskSchema = z.object({
     taskname: z.string().min(1, 'Task name is required'),
 
-    priority: z.number().int().min(1, 'Priority must be a positive integer'),
-
     deadline: z
       .string()  // Assuming the deadline comes as a string from an input field
       .refine((val) => !isNaN(Date.parse(val)), {

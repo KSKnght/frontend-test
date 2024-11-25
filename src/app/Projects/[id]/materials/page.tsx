@@ -41,9 +41,12 @@ const MatCard = ({phase}) => {
             return (
               tasks.isDeleted == false && tasks.taskMat.length ?
               <div key={i}>
-                {tasks.taskName + ' from ' + phase.phaseName}
+                <div className='flex flex-row text-lg'>
+                  <p>{tasks.taskName + ' from '}</p>
+                  <p className='text-pink-600 font-bold ml-2'>{phase.phaseName}</p>
+                </div>
                 <div>
-                <Table className='w-full table-fixed'>
+                <Table className='w-[64rem] table-fixed'>
                   <TableBody>
                     {tasks.taskMat.map((mat, i) => (
                       <TableRow key={i}>
@@ -114,7 +117,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
           <div className='mb-6 fixed h-[5rem] w-full bg-white content-center z-[2]'>
               <div className='flex flex-row space-x-[21.5rem]'>
                 <div className='px-[3rem]'>
-                  <input className='w-[50rem] px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-pink-600' placeholder='Search Phase Name...'></input>
+                  <input className='w-[50rem] px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-pink-600' placeholder='Search Materials...'></input>
                 </div>
               </div>
           </div>

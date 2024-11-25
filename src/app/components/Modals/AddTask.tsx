@@ -7,11 +7,10 @@ import { useRouter } from 'next/navigation';
 import { taskSchema } from '../formSchema';
 import { z } from 'zod';
 
-const AddTask = ({data, projID, project}) => {
+const AddTask = ({data, projID}) => {
 
     const [formData, setFormData] = useState({
         taskname: '',
-        priority: 0,
         deadline: '',
         description: ''
       })
@@ -69,7 +68,7 @@ const AddTask = ({data, projID, project}) => {
         const response = await createTask(formDataToSend, data, projID);
 
         if (response.success) {
-          revalidatePath('/Projects/' + project + '/view');
+          revalidatePath(`/Projects/${projID}/view`);
         } else {
           setErrors({ submit: 'Failed to create task. Please try again.' });
         }
@@ -96,18 +95,6 @@ const AddTask = ({data, projID, project}) => {
     return (
         <form onSubmit={handleSubmit}>
         <div className='flex flex-row justify-evenly space-x-3'>
-            <div>
-                <p className='text-xs font-bold flex mb-1'>Priority*</p>
-                <input 
-                    className={`h-6 w-auto flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.priority && errors.priority ? 'border-red-500' : 'border-slate-200'}`}
-                    type="number" 
-                    name='priority' 
-                    value={formData.priority} 
-                    onChange={handleChange}
-                    onBlur={() => handleBlur('priority')}
-                />
-                {touched.priority && errors.priority && <p className='text-red-500 text-xs mt-1 text-left'>{errors.priority}</p>} 
-            </div>
             
             <div>
                 <p className='text-xs font-bold flex mb-1'>Task Name*</p>

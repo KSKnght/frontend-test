@@ -49,10 +49,10 @@ export async function updateTask(FormData : FormData, id: number, projID: number
 
     } catch (err) {
         console.error('Error updating task:', err);
-    }
+    };
 
-    revalidatePath('/Projects/' + projID + '/view');
-    redirect('/Projects/' + projID + '/view')
+        revalidatePath('/Projects/' + projID + '/view');
+        redirect('/Projects/' + projID + '/view');
 };
 
 

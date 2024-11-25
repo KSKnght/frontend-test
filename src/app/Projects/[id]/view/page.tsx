@@ -9,6 +9,7 @@ import Modal from '@/app/components/Modal'
 import EditTask from '@/app/components/Modals/EditTask'
 import TaskDetails from '@/app/components/Modals/MatAndSubForm/TaskDetails'
 import { IoIosAddCircle } from "react-icons/io";
+import ExtendProject from '@/app/components/Modals/ExtendProject'
 
 export const revalidate = 0;
 
@@ -20,6 +21,7 @@ type SearchParamProps = {
   phase: any
   addPhase: boolean
   state: any
+  extProj: any,
   searchParams: Record<string, string> | null | undefined;
 };
 
@@ -30,13 +32,17 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
   const edittask = searchParams?.edittask;
   const viewtask = searchParams?.viewtask;
   const addmat = searchParams?.addmat;
+  const extProj = searchParams?.extProj;
   const addsub = searchParams?.addsub;
   const project = await getInfoProject(Number(id))
+  if (!project) {
+    return <p>Project data is unavailable. Please try again later.</p>;
+  }
   const phaseTasks = await getPhases(Number(id))
   const state = searchParams?.state;
 
   // Group the phases by their priority number
-  const groupedPhases = phaseTasks.reduce((acc, phase) => {
+  const groupedPhases = (phaseTasks || []).reduce((acc, phase) => {
     if (phase.isDeleted === false) {
       if (!acc[phase.priority]) {
         acc[phase.priority] = [];
@@ -45,13 +51,13 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
     }
     return acc;
   }, {});
+  
 
   return (
     <div className=' flex flex-row overflow-x-auto h-screen'>
       {addPhase && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Add Phase'}>
                 <AddPhase data={project.id} />
             </Modal>}
-
       {phase && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Add Task'}>
                 <AddTask data={phase} projID={project.id} />
             </Modal>}
@@ -60,6 +66,9 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
             </Modal>}
       {viewtask && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Task Details'}>
                 <TaskDetails data={viewtask} state={state} projID={id}/>
+            </Modal>}
+      {extProj && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Extend Project'}>
+                <ExtendProject data={extProj} state={state} projID={id}/>
             </Modal>}
 
       <div className='h-screen'>
@@ -90,7 +99,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
           <div className='flex flex-row w-screen mt-[6rem]'>
             {Object.keys(groupedPhases).map(priority => (
               <div key={priority} className="mb-6">
-                <h2 className="text-md font-bold text-slate-600 translate-x-5">Priority {priority}</h2>
+                <h2 className="text-md font-bold text-slate-600 translate-x-5">Step {priority}</h2>
                 <div className="flex flex-row w-full overflow-x-auto mr-5 border-r border-slate-200 h-full">
                   {groupedPhases[priority].map((phase, i) => (
                     <PhaseCard Phase={phase} proj={id} key={i} />
