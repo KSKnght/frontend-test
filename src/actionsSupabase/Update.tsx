@@ -12,8 +12,6 @@ export async function updateProject(FormData : FormData, id: number) {
         name: FormData.get('name'),
         type: FormData.get('type'),
         projectAddress: FormData.get('address'),
-        startDate: new Date(FormData.get('startDate') + 'T00:00:00.000Z'),
-        endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
         clientID: Number(FormData.get('id')) // Assuming you have a client_id column
     })
     .eq('id', id);
@@ -180,4 +178,50 @@ export async function updatePhaseName(id: number, name: string) {
         console.log('Phase name updated!');
     }
     
+}
+
+export async function cancelProject(id: number) {
+    const { error } = await supabase
+    .from('project')
+    .update({
+        status: 'CANCELLED'
+    })
+    .eq('id', id);
+
+    if (error){
+        console.log('error cancelling project:', error)
+    } else {
+        console.log('project cancelled')
+    }
+}
+
+export async function moveProjectDate(FormData : FormData, id: number) {
+    const { error } = await supabase
+    .from('project')
+    .update({
+        startDate: new Date(FormData.get('startDate') + 'T00:00:00.000Z'),
+        endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
+    })
+    .eq('id', id);
+
+    if (error){
+        console.log('error moving project dates:', error)
+    } else {
+        console.log('project has been moved')
+    }
+}
+
+export async function extendProjectEndDate(FormData: FormData, id : number) {
+    const { error } = await supabase
+    .from('project')
+    .update({
+        endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
+    })
+    .eq('id', id);
+
+    if (error){
+        console.log('error moving project endDate:', error)
+    } else {
+        console.log('project end Date has been extended')
+    }
 }
