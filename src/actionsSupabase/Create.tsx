@@ -95,7 +95,6 @@ export async function createTask(FormData : FormData, id: any, projID: number) {
         const { data, error } = await supabase
         .from('phaseTasks') // Replace 'phase_tasks' with your actual table name
         .insert({
-            priority: Number(FormData.get('priority')),
             taskName: FormData.get('taskname'), // Use snake_case for column names
             description: FormData.get('description'),
             deadline: FormData.get('deadline') + 'T00:00:00.000Z', // Format the deadline
