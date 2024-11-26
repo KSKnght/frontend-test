@@ -10,6 +10,8 @@ import EditTask from '@/app/components/Modals/EditTask'
 import TaskDetails from '@/app/components/Modals/MatAndSubForm/TaskDetails'
 import { IoIosAddCircle } from "react-icons/io";
 import ExtendProject from '@/app/components/Modals/ExtendProject'
+import { ToastContainer } from 'react-toastify';
+
 
 export const revalidate = 0;
 
@@ -81,7 +83,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
       <div className='flex flex-col'>
         <div className=''>
           <div className='mb-6 fixed h-[5rem] w-full bg-white content-center z-[2] border-b border-slate-200'>
-              <div className='flex flex-row space-x-[21.5rem]'>
+              <div className='flex flex-row'>
                 <Link className='translate-x-5 flex flex-row w-32 rounded-lg px-3 py-1 text-white bg-pink-600 items-center' href={'/Projects/'+project.id+'/view?addPhase=true'}>
                   <IoIosAddCircle className='mt-1 mr-1'/>
                   <p>Add Phase</p>
@@ -90,6 +92,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                 <div className='px-[3rem]'>
                   <input className='w-[50rem] px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-pink-600' placeholder='Search Phase Name...'></input>
                 </div>
+
 
               </div>
           </div>

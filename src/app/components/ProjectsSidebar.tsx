@@ -29,20 +29,20 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
       <div className='h-full flex-col bg-white border-r w-80 px-3 py-2'>
 
 
-            {/* <div className='mt-2 flex flex-row'>
-              <Link className='mb-6 ml-1 px-1.5 py-1.5 bg-slate-50 hover:bg-slate-100 ease-out rounded-lg' href={'/Projects'}>
+            <div className='mt-3 flex flex-row'>
+              <Link className='space-x-1 align-middle flex flex-row mb-6 ml-1 p-1 bg-slate-50 hover:bg-slate-100 ease-out rounded-lg' href={'/Projects'}>
                 <BsArrowLeftShort />
+                <p className='text-sm'>Back to Projects</p>
               </Link>
-            </div> */}
+            </div>
 
-            <div className='mt-2 flex flex-row'>
+            {/* <div className='mt-2 flex flex-row'>
               <button className='mb-6 ml-1 px-1.5 py-1.5 bg-slate-50 hover:bg-slate-100 ease-out rounded-lg'
                       onClick={() => {router.back()}}>
                 <BsArrowLeftShort />
               </button>
-            </div>
+            </div> */}
 
-            
             
             <div className={`mt-4 mb-2 ml-3 text-xs px-2 py-1 rounded-xl w-[8rem] text-center transition-colors duration-500 ${statusColors[project.progress]}`}>
               <h2 className='text-white font-semibold'>{project.progress}</h2>
@@ -84,7 +84,7 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
               </p>
               <p className='mb-3 text-slate-500'>{project.projectAddress}</p>
             </div>
-            <div className='ml-4 mt-[8rem] flex flex-col gap-3'>
+            <div className='ml-4 mt-[16rem] flex flex-col gap-3'>
               { currPage == false && 
                   <button onClick={() => {router.push('materials')}} className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-center hover:bg-slate-200 transition-colors'>View All Materials</button>
               } 

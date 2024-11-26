@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 
+
 export async function updateProject(FormData : FormData, id: number) {
     const { data, error } = await supabase
     .from('project')

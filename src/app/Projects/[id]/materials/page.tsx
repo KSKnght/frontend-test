@@ -18,6 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator"
+
 
 
 export const revalidate = 0;
@@ -40,13 +42,13 @@ const MatCard = ({phase}) => {
           {phase.phaseTasks.map((tasks, i) => {
             return (
               tasks.isDeleted == false && tasks.taskMat.length ?
-              <div key={i}>
-                <div className='flex flex-row text-lg'>
+              <div key={i} className='px-10 py-4'>
+                <div className='flex flex-row font-semibold'>
                   <p>{tasks.taskName + ' from '}</p>
-                  <p className='text-pink-600 font-bold ml-2'>{phase.phaseName}</p>
+                  <p className='text-pink-600 font-bold ml-1'>{phase.phaseName}</p>
                 </div>
                 <div>
-                <Table className='w-[64rem] table-fixed'>
+                <Table className='w-[36rem] table-fixed'>
                   <TableBody>
                     {tasks.taskMat.map((mat, i) => (
                       <TableRow key={i}>
