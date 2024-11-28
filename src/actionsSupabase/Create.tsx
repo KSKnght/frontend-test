@@ -117,6 +117,7 @@ export async function createTask(FormData : FormData, id: any, projID: number) {
 }
 
 export async function createClient(FormData: FormData) {
+    var errorCheck = false
     try {
         const lastname = FormData.get('lastname');
         const firstname = FormData.get('firstname');
@@ -135,16 +136,21 @@ export async function createClient(FormData: FormData) {
             });
 
         if (error) {
+            errorCheck = true;
             console.error('Error inserting client:', error);
+            throw error;
         } else {
             console.log('Client created:', data);
         }
     } catch (err) {
-        return { success: false, message: 'An error occurred: ' + err.message };
+        return { success: false, message: err.message, code: err.code };
     }
 
-    
-    redirect('/Clients');
+    if (errorCheck === false) {
+        revalidatePath('/Clients');
+        // redirect('/Clients');
+        return { success: true, message: 'successfully added client!'};
+    }
 }
 
 

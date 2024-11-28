@@ -1,11 +1,12 @@
 'use client'; // Mark this as a client component
 
-import React, { useState } from 'react';
+import React, { startTransition, use, useEffect, useState } from 'react';
 import { createClient } from '@/actionsSupabase/Create';
 import { revalidatePath } from 'next/cache';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { clientformSchema } from '../formSchema';
 import { z } from 'zod';
+import { duplicateClientCheck } from '@/actionsSupabase/validation';
 
 const AddClientForm = () => {
   const [formData, setFormData] = useState({
@@ -39,6 +40,7 @@ const AddClientForm = () => {
     try {
       clientformSchema.parse(data); // Validate with Zod
       setErrors({}); // Clear errors if valid
+
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: { [key: string]: string } = {};
@@ -59,14 +61,14 @@ const AddClientForm = () => {
     try {
       clientformSchema.parse(formData); // Validate form data with Zod
       setErrors({}); // Clear errors if valid
-
+      
       const formDataToSend = new FormData(e.currentTarget);
       const response = await createClient(formDataToSend);
-
-      if (response.success) {
-        revalidatePath('/Clients');
-      } else {
-        setErrors({ submit: 'Failed to create client. Please try again.' });
+      
+      if (response.success == false) {
+        setErrors({ submit: response.message })
+      } else if (response.success == true) {
+        route.back();
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -78,7 +80,8 @@ const AddClientForm = () => {
         });
         setErrors(fieldErrors); // Set errors from Zod validation
       } else {
-        setErrors({ submit: 'An unexpected error occurred. Please try again.' });
+        console.log(error)
+        setErrors({ submit: error });
       }
     }
   };
@@ -87,7 +90,7 @@ const AddClientForm = () => {
   const isEmpty = Object.values(formData).every((field) => field === '');
 
   return (
-    <form onSubmit={(e) => { handleSubmit(e); route.back(); }}>
+    <form onSubmit={(e) => { handleSubmit(e);}}>
       <div className="flex flex-row justify-evenly space-x-3">
         <div>
           <p className="text-xs font-bold flex mb-1">First Name*</p>
