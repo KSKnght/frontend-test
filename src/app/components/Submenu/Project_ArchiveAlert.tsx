@@ -11,6 +11,7 @@ import {
     AlertDialogTrigger,
   } from "../ui/alertdialog"
 import { Button } from "../ui/button";
+import { archiveProject } from '@/actionsSupabase/Update';
 
 const Project_ArchiveAlert = ({id}) => {
 
@@ -18,7 +19,7 @@ const Project_ArchiveAlert = ({id}) => {
     <div>
       <AlertDialog>
         <AlertDialogTrigger asChild className='translate-x-[0.1rem]'>
-            <Button onClick={(e) => {e.stopPropagation()}} className='h-8 rounded-lg text-sm w-[16rem] py-3 text-left hover:bg-slate-200 transition-colors' variant='ghost'>Archive Project</Button>
+            <Button onClick={(e) => {e.stopPropagation()}} className='h-8 rounded-lg text-sm w-[8rem] py-3 text-left hover:bg-slate-200 transition-colors' variant='ghost'>Archive Project</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
             <AlertDialogHeader>
@@ -29,7 +30,9 @@ const Project_ArchiveAlert = ({id}) => {
             </AlertDialogHeader>
             <AlertDialogFooter>
             <AlertDialogCancel onClick={(e) => {e.stopPropagation()}}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={(e) => {e.stopPropagation()}} className='text-red-500 bg-red-50 hover:bg-red-100'>
+            <AlertDialogAction onClick={(e) => {e.stopPropagation(); startTransition(async () => {
+              await archiveProject(id);
+            })}} className='text-red-500 bg-red-50 hover:bg-red-100'>
               Archive Project
             </AlertDialogAction>
             </AlertDialogFooter>

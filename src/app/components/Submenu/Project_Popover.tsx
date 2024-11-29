@@ -10,7 +10,7 @@ import Archive from "../Submenu/Project_ArchiveAlert"
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 
 
-const ProjectList_Popover = ({id}) => {
+const ProjectList_Popover = ({id, isArchived}) => {
   
     return (
     <div>
@@ -22,11 +22,22 @@ const ProjectList_Popover = ({id}) => {
             </PopoverTrigger>
             <PopoverContent className='w-[10rem]'>
                 <div className='flex flex-col h-auto content-center' onClick={(e) => {e.stopPropagation()}}>
-                    <Button className='h-8' onClick={(e) => {e.stopPropagation(); location.href='/Projects?edit='+id;}} variant='ghost'>Edit Project</Button>
-                    <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Extend Project</Button>
-                    <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Cancel Project</Button>
-                    <Archive id={id} />
-                    <Delete id={id} />
+                    {!isArchived ? (
+                    <>
+                        <Button className='h-8' onClick={(e) => {e.stopPropagation(); location.href='/Projects?edit='+id;}} variant='ghost'>Edit Project</Button>
+                        <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Extend Project</Button>
+                        <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Cancel Project</Button>
+                        <Archive id={id} />
+                        <Delete id={id} />
+                    </>
+                    ) : (
+                    <>
+                        <Button className="h-8" onClick={(e) => {e.stopPropagation(); alert('Restore functionality not implemented yet!');}} variant="ghost">
+                            Restore Project
+                        </Button>
+                        <Delete id={id} />
+                    </>
+                    )}
                 </div>
             </PopoverContent>
         </Popover>

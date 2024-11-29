@@ -50,7 +50,7 @@ const ProjectsCard = ({data}) => {
                     {data.progress}
                   </p>
                 </div>
-                <Popover id={data.id}/>
+                <Popover id={data.id} isArchived={data.isArchived}/>
               </div>
               <Separator className='bg-slate-300 mt-2'/>
             </CardTitle>

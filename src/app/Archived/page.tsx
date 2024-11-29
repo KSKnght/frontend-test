@@ -10,6 +10,7 @@ import { HiPlusCircle } from "react-icons/hi";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AddProjectForm from '../components/Modals/AddProjectForm';
+import { IoArchiveSharp } from "react-icons/io5";
 import { ToastContainer } from 'react-toastify';
 
 export const revalidate = 0;
@@ -35,8 +36,8 @@ export default async function ProjectsPage({ searchParams }: SearchParamProps) {
             <div className='h-screen w-full'>
                 <div className='mb-5 space-x-56 flex justify-between border-b py-5'>
                     <div className='flex flex-row ml-10 -translate-y-1'>
-                        <HiDocumentText className='w-8 h-8 mr-3 translate-y-[1rem] text-pink-600' />
-                        <h1 className='text-4xl font-black mt-3 text-pink-600'>PROJECTS</h1>
+                        <IoArchiveSharp className='w-8 h-8 mr-3 translate-y-[1rem] text-pink-600' />
+                        <h1 className='text-4xl font-black mt-3 text-pink-600'>ARCHIVE</h1>
                     </div>
                     <div className='flex flex-row space-x-4 items-center pr-11'>
                         <div className='flex flex-row space-x-1 items-center'>
