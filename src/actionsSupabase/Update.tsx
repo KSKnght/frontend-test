@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 
-
 export async function updateProject(FormData : FormData, id: number) {
     const { data, error } = await supabase
     .from('project')
@@ -48,10 +47,10 @@ export async function updateTask(FormData : FormData, id: number, projID: number
 
     } catch (err) {
         console.error('Error updating task:', err);
-    };
+    }
 
-        revalidatePath('/Projects/' + projID + '/view');
-        redirect('/Projects/' + projID + '/view');
+    revalidatePath('/Projects/' + projID + '/view');
+    redirect('/Projects/' + projID + '/view')
 };
 
 
@@ -224,5 +223,34 @@ export async function extendProjectEndDate(FormData: FormData, id : number) {
         console.log('error moving project endDate:', error)
     } else {
         console.log('project end Date has been extended')
+    }
+}
+
+export async function archiveProject(id: number) {
+    const { error } = await supabase
+    .from('project')
+    .update({
+        isArchived: true
+    })
+    .eq('id', id);
+
+    if (error){
+        console.log('error moving project to archive:', error)
+    } else {
+        console.log('project moved to archive')
+    }
+}
+
+export async function movePriority(id: number, priority: number) {
+    const { error } = await supabase
+    .from('phase')
+    .update({
+        priority: priority
+    })
+    .eq('id', id);
+    if (error){
+        console.log('error moving phase priority:', error)
+    } else {
+        console.log('phase has been moved to other step')
     }
 }
