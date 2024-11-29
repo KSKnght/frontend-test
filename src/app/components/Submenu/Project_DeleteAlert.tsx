@@ -34,7 +34,7 @@ const Project_DeleteAlert = ({id}) => {
             <AlertDialogAction onClick={(e) => {e.stopPropagation(); startTransition(async () => {
              await softdelProject(id);
            })}} className='text-red-500 bg-red-50 hover:bg-red-100'>
-              Cancel Project
+              Delete Project
             </AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>

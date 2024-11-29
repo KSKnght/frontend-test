@@ -18,8 +18,10 @@ export async function updateProject(FormData : FormData, id: number) {
 
     if (error) {
     console.error('Error updating project:', error);
+    return {success : false}
     } else {
     console.log('Project updated successfully:', data);
+    return {success : true}
     }
     revalidatePath('/Projects');
     redirect('/Projects');
@@ -50,7 +52,6 @@ export async function updateTask(FormData : FormData, id: number, projID: number
     }
 
     revalidatePath('/Projects/' + projID + '/view');
-    redirect('/Projects/' + projID + '/view')
 };
 
 
@@ -161,6 +162,7 @@ export async function updateClient(FormData : FormData, id: number) {
         return {success: true}
     }
     
+    revalidatePath('/Clients')
     redirect('/Clients')
 }
 

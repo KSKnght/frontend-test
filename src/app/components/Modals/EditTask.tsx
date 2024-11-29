@@ -106,9 +106,7 @@ const EditTask = ({ data, project }) => {
       const response = await updateTask(formDataToSend, formData.id, project);
 
       if (response.success) {
-        await revalidatePath('/Projects/' + project + '/view');
-        await revalidatePath('/Projects/' + project + '/view??edittask='+formData.id);
-
+        revalidatePath('/Projects/' + project + '/view');
       } else {
         setErrors({ submit: 'Failed to update task. Please try again.' });
       }
@@ -124,7 +122,6 @@ const EditTask = ({ data, project }) => {
         });
         setErrors(fieldErrors);
       } else {
-        setErrors({ submit: 'An unexpected error occurred. Please try again.' });
       }
     }
   };
@@ -133,7 +130,7 @@ const EditTask = ({ data, project }) => {
   const isEmpty = Object.values(formData).every((field) => field === '');
 
   return (
-    <form action={async (e) => {handleSubmit}}>
+    <form onSubmit={(e) => { handleSubmit(e); route.push('/Projects/' + project + '/view'); }}>
         <div className='flex flex-row justify-evenly space-x-3'>
             <div>
                 <p className='text-xs font-bold flex mb-1'>Priority*</p>

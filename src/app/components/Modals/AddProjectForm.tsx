@@ -70,29 +70,31 @@ const AddProjectForm = () => {
         e.preventDefault();
         
         try {
-            projectformSchema.parse(formData); // Validate form data with Zod
-            setErrors({}); // Clear errors if valid
-      
+            projectformSchema.parse(formData); 
+            setErrors({}); 
+          
             const formDataToSend = new FormData(e.currentTarget);
             const response = await createProject(formDataToSend);
-      
+          
             if (response.success) {
               revalidatePath('/Projects');
+              route.push('/Projects')
             } else {
               setErrors({ submit: 'Failed to create project. Please try again.' });
             }
           } catch (error) {
             if (error instanceof z.ZodError) {
-                const fieldErrors = error.errors.reduce((acc: { [key: string]: string }, err) => {
-                    if (err.path[0]) acc[err.path[0] as string] = err.message;
-                    return acc;
-                  }, {});
-                  setErrors(fieldErrors);
+              const fieldErrors = error.errors.reduce((acc: { [key: string]: string }, err) => {
+                if (err.path[0]) acc[err.path[0] as string] = err.message;
+                return acc;
+              }, {});
+              setErrors(fieldErrors);
             } else {
-              setErrors({ submit: 'An unexpected error occurred. Please try again.' });
+                route.push('/Projects')
             }
           }
-        };
+    }
+          
       
         const hasErrors = Object.keys(errors).length > 0;
         const isEmpty = Object.values(formData).every((field) => field === '');        

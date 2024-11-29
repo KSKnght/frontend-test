@@ -4,10 +4,10 @@ import React, { useState, useEffect, useTransition, startTransition } from 'reac
 import { revalidatePath } from 'next/cache';
 import { updateClient } from '@/actionsSupabase/Update';
 import { showClient } from '@/actionsSupabase/read';
-import router, { Router, useRouter } from 'next/router';
 import { redirect } from 'next/dist/server/api-utils';
 import { z } from 'zod';
 import { clientformSchema } from '../formSchema';
+import { useRouter } from 'next/navigation';
 
 // Define the shape of the client data
 interface ClientData {
@@ -31,6 +31,7 @@ const EditClient = ({ data }) => {
     contactNum: '',
     emailAdd: ''
   });
+  const route = useRouter();
 
   // Fetch client data on mount
   useEffect(() => {
@@ -106,7 +107,6 @@ const EditClient = ({ data }) => {
       const response = await updateClient(formDataToSend, formData.id);
 
       if (response.success) {
-        router.push('/Clients');
         revalidatePath('/Clients')
       } else {
         setErrors({ submit: 'Failed to create client. Please try again.' });
@@ -121,7 +121,6 @@ const EditClient = ({ data }) => {
         });
         setErrors(fieldErrors); // Set errors from Zod validation
       } else {
-        setErrors({ submit: 'An unexpected error occurred. Please try again.' });
       }
     }
   };
@@ -130,7 +129,7 @@ const EditClient = ({ data }) => {
   const isEmpty = Object.values(formData).every(field => field === '');
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) => { handleSubmit(e); route.push('/Clients'); }}>
       <div className='flex flex-row justify-evenly space-x-3'>
         <div>
           <p className='text-xs font-bold flex mb-1'>First Name</p>

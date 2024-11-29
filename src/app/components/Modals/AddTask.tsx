@@ -55,45 +55,39 @@ const AddTask = ({data, projID}) => {
       }
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-  
-
-    // Final validation on submit
-    try {
-        taskSchema.parse(formData); // Validate form data with Zod
-        setErrors({}); // Clear errors if valid
-
-        const formDataToSend = new FormData(e.currentTarget);
-        const response = await createTask(formDataToSend, data, projID);
-
-        if (response.success) {
-          revalidatePath(`/Projects/${projID}/view`);
-        } else {
-          setErrors({ submit: 'Failed to create task. Please try again.' });
-        }
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          const fieldErrors: { [key: string]: string } = {};
-          error.errors.forEach((err) => {
-            if (err.path[0]) {
-              fieldErrors[err.path[0] as string] = err.message;
+      const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        
+        try {
+            taskSchema.parse(formData); 
+            setErrors({}); 
+          
+            const formDataToSend = new FormData(e.currentTarget);
+            const response = await createTask(formDataToSend, data, projID);
+          
+            if (response.success) {
+            } else {
+              setErrors({ submit: 'Failed to create project. Please try again.' });
             }
-          });
-          setErrors(fieldErrors); // Set errors from Zod validation
-        } else {
-          setErrors({ submit: 'An unexpected error occurred. Please try again.' });
-        }
-      }
-    };
-    
+          } catch (error) {
+            if (error instanceof z.ZodError) {
+              const fieldErrors = error.errors.reduce((acc: { [key: string]: string }, err) => {
+                if (err.path[0]) acc[err.path[0] as string] = err.message;
+                return acc;
+              }, {});
+              setErrors(fieldErrors);
+            } else {
+            }
+          }
+    }
+
     const hasErrors = Object.keys(errors).length > 0;
     const isEmpty = Object.values(formData).every(field => field === '');
 
 
 
     return (
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => { handleSubmit(e); route.push('/Projects/' + projID + '/view'); }}>
         <div className='flex flex-row justify-evenly space-x-3'>
             
             <div>
