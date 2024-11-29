@@ -243,6 +243,21 @@ export async function archiveProject(id: number) {
     }
 }
 
+export async function unnrchiveProject(id: number) {
+    const { error } = await supabase
+    .from('project')
+    .update({
+        isArchived: false
+    })
+    .eq('id', id);
+
+    if (error){
+        console.log('error moving project to archive:', error)
+    } else {
+        console.log('project moved to archive')
+    }
+}
+
 export async function movePriority(id: number, priority: number) {
     const { error } = await supabase
     .from('phase')
