@@ -35,37 +35,45 @@ type SearchParamProps = {
   searchParams: Record<string, string> | null | undefined;
 };
 
-const MatCard = ({phase}) => {
-    return (
+const MatCard = ({ phase }) => {
+  return (
+    <div className='overflow-x-none'>
       <div>
-        <div>
-          {phase.phaseTasks.map((tasks, i) => {
-            return (
-              tasks.isDeleted == false && tasks.taskMat.length ?
-              <div key={i} className='px-10 py-4'>
-                <div className='flex flex-row font-semibold'>
-                  <p>{tasks.taskName + ' from '}</p>
-                  <p className='text-pink-600 font-bold ml-1'>{phase.phaseName}</p>
+        {phase.phaseTasks.map((tasks, i) => {
+          return (
+            tasks.isDeleted == false && tasks.taskMat.length ? (
+              <div key={`task-${i}`}>
+                <div className="flex flex-row font-semibold ml-8">
+                  <p>{tasks.taskName + " from "}</p>
+                  <p className="text-pink-600 font-bold ml-1">{phase.phaseName}</p>
                 </div>
-                <div>
-                <Table className='w-[36rem] table-fixed'>
-                  <TableBody>
-                    {tasks.taskMat.map((mat, i) => (
-                      <TableRow key={i}>
-                        <TableCell>{mat.materials.name}</TableCell>
-                        <TableCell>{mat.qty +' '+mat.unit}</TableCell>
+                <div className='p-3 border border-slate-300 rounded-xl mx-8 mt-2 mb-8 w-[36rem]'>
+                  <Table className="w-[34.3rem] table-fixed">
+                    <TableHeader>
+                      <TableRow className='font-bold bg-slate-100'>
+                        <TableCell>Material Name</TableCell>
+                        <TableCell>Quantity</TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {tasks.taskMat.map((mat) => (
+                        <TableRow key={`mat-${mat.id}`}>
+                          <TableCell>{mat.materials.name}</TableCell>
+                          <TableCell>{mat.qty + " " + mat.unit}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </div>
-              </div> : <></>
-            )
-          })}
-        </div>
+              </div>
+            ) : null
+          );
+        })}
       </div>
-    )
-}
+    </div>
+  );
+};
+
 
 
 const page = async ({params, searchParams}:{ params: { id: string }, searchParams : SearchParamProps}) => {
@@ -118,7 +126,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
         <div className=''>
           <div className='mb-6 fixed h-[5rem] w-full bg-white content-center z-[2]'>
               <div className='flex flex-row space-x-[21.5rem]'>
-                <div className='px-[3rem]'>
+                <div className='px-[2rem]'>
                   <input className='w-[50rem] px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-pink-600' placeholder='Search Materials...'></input>
                 </div>
               </div>

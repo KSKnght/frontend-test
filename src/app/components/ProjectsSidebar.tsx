@@ -23,6 +23,10 @@ const statusColors = {
 
 const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: boolean, id : Number}) => {
   const router = useRouter();
+  const currentDate = new Date();
+  const startDate = new Date(project.startDate);
+  const hasStarted = currentDate >= startDate;
+
 
   return (
     <div className='h-full fixed z-[2]'>
@@ -91,7 +95,22 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
               { currPage == true && 
                   <button onClick={() => {router.push('view')}} className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-center hover:bg-slate-200 transition-colors'>View All Tasks</button>
               } 
-              <Link className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-center hover:bg-slate-200 transition-colors' href={'/Projects/'+project.id+'/view?extProj=true'}>Extend Project</Link>
+              
+              {hasStarted ? (
+                <Link
+                  className="bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-center hover:bg-slate-200 transition-colors"
+                  href={`/Projects/${project.id}/view?extProj=true`}
+                >
+                  Extend Project
+                </Link>
+              ) : (
+                <Link
+                  className="bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-center hover:bg-slate-200 transition-colors"
+                  href={`/Projects/${project.id}/view?movProj=true`}
+                >
+                  Move Project
+                </Link>
+              )}          
           <Alert id={id}/>
 
             </div>

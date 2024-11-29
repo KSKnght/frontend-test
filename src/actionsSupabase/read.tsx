@@ -26,6 +26,7 @@ export async function getProjects() {
     return data;
 }
 
+
 export async function getClients() {
     const { data, error } = await supabase
         .from('client') // Replace with your actual table name
@@ -62,6 +63,7 @@ export async function getInfoProject(id:number) {
     }
     return data
 }
+
 
 export async function getPhases(id:number) {
     const { data, error } = await supabase

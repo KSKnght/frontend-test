@@ -32,6 +32,7 @@ const EditTask = ({ data, project }) => {
 
   // Fetch task data
   useEffect(() => {
+    console.log(data)
     const fetchTaskData = async () => {
       try {
         console.log("Fetching task for ID:", data); // Debugging

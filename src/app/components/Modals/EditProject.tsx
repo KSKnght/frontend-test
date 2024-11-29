@@ -24,10 +24,6 @@ const EditProjectForm = async ({project, clients}) => {
                             <option value={'DESIGN'}>Design</option>
                     </select>
                 </div>
-                <div>
-                    <p className='subHeader'>Start Date</p>
-                    <input defaultValue={project.startDate} className='inputSubHeader inputSubHeader:focus w-[10rem]' type="date" name='startDate'/>
-                </div>
             </div>
             
             <div className='flex flex-row justify-between space-x-3 mt-3'>
@@ -37,16 +33,12 @@ const EditProjectForm = async ({project, clients}) => {
                 </div>
                 <div>
                     <p className='subHeader'>Client</p>
-                    <select className='inputSubHeader inputSubHeader:focus w-[10rem]' defaultValue={project.clientID} name='id'>
+                    <select className='inputSubHeader inputSubHeader:focus w-[16rem]' defaultValue={project.clientID} name='id'>
                         <option value={'Select'} disabled={true}>Select Client</option>
                         {clients.map((clients, i) => {
                             return <option key={i} value={clients.id}>{clients.lastname + ', ' + clients.firstname+ ' ' + clients.middlename}</option>
                         })}
                     </select>
-                </div>
-                <div>
-                    <p className='subHeader'>End Date</p>
-                    <input defaultValue={project.endDate} className='inputSubHeader inputSubHeader:focus w-[10rem]' type="date" name='endDate'/>
                 </div>
             </div>
         </>

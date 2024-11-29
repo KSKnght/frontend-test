@@ -207,8 +207,10 @@ export async function moveProjectDate(FormData : FormData, id: number) {
 
     if (error){
         console.log('error moving project dates:', error)
+        return {success: false}
     } else {
         console.log('project has been moved')
+        return {success: true}
     }
 }
 
