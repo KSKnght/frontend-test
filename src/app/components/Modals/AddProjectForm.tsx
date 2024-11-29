@@ -78,7 +78,6 @@ const AddProjectForm = () => {
       
             if (response.success) {
               revalidatePath('/Projects');
-              route.push('/Projects');
             } else {
               setErrors({ submit: 'Failed to create project. Please try again.' });
             }
@@ -100,7 +99,7 @@ const AddProjectForm = () => {
 
 
     return (
-        <form onSubmit={(e) => { handleSubmit(e) }}>
+        <form onSubmit={(e) => { handleSubmit(e); route.push('/Projects'); }}>
             <div className='flex flex-row justify-between space-x-3'>
                 <div className="grid w-full gap-1.5">
                     <Label className='font-bold text-xs flex'>Project Name</Label>
