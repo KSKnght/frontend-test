@@ -10,6 +10,7 @@ import EditTask from '@/app/components/Modals/EditTask'
 import TaskDetails from '@/app/components/Modals/MatAndSubForm/TaskDetails'
 import { IoIosAddCircle } from "react-icons/io";
 import ExtendProject from '@/app/components/Modals/ExtendProject'
+import MoveProject from '@/app/components/Modals/MoveProject'
 import { ToastContainer } from 'react-toastify';
 
 
@@ -24,7 +25,9 @@ type SearchParamProps = {
   addPhase: boolean
   state: any
   extProj: any,
+  movProj: any,
   searchParams: Record<string, string> | null | undefined;
+  search: string
 };
 
 const page = async ({params, searchParams}:{ params: { id: string }, searchParams : SearchParamProps}) => {
@@ -35,6 +38,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
   const viewtask = searchParams?.viewtask;
   const addmat = searchParams?.addmat;
   const extProj = searchParams?.extProj;
+  const movProj = searchParams?.movProj;
   const addsub = searchParams?.addsub;
   const project = await getInfoProject(Number(id))
   if (!project) {
@@ -42,6 +46,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
   }
   const phaseTasks = await getPhases(Number(id))
   const state = searchParams?.state;
+  const searchQuery = searchParams?.search || '';
 
   // Group the phases by their priority number
   const groupedPhases = (phaseTasks || []).reduce((acc, phase) => {
@@ -53,7 +58,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
     }
     return acc;
   }, {});
-  
+
 
   return (
     <div className=' flex flex-row overflow-x-auto h-screen'>
@@ -70,7 +75,10 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                 <TaskDetails data={viewtask} state={state} projID={id}/>
             </Modal>}
       {extProj && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Extend Project'}>
-                <ExtendProject data={extProj} state={state} projID={id}/>
+                <ExtendProject data={extProj} state={state} projID={project.id}/>
+            </Modal>}
+      {movProj && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Move Project'}>
+                <MoveProject data={movProj} state={state} projID={project.id}/>
             </Modal>}
 
       <div className='h-screen'>
@@ -88,11 +96,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                   <IoIosAddCircle className='mt-1 mr-1'/>
                   <p>Add Phase</p>
                 </Link>
-                
-                <div className='px-[3rem]'>
-                  <input className='w-[50rem] px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-pink-600' placeholder='Search Phase Name...'></input>
-                </div>
-
+              
 
               </div>
           </div>

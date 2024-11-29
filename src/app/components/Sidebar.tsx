@@ -5,6 +5,7 @@ import React, {useState } from 'react'
 import { HiUser } from "react-icons/hi";
 import { HiDocumentText } from "react-icons/hi2";
 import { HiOutlineMenu } from "react-icons/hi";
+import { IoArchiveSharp } from "react-icons/io5";
 import { Separator } from '@radix-ui/react-separator';
 
 export default function Navbar() {
@@ -49,7 +50,7 @@ export default function Navbar() {
           </li>
           <li className='relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer text-white transition-colors hover:bg-pink-600'>
               <Link href='/Archived' className='flex'>
-                <HiUser className='w-5 h-5'/>
+                <IoArchiveSharp className='w-5 h-5'/>
                 <span className={`${expanded ? 'w-0' : 'w-[11rem] ml-5'}
                                   overflow-hidden transition-all`}>
                   Archived Projects

@@ -1,14 +1,19 @@
 import React from 'react'
 
+interface DateData {
+    id: number;
+    startDate: any;
+    endDate: any;
+}
 
-const ExtendProject = (data, projID) => {
+const MoveProject = (data, projID) => {
   return (
     <div>
       <form>
         <div className='flex flex-row space-x-6'>
             <div>
                 <p className='text-xs font-bold flex mb-1'>Start Date</p>
-                <input type='date' className='`h-6 w-auto flex border disabled:outline-slate-500 disabled:bg-slate-300 disabled:text-slate-500 rounded-lg pl-1 text-sm' disabled></input>
+                <input type='date' className='`h-6 w-auto flex border rounded-lg pl-1 text-sm'></input>
             </div>
             <div>
                 <p className='text-xs font-bold flex mb-1'>End Date</p>
@@ -19,11 +24,11 @@ const ExtendProject = (data, projID) => {
           className={`mt-8 text-sm px-4 py-1 rounded-lg text-white bg-pink-600`}
           type="submit"
           >
-            Extend Project
+            Move Project
         </button>
       </form>
     </div>
   )
 }
 
-export default ExtendProject
+export default MoveProject

@@ -5,7 +5,8 @@ import {
     PopoverTrigger,
   } from "../ui/popover"
 import { Button } from "../ui/button"
-import Alert from "../Submenu/Project_DeleteAlert"
+import Delete from "../Submenu/Project_DeleteAlert"
+import Archive from "../Submenu/Project_ArchiveAlert"
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 
 
@@ -19,13 +20,13 @@ const ProjectList_Popover = ({id}) => {
                     <IoEllipsisVerticalSharp className='text-lg'/>
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className='w-25'>
+            <PopoverContent className='w-[10rem]'>
                 <div className='flex flex-col h-auto content-center' onClick={(e) => {e.stopPropagation()}}>
                     <Button className='h-8' onClick={(e) => {e.stopPropagation(); location.href='/Projects?edit='+id;}} variant='ghost'>Edit Project</Button>
                     <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Extend Project</Button>
                     <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Cancel Project</Button>
-                    <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Archive Project</Button>
-                    <Alert id={id} />
+                    <Archive id={id} />
+                    <Delete id={id} />
                 </div>
             </PopoverContent>
         </Popover>

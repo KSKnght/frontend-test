@@ -20,7 +20,7 @@ const Project_DeleteAlert = ({id}) => {
     <div>
       <AlertDialog>
         <AlertDialogTrigger asChild className='translate-x-[0.1rem]'>
-            <Button onClick={(e) => {e.stopPropagation()}} className='h-8 text-red-500 hover:text-red-500 hover:bg-red-50' variant='ghost'>Delete Project</Button>
+            <Button onClick={(e) => {e.stopPropagation()}} className='rounded-lg text-sm w-[16rem] py-3 text-left text-red-500 hover:text-red-500 hover:bg-red-50' variant='ghost'>Delete Project</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
             <AlertDialogHeader>

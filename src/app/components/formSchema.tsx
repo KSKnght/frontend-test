@@ -1,7 +1,14 @@
 'use client'
 
 import {z} from "zod"
-    
+
+const validateEndDate = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return end > start && end.getTime() !== start.getTime(); // endDate > startDate && endDate != startDate
+  };
+
+
 //General Regex
 const numberRegex = /^\d+$/
 const alphabetRegex = /^[A-Za-z\s]+$/
@@ -152,29 +159,66 @@ export type clientformData = z.infer<typeof clientformSchema>;
 export enum clientOptions {
     SELECT = 'Select Client'
 }
-
 export enum projecttypeOptions {
-    SELECT = 'Select Project Type'
+    SELECT = 'Select Project Type',
 }
-
 export const projectformSchema = z.object({
-    projectName: z.string().min(1, {
-        message: "Project name is required"
-    }),
-    projectAddress: z.string().min(1, {
-        message: "Project address is required"
-    }),
-    projecttype: z.string().min(1, {
-        message: 'You must select a project type'
-    }).refine((value) => value ! == projecttypeOptions.SELECT, {
-        message: "Select a valid project type"
-    }),
-    client: z.string().min(1, {
-        message: 'You must select a client'
-    }).refine((value) => value ! == clientOptions.SELECT, {
-        message: "Select a valid client"
+    name: z.string().min(1, {
+        message: "Project name is required",
+      }),
+      address: z.string().min(1, {
+        message: "Project address is required",
+      }),
+      type: z.string().refine((value) => value !== projecttypeOptions.SELECT, {
+        message: "Select a project type",
+      }),
+      id: z.string().refine((value) => value !== clientOptions.SELECT, {
+        message: "Select a client",
+      }),
+      startDate: z.string(),
+      endDate: z.string(),
     })
-})
+    .superRefine((data, ctx) => {
+      const { startDate, endDate } = data;
+  
+      // Validate startDate
+      if (isNaN(Date.parse(startDate))) {
+        ctx.addIssue({
+          path: ['startDate'],
+          message: 'Start date is required',
+          code: z.ZodIssueCode.custom,
+        });
+      } else if (Date.parse(startDate) < Date.now()) {
+        ctx.addIssue({
+          path: ['startDate'],
+          message: 'Start date cannot be in the past',
+          code: z.ZodIssueCode.custom,
+        });
+      }
+  
+      // Validate endDate
+      if (isNaN(Date.parse(endDate))) {
+        ctx.addIssue({
+          path: ['endDate'],
+          message: 'End date is required',
+          code: z.ZodIssueCode.custom,
+        });
+      } else if (Date.parse(endDate) < Date.parse(startDate)) {
+        ctx.addIssue({
+          path: ['endDate'],
+          message: 'End date must be after start date',
+          code: z.ZodIssueCode.custom,
+        });
+      } else if (Date.parse(endDate) == Date.parse(startDate)) {
+        ctx.addIssue({
+          path: ['endDate'],
+          message: 'End date cannot be the same as start date',
+          code: z.ZodIssueCode.custom,
+        });
+        return;
+      } 
+    });
+
 export type projectData = z.infer<typeof projectformSchema>
 
 
@@ -256,3 +300,5 @@ export const subcontractorsSchema = z.object({
     }),
 })
 export type subcontractorsData = z.infer<typeof subcontractorsSchema>
+
+
