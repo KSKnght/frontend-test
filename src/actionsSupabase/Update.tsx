@@ -143,25 +143,35 @@ export async function addSubCom(FormData : FormData, taskID : number) {
 }
 
 export async function updateClient(FormData : FormData, id: number) {
-    const { error } = await supabase
-    .from('client')
-    .update({
-        lastname: FormData.get('lastname'),
-        firstname: FormData.get('firstname'),
-        middlename: FormData.get('middlename'),
-        contactNum: FormData.get('contactNum'),
-        emailAdd: FormData.get('emailAdd')
-    })
-    .eq('id', id);
+    var errorCheck = false
+    try {
+        const { error } = await supabase
+        .from('client')
+        .update({
+            lastname: FormData.get('lastname'),
+            firstname: FormData.get('firstname'),
+            middlename: FormData.get('middlename'),
+            contactNum: FormData.get('contactNum'),
+            emailAdd: FormData.get('emailAdd')
+        })
+        .eq('id', id);
 
-    if (error) {
-        console.error('Error updating client:', error);
-    } else {
-        console.log('Client updated!');
-        return {success: true}
+        if (error) {
+            console.error('Error updating client:', error);
+            throw error;
+        } else {
+            console.log('Client updated!');
+            return {success: true}
+        }
+    } catch (err) {
+        return { success: false, message: err.message, code: err.code };
     }
-    
-    redirect('/Clients')
+
+    if (errorCheck === false) {
+        // revalidatePath('/Clients');
+        // redirect('/Clients');
+        return { success: true, message: 'successfully added client!'};
+    }
 }
 
 export async function updatePhaseName(id: number, name: string) {
@@ -184,7 +194,7 @@ export async function cancelProject(id: number) {
     const { error } = await supabase
     .from('project')
     .update({
-        status: 'CANCELLED'
+        progress: 'CANCELLED'
     })
     .eq('id', id);
 
@@ -193,6 +203,8 @@ export async function cancelProject(id: number) {
     } else {
         console.log('project cancelled')
     }
+
+    revalidatePath('Projects/'+id+'/view');
 }
 
 export async function moveProjectDate(FormData : FormData, id: number) {

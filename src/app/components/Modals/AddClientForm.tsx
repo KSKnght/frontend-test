@@ -158,6 +158,7 @@ const AddClientForm = () => {
         </div>
       </div>
 
+      {errors.submit && <p className='text-red-500 text-xs mt-1 text-left'>{errors.submit}</p>}
       <button
         className={`mt-8 text-sm px-4 py-1 rounded-lg text-white ${hasErrors || isEmpty ? 'bg-gray-400 cursor-not-allowed' : 'bg-pink-600'}`}
         type="submit"

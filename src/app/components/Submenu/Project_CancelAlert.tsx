@@ -11,6 +11,7 @@ import {
     AlertDialogTrigger,
   } from "../ui/alertdialog"
 import { Button } from "../ui/button";
+import { cancelProject } from '@/actionsSupabase/Update';
 
 const Project_CancelAlert = ({id}) => {
 
@@ -29,7 +30,9 @@ const Project_CancelAlert = ({id}) => {
             </AlertDialogHeader>
             <AlertDialogFooter>
             <AlertDialogCancel onClick={(e) => {e.stopPropagation()}}>Sustain</AlertDialogCancel>
-            <AlertDialogAction onClick={(e) => {e.stopPropagation()}} className='text-red-500 bg-red-50 hover:bg-red-100'>
+            <AlertDialogAction onClick={(e) => {e.stopPropagation(); startTransition(async () => {
+             await cancelProject(id);
+           })}} className='text-red-500 bg-red-50 hover:bg-red-100'>
               Cancel Project
             </AlertDialogAction>
             </AlertDialogFooter>
