@@ -22,6 +22,7 @@ import { HiUser } from "react-icons/hi";
 import { reloadPage } from '@/actionsSupabase/reload';
 import { supabase } from '@/lib/supabase';
 
+const revalidate = 0;
 
 type SearchParamProps = {
   show?: boolean;

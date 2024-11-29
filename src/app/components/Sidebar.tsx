@@ -47,14 +47,21 @@ export default function Navbar() {
                 </span>
               </Link>
           </li>
+          <li className='relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer text-white transition-colors hover:bg-pink-600'>
+              <Link href='/Archived' className='flex'>
+                <HiUser className='w-5 h-5'/>
+                <span className={`${expanded ? 'w-0' : 'w-[11rem] ml-5'}
+                                  overflow-hidden transition-all`}>
+                  Archived Projects
+                </span>
+              </Link>
+          </li>
         </div>
 
 
         <div>
           <ul className='flex-1 px-3'>{}</ul>
         </div>
-
-
 
       </nav>        
     </aside>

@@ -24,6 +24,7 @@ const ProjectList_Popover = ({id}) => {
                     <Button className='h-8' onClick={(e) => {e.stopPropagation(); location.href='/Projects?edit='+id;}} variant='ghost'>Edit Project</Button>
                     <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Extend Project</Button>
                     <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Cancel Project</Button>
+                    <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Archive Project</Button>
                     <Alert id={id} />
                 </div>
             </PopoverContent>

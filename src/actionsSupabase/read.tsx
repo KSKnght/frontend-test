@@ -16,6 +16,31 @@ export async function getProjects() {
                 emailAdd
             )
         `)
+        .eq('isArchived', false)
+        .order('id', { ascending: false });
+        
+
+    if (error) {
+        console.error('Error fetching projects:', error);
+    }
+
+    return data;
+}
+
+export async function getProjectsArchived() {
+    const { data, error } = await supabase
+        .from('project')
+        .select(`
+            *,
+            client (
+                lastname,
+                firstname,
+                middlename,
+                contactNum,
+                emailAdd
+            )
+        `)
+        .eq('isArchived', true)
         .order('id', { ascending: false });
         
 
