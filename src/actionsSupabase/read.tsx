@@ -55,11 +55,8 @@ export async function getProjectDate(id: number) {
     const { data, error } = await supabase
     .from('project') // Replace 'projects' with your actual table name
     .select(`
-        *,
-        client (
-            startDate,
-            endDate,
-        )
+        startDate,
+        endDate,
     `)
     .eq('id', id) // Assuming 'id' is the project ID
     .single(); // Use .single() if you expect only one record
