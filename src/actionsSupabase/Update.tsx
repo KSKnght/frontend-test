@@ -40,18 +40,20 @@ export async function updateTask(FormData : FormData, id: number, projID: number
         .eq('id', id);
 
         if (error) {
-        console.error('Error updating phase task:', error);
-        return {success: false, error: error.message}
+            console.error('Error updating phase task:', error);
+            throw error
         } else {
-        console.log('Phase task updated successfully:', data);
-        return {success: true}
+            console.log('Phase task updated successfully:', data);
+            revalidatePath('/Projects/' + projID + '/view');
+            return {success: true}
         }
 
     } catch (err) {
-        console.error('Error updating task:', err);
+        return { success: false, message: err.message };
     }
 
-    revalidatePath('/Projects/' + projID + '/view');
+    
+    redirect('/Projects/' + projID + '/view')
 };
 
 
@@ -144,6 +146,7 @@ export async function addSubCom(FormData : FormData, taskID : number) {
 }
 
 export async function updateClient(FormData : FormData, id: number) {
+    var errorCheck = false
     const { error } = await supabase
     .from('client')
     .update({
@@ -154,12 +157,23 @@ export async function updateClient(FormData : FormData, id: number) {
         emailAdd: FormData.get('emailAdd')
     })
     .eq('id', id);
+    try {
+        if (error) {
+            console.error('Error updating client:', error);
+            throw error;
+        } else {
+            console.log('Client updated!');
+            
+            return {success: true}
+        }
+    } catch (err) {
+        return { success: false, message: err.message, code: err.code };
+    }
 
-    if (error) {
-        console.error('Error updating client:', error);
-    } else {
-        console.log('Client updated!');
-        return {success: true}
+    if (errorCheck === false) {
+        // revalidatePath('/Clients');
+        // redirect('/Clients');
+        return { success: true, message: 'successfully added client!'};
     }
     
     revalidatePath('/Clients')
@@ -167,18 +181,25 @@ export async function updateClient(FormData : FormData, id: number) {
 }
 
 export async function updatePhaseName(id: number, name: string) {
-    const { error } = await supabase
-    .from('phase')
-    .update({
-        phaseName: name
-    })
-    .eq('id', id);
-
-    if (error) {
-        console.error('Error updating phase name:', error);
-    } else {
-        console.log('Phase name updated!');
+    try {
+        const { error } = await supabase
+        .from('phase')
+        .update({
+            phaseName: name
+        })
+        .eq('id', id);
+    
+        if (error) {
+            console.error('Error updating phase name:', error);
+            throw error;
+        } else {
+            console.log('Phase name updated!');
+            return {success: true}
+        }
+    } catch (error) {
+        return {success: false, error: error.message}
     }
+
     
 }
 

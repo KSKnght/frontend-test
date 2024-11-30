@@ -80,18 +80,21 @@ export async function addPhase(FormData: FormData, id: any) {
 
         if (error) {
             console.error('Error inserting phase:', error);
+            throw error;
         } else {
             console.log('Phase created:', data);
+            revalidatePath('/Projects/' + id + '/view');
+            return {success: true}
         }
     } catch (err) {
-        return { success: false, message: 'An error occurred: ' + err.message };
+        return { success: false, message: err.message };
     }
-    revalidatePath('/Projects/' + id + '/view');
     redirect('/Projects/' + id + '/view');
 }
 
 export async function createTask(FormData : FormData, id: any, projID: number) {
     try {
+        console.log(FormData + id)
         const { data, error } = await supabase
         .from('phaseTasks') // Replace 'phase_tasks' with your actual table name
         .insert({
@@ -103,14 +106,17 @@ export async function createTask(FormData : FormData, id: any, projID: number) {
         });
 
         if (error) {
-        console.error('Error inserting phase task:', error);
+            console.error('Error inserting phase task:', error);
+            throw error;
         } else {
-        console.log('Phase task created:', data);
+            console.log('Phase task created:', data);
+            revalidatePath('/Projects/' + projID + '/view');
+            return {success: true}
         }
     }
     catch (err) {
-        return { success: false, message: 'An error occurred: ' + err.message };
-    }
+        return { success: false, message: err.message };
+    } 
 
     revalidatePath('/Projects/' + projID + '/view');
     redirect('/Projects/' + projID + '/view')
