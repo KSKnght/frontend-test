@@ -1,3 +1,5 @@
+
+
 import { getInfoProject, getPhases } from '@/actionsSupabase/read'
 import Link from 'next/link'
 import React, { Suspense } from 'react'
@@ -12,6 +14,7 @@ import { IoIosAddCircle } from "react-icons/io";
 import ExtendProject from '@/app/components/Modals/ExtendProject'
 import MoveProject from '@/app/components/Modals/MoveProject'
 import { ToastContainer } from 'react-toastify';
+import SearchPhase from '@/app/components/SearchPhase'
 
 
 export const revalidate = 0;
@@ -46,18 +49,21 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
   }
   const phaseTasks = await getPhases(Number(id))
   const state = searchParams?.state;
-  const searchQuery = searchParams?.search || '';
+  const isDisabled = project.progress === 'CANCELLED' || project.isArchived === true;
+  
 
-  // Group the phases by their priority number
+  // Group the phases by their priority number 
   const groupedPhases = (phaseTasks || []).reduce((acc, phase) => {
     if (phase.isDeleted === false) {
-      if (!acc[phase.priority]) {
+      if (!acc[phase.priority]) { 
         acc[phase.priority] = [];
       }
       acc[phase.priority].push(phase);
     }
     return acc;
   }, {});
+
+  const maxPriority = Object.keys(groupedPhases).length;
 
 
   return (
@@ -78,7 +84,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                 <ExtendProject data={extProj} state={state} projID={project.id}/>
             </Modal>}
       {movProj && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Move Project'}>
-                <MoveProject data={movProj} state={state} projID={project.id}/>
+                <MoveProject data={movProj} state={state} maxPriority={maxPriority} projID={project.id}/>
             </Modal>}
 
       <div className='h-screen'>
@@ -88,34 +94,39 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
 
       <ProjectsSidebar project={project} currPage={false} id={Number(id)}/>
 
-      <div className='flex flex-col'>
+      <div className='flex flex-row'>
         <div className=''>
-          <div className='mb-6 fixed h-[5rem] w-full bg-white content-center z-[2] border-b border-slate-200'>
-              <div className='flex flex-row'>
-                <Link className='translate-x-5 flex flex-row w-32 rounded-lg px-3 py-1 text-white bg-pink-600 items-center' href={'/Projects/'+project.id+'/view?addPhase=true'}>
-                  <IoIosAddCircle className='mt-1 mr-1'/>
-                  <p>Add Phase</p>
-                </Link>
-              
-
+          <div className='mb-6 h-[5rem] w-full bg-white content-center z-[2] border-b border-slate-200'>
+              <div className='flex flex-row content-center space-x-10'>
+              <button
+                className={`z-[50] fixed top-0 h-10 translate-y-4 translate-x-5 flex flex-row w-32 rounded-lg items-center px-3 py-1 justify-between 
+                ${isDisabled
+                    ? 'bg-gray-300 cursor-not-allowed text-gray-500'
+                    : 'bg-pink-600 text-white hover:bg-pink-700'}`}
+                disabled={isDisabled}
+              >
+                <IoIosAddCircle className='mt-1 mr-1 -translate-y-[0.19rem]' />
+                <p>Add Phase</p>
+              </button>
+                <SearchPhase groupedPhases={groupedPhases} id={id} maxPriority={maxPriority} isDisabled={isDisabled} />
               </div>
           </div>
         </div>
         
-        <Suspense fallback={'loading'}>
+        {/* <Suspense fallback={'loading'}>
           <div className='flex flex-row w-screen mt-[6rem]'>
             {Object.keys(groupedPhases).map(priority => (
               <div key={priority} className="mb-6">
                 <h2 className="text-md font-bold text-slate-600 translate-x-5">Step {priority}</h2>
                 <div className="flex flex-row w-full overflow-x-auto mr-5 border-r border-slate-200 h-full">
                   {groupedPhases[priority].map((phase, i) => (
-                    <PhaseCard Phase={phase} proj={id} key={i} />
+                    <PhaseCard Phase={phase} proj={id} maxPriority={maxPriority} key={i} />
                   ))}
                 </div>
               </div>
             ))}
           </div>
-        </Suspense>
+        </Suspense> */}
       </div>
     </div>
   );

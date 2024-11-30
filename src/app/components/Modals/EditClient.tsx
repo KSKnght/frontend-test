@@ -4,10 +4,10 @@ import React, { useState, useEffect, useTransition, startTransition } from 'reac
 import { revalidatePath } from 'next/cache';
 import { updateClient } from '@/actionsSupabase/Update';
 import { showClient } from '@/actionsSupabase/read';
+import router, { useRouter } from 'next/navigation';
 import { redirect } from 'next/dist/server/api-utils';
 import { z } from 'zod';
 import { clientformSchema } from '../formSchema';
-import { useRouter } from 'next/navigation';
 
 // Define the shape of the client data
 interface ClientData {
@@ -32,7 +32,6 @@ const EditClient = ({ data }) => {
     emailAdd: ''
   });
   const route = useRouter();
-
   // Fetch client data on mount
   useEffect(() => {
     const fetchClientData = async () => {
@@ -106,10 +105,10 @@ const EditClient = ({ data }) => {
       const formDataToSend = new FormData(e.currentTarget);
       const response = await updateClient(formDataToSend, formData.id);
 
-      if (response.success) {
-        revalidatePath('/Clients')
+      if (response.success == false) {
+        setErrors({ submit: 'Failed to update client. Please try again.' })
       } else {
-        setErrors({ submit: 'Failed to create client. Please try again.' });
+        route.back();
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -121,9 +120,11 @@ const EditClient = ({ data }) => {
         });
         setErrors(fieldErrors); // Set errors from Zod validation
       } else {
-      }
-    }
-  };
+        console.log(error)
+        setErrors({ submit: error });
+    };
+  }
+}
 
   const hasErrors = Object.keys(errors).length > 0;
   const isEmpty = Object.values(formData).every(field => field === '');
@@ -197,6 +198,7 @@ const EditClient = ({ data }) => {
         </div>
       </div>
 
+      {errors.submit && <p className='text-red-500 text-xs mt-1 text-left'>{errors.submit}</p>}
       <button
         className={`mt-8 text-sm px-4 py-1 rounded-lg text-white ${hasErrors || isEmpty ? 'bg-gray-400 cursor-not-allowed' : 'bg-pink-600'}`}
         type='submit'
@@ -204,7 +206,6 @@ const EditClient = ({ data }) => {
       >
         Save Changes
       </button>
-      {errors.submit && <p className='text-red-500 text-xs mt-1 text-left'>{errors.submit}</p>}
     </form>
   );
 };

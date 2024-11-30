@@ -141,13 +141,14 @@ export async function createClient(FormData: FormData) {
             throw error;
         } else {
             console.log('Client created:', data);
+            return {success: true}
         }
     } catch (err) {
         return { success: false, message: err.message, code: err.code };
     }
 
     if (errorCheck === false) {
-        revalidatePath('/Clients');
+        // revalidatePath('/Clients');
         // redirect('/Clients');
         return { success: true, message: 'successfully added client!'};
     }

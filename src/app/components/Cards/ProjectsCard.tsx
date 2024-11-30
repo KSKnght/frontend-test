@@ -28,7 +28,8 @@ const statusColors = {
   NOT_STARTED: 'bg-slate-500',    
   IN_PROGRESS: 'bg-amber-500', 
   COMPLETED: 'bg-green-500',
-  OVERDUE: 'bg-red-500'     
+  OVERDUE: 'bg-red-500',
+  CANCELLED: 'bg-red-800'     
 };
 
 
@@ -41,18 +42,18 @@ const ProjectsCard = ({data}) => {
               onClick={(e) => {e.stopPropagation(); e.preventDefault(); router.push('/Projects/'+ data.id+'/view')}}>
           <CardHeader>
             <CardTitle>
-              <div className='flex flex-row w-auto justify-between'>
+              <div className='flex flex-row w-auto justify-between content-center'>
                 <h1 className='w-full text-[1.5rem] font-semibold text-pink-600 truncate translate-y-2'>
                   {data.name}
                 </h1>
                 <div>
-                  <p className={` text-white mt-2 mb-8 text-xs px-2 py-2 rounded-xl w-32 text-center transition-colors duration-500 ${statusColors[data.progress]}`}>
+                  <p className={` text-white mt-2 mb-6 text-xs px-2 py-2 rounded-xl w-32 text-center transition-colors duration-500 ${statusColors[data.progress]}`}>
                     {data.progress}
                   </p>
                 </div>
                 <Popover id={data.id} isArchived={data.isArchived}/>
               </div>
-              <Separator className='bg-slate-300 mt-2'/>
+              <Separator className='bg-slate-300'/>
             </CardTitle>
           </CardHeader>
           <CardContent className='grid gap-1.5'>

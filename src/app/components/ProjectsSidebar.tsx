@@ -18,7 +18,8 @@ const statusColors = {
   NOT_STARTED: 'bg-slate-500',
   IN_PROGRESS: 'bg-amber-500',
   COMPLETE: 'bg-green-500',
-  OVERDUE: 'bg-red-500'
+  OVERDUE: 'bg-red-500',
+  CANCELLED: 'bg-red-800'
 };
 
 const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: boolean, id : Number}) => {
@@ -26,10 +27,11 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
   const currentDate = new Date();
   const startDate = new Date(project.startDate);
   const hasStarted = currentDate >= startDate;
+  const isDisabled = project.progress === 'CANCELLED' || project.isArchived === true;
 
 
   return (
-    <div className='h-full fixed z-[2]'>
+    <div className='h-full fixed z-[50]'>
       <div className='h-full flex-col bg-white border-r w-80 px-3 py-2'>
 
 
@@ -39,13 +41,6 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
                 <p className='text-sm'>Back to Projects</p>
               </Link>
             </div>
-
-            {/* <div className='mt-2 flex flex-row'>
-              <button className='mb-6 ml-1 px-1.5 py-1.5 bg-slate-50 hover:bg-slate-100 ease-out rounded-lg'
-                      onClick={() => {router.back()}}>
-                <BsArrowLeftShort />
-              </button>
-            </div> */}
 
             
             <div className={`mt-4 mb-2 ml-3 text-xs px-2 py-1 rounded-xl w-[8rem] text-center transition-colors duration-500 ${statusColors[project.progress]}`}>
@@ -88,7 +83,24 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
               </p>
               <p className='mb-3 text-slate-500'>{project.projectAddress}</p>
             </div>
-            <div className='ml-4 mt-[16rem] flex flex-col gap-3'>
+
+            <div className='ml-4 text-xs italic'>
+              {project.progress === 'CANCELLED' ? (
+                <span className='text-red-500'>
+                  You cannot edit anymore the phases and tasks because
+                  the project is cancelled.
+                </span>
+              ): project.isArchived === true ? (
+                <span className='text-red-500'>
+                  You cannot edit anymore the phases and tasks because
+                  the project is archived. Restore the project from the
+                  Archive Projects page.
+                </span>
+              ) : null}
+            </div>
+
+
+            <div className='ml-4 mt-[8rem] flex flex-col gap-3'>
               { currPage == false && 
                   <button onClick={() => {router.push('materials')}} className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-center hover:bg-slate-200 transition-colors'>View All Materials</button>
               } 
@@ -96,21 +108,22 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
                   <button onClick={() => {router.push('view')}} className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-center hover:bg-slate-200 transition-colors'>View All Tasks</button>
               } 
               
-              {hasStarted ? (
-                <Link
-                  className="bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-center hover:bg-slate-200 transition-colors"
-                  href={`/Projects/${project.id}/view?extProj=true`}
-                >
-                  Extend Project
-                </Link>
-              ) : (
-                <Link
-                  className="bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-center hover:bg-slate-200 transition-colors"
-                  href={`/Projects/${project.id}/view?movProj=true`}
-                >
-                  Move Project
-                </Link>
-              )}          
+              <button
+                disabled={isDisabled}
+                onClick={() => {
+                  hasStarted
+                    ? router.push(`/Projects/${project.id}/view?extProj=true`)
+                    : router.push(`/Projects/${project.id}/view?movProj=true`);
+                }}
+                className={`rounded-lg text-sm w-[16rem] py-3 text-center transition-colors ${
+                  isDisabled
+                    ? 'bg-gray-300 cursor-not-allowed text-gray-500'
+                    : 'bg-slate-100 hover:bg-slate-200'
+                }`}
+              >
+                {hasStarted ? 'Extend Project' : 'Move Project'}
+              </button>
+
           <Alert id={id}/>
 
             </div>

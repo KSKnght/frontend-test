@@ -245,7 +245,7 @@ export async function archiveProject(id: number) {
     }
 }
 
-export async function unnrchiveProject(id: number) {
+export async function unarchiveProject(id: number) {
     const { error } = await supabase
     .from('project')
     .update({

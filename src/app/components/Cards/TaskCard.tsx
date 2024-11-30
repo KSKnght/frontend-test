@@ -14,6 +14,7 @@ const statusColors = {
   IN_PROGRESS: 'bg-amber-500',
   COMPLETED: 'bg-green-500',
   OVERDUE: 'bg-red-500',
+  CANCELLED: 'bg-red-800'
 };
 
 const MatList = ({ tasks }) => {
@@ -48,7 +49,7 @@ const SubConList = ({ subcon }) => {
   );
 };
 
-const TaskCard = ({ tasks, data, proj }) => {
+const TaskCard = ({ tasks, data, proj, isDisabled }) => {
   const router = useRouter();
   
   // Check if the task is overdue
@@ -72,29 +73,41 @@ const TaskCard = ({ tasks, data, proj }) => {
       <div>
         <div className="flex flex-row justify-between">
           <div className="flex flex-row justify-between items-center gap-1.5">
-            <button onClick={handleCheck} className="hover:text-pink-600">
+          <button
+              onClick={handleCheck}
+              className={` ${isDisabled ? 'text-slate-400' : 'hover:text-pink-600 text-slate-800'}`}
+              disabled={isDisabled}
+            >
               {tasks.progress === true ? <MdCheckBox /> : <MdOutlineCheckBoxOutlineBlank />}
             </button>
             <h1 className="font-bold text-slate-800 leading-tight truncate">{tasks.taskName}</h1>
           </div>
           <div className="flex flex-row justify-between items-center -translate-y-1 translate-x-2 -space-x-[5px]">
-            <button
-              className="text-slate-600 w-6 h-6 hover:text-pink-600 transition-colors"
+          <button
+              className={`w-6 h-6  transition-colors ${
+                isDisabled ? ' text-slate-400' : 'text-slate-600 hover:text-pink-600'
+              }`}
               onClick={(e) => {
+                if (isDisabled) return;
                 e.stopPropagation();
                 router.push('/Projects/' + data + '/view/?edittask=' + tasks.id);
               }}
+              disabled={isDisabled}
             >
               <MdEdit />
             </button>
             <button
-              className="text-slate-600 w-6 h-6 hover:text-pink-600 transition-colors"
+              className={`w-6 h-6 transition-colors ${
+                isDisabled ? 'text-slate-400' : 'text-slate-600 hover:text-pink-600'
+              }`}
               onClick={(e) => {
+                if (isDisabled) return;
                 e.stopPropagation();
                 startTransition(async () => {
                   await softDelTasks(tasks.id, proj);
                 });
               }}
+              disabled={isDisabled}
             >
               <MdDelete />
             </button>

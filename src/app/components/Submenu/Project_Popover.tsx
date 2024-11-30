@@ -7,6 +7,7 @@ import {
 import { Button } from "../ui/button"
 import Delete from "../Submenu/Project_DeleteAlert"
 import Archive from "../Submenu/Project_ArchiveAlert"
+import Cancel from "../Submenu/Project_CancelAlert"
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 
 
@@ -25,9 +26,8 @@ const ProjectList_Popover = ({id, isArchived}) => {
                     {!isArchived ? (
                     <>
                         <Button className='h-8' onClick={(e) => {e.stopPropagation(); location.href='/Projects?edit='+id;}} variant='ghost'>Edit Project</Button>
-                        <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Extend Project</Button>
-                        <Button className='h-8' onClick={(e) => {e.stopPropagation();}} variant='ghost'>Cancel Project</Button>
                         <Archive id={id} />
+                        <Cancel id={id} />
                         <Delete id={id} />
                     </>
                     ) : (
