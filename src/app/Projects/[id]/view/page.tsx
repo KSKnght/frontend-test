@@ -84,7 +84,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                 <ExtendProject data={extProj} state={state} projID={project.id}/>
             </Modal>}
       {movProj && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Move Project'}>
-                <MoveProject data={movProj} state={state} maxPriority={maxPriority} projID={project.id}/>
+                <MoveProject data={movProj} state={state} projID={project.id}/>
             </Modal>}
 
       <div className='h-screen'>

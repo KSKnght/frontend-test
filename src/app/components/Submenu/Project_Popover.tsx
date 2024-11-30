@@ -8,6 +8,7 @@ import { Button } from "../ui/button"
 import Delete from "../Submenu/Project_DeleteAlert"
 import Archive from "../Submenu/Project_ArchiveAlert"
 import Cancel from "../Submenu/Project_CancelAlert"
+import Restore from "../Submenu/Project_RestoreAlert"
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 
 
@@ -32,9 +33,7 @@ const ProjectList_Popover = ({id, isArchived}) => {
                     </>
                     ) : (
                     <>
-                        <Button className="h-8" onClick={(e) => {e.stopPropagation(); alert('Restore functionality not implemented yet!');}} variant="ghost">
-                            Restore Project
-                        </Button>
+                        <Restore id={id} />
                         <Delete id={id} />
                     </>
                     )}

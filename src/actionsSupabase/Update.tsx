@@ -246,8 +246,10 @@ export async function extendProjectEndDate(FormData: FormData, id : number) {
 
     if (error){
         console.log('error moving project endDate:', error)
+        return {success: false}
     } else {
         console.log('project end Date has been extended')
+        return {success: true}
     }
 }
 
