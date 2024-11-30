@@ -51,6 +51,27 @@ export async function getProjectsArchived() {
     return data;
 }
 
+export async function getProjectDate(id: number) {
+    const { data, error } = await supabase
+    .from('project') // Replace 'projects' with your actual table name
+    .select(`
+        *,
+        client (
+            startDate,
+            endDate,
+        )
+    `)
+    .eq('id', id) // Assuming 'id' is the project ID
+    .single(); // Use .single() if you expect only one record
+
+    if (error) {
+    console.error('Error fetching project:', error);
+    } else {
+    // console.log('Project data:', data);
+    }
+    return data
+}
+
 
 export async function getClients() {
     const { data, error } = await supabase
