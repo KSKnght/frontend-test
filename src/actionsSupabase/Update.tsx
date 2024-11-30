@@ -207,7 +207,7 @@ export async function cancelProject(id: number) {
     const { error } = await supabase
     .from('project')
     .update({
-        status: 'CANCELLED'
+        progress: 'CANCELLED'
     })
     .eq('id', id);
 
