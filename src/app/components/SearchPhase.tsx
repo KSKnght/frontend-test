@@ -45,7 +45,7 @@ const SearchablePhaseView = ({ groupedPhases, id, maxPriority, isDisabled}) => {
                   <PhaseCard
                     Phase={phase}
                     proj={id}
-                    maxPriority={maxPriority}
+                    // maxPriority={maxPriority}
                     isDisabled={isDisabled}
                     key={phase.id}
                   />
