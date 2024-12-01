@@ -6,10 +6,10 @@ import prisma from "../lib/db";
 
 export async function Design(id : number) {
     const phases = [
-        { phaseName: 'Preliminary Design', projectID: id, priority: 0, progress: 'NOT_STARTED' },
-        { phaseName: 'Second Design', projectID: id, priority: 1, progress: 'NOT_STARTED' },
-        { phaseName: 'Finalizing', projectID: id, priority: 2, progress: 'NOT_STARTED' },
-        { phaseName: 'Final Phase', projectID: id, priority: 3, progress: 'NOT_STARTED' }
+        { phaseName: 'Preliminary Design', projectID: id, priority: 1, progress: 'NOT_STARTED' },
+        { phaseName: 'Second Design', projectID: id, priority: 2, progress: 'NOT_STARTED' },
+        { phaseName: 'Finalizing', projectID: id, priority: 3, progress: 'NOT_STARTED' },
+        { phaseName: 'Final Phase', projectID: id, priority: 4, progress: 'NOT_STARTED' }
     ];
     
     // Insert multiple rows into the 'phase' table
@@ -29,14 +29,14 @@ export async function DesignBuild(id : number) {
     const { data, error } = await supabase
         .from('phase')
         .insert([
-            {phaseName: 'Preliminary Design', projectID: id, priority: 0, progress: 'NOT_STARTED'},
-            {phaseName: 'Second Design', projectID: id, priority: 1, progress: 'NOT_STARTED'},
-            {phaseName: 'Layouting', projectID: id, priority: 0, progress: 'NOT_STARTED'},
-            {phaseName: 'Constructing', projectID: id, priority: 1, progress: 'NOT_STARTED'},
-            {phaseName: 'Intstallations', projectID: id, priority: 2, progress: 'NOT_STARTED'},
-            {phaseName: 'Polishing', projectID: id, priority: 2, progress: 'NOT_STARTED'},
-            {phaseName: 'Finalizing', projectID: id, priority: 2, progress: 'NOT_STARTED'},
-            {phaseName: 'Final Phase', projectID: id, priority: 3, progress: 'NOT_STARTED'}
+            {phaseName: 'Preliminary Design', projectID: id, priority: 1, progress: 'NOT_STARTED'},
+            {phaseName: 'Second Design', projectID: id, priority: 2, progress: 'NOT_STARTED'},
+            {phaseName: 'Layouting', projectID: id, priority: 1, progress: 'NOT_STARTED'},
+            {phaseName: 'Constructing', projectID: id, priority: 3, progress: 'NOT_STARTED'},
+            {phaseName: 'Intstallations', projectID: id, priority: 4, progress: 'NOT_STARTED'},
+            {phaseName: 'Polishing', projectID: id, priority: 5, progress: 'NOT_STARTED'},
+            {phaseName: 'Finalizing', projectID: id, priority: 6, progress: 'NOT_STARTED'},
+            {phaseName: 'Final Phase', projectID: id, priority: 7, progress: 'NOT_STARTED'}
         ]);
     
     if (error) {
@@ -51,11 +51,11 @@ export async function Build(id : number) {
     const { data, error } = await supabase
         .from('phase')
         .insert([
-            {phaseName: 'Layouting', projectID: id, priority: 0, progress: 'NOT_STARTED'},
-            {phaseName: 'Constructing', projectID: id, priority: 1, progress: 'NOT_STARTED'},
-            {phaseName: 'Intstallations', projectID: id, priority: 2, progress: 'NOT_STARTED'},
-            {phaseName: 'Polishing', projectID: id, priority: 2, progress: 'NOT_STARTED'},
-            {phaseName: 'Final Phase', projectID: id, priority: 3, progress: 'NOT_STARTED'}
+            {phaseName: 'Layouting', projectID: id, priority: 1, progress: 'NOT_STARTED'},
+            {phaseName: 'Constructing', projectID: id, priority: 2, progress: 'NOT_STARTED'},
+            {phaseName: 'Intstallations', projectID: id, priority: 3, progress: 'NOT_STARTED'},
+            {phaseName: 'Polishing', projectID: id, priority: 4, progress: 'NOT_STARTED'},
+            {phaseName: 'Final Phase', projectID: id, priority: 5, progress: 'NOT_STARTED'}
         ]);
     
     if (error) {
