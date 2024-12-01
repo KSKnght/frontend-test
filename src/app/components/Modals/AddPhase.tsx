@@ -2,11 +2,12 @@
 
 import { addPhase } from '@/actionsSupabase/Create'
 import { revalidatePath } from 'next/cache';
+import { useRouter } from 'next/navigation';
 import React, { startTransition, useState } from 'react'
 
 
 const AddPhase = ({data}) => {
-  
+  const route = useRouter()
   const [formData, setFormData] = useState({
     phasename: '',
     priority: ''
@@ -58,6 +59,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       console.log('Sending data to create phase:', formDataToSend);
       await addPhase(formDataToSend, data);
+      route.back();
     } catch (error) {
       setErrors({ submit: error.message || 'Failed to create phase. Please try again.' });
     }
