@@ -7,6 +7,7 @@ import { HiDocumentText } from "react-icons/hi2";
 import { HiOutlineMenu } from "react-icons/hi";
 import { IoArchiveSharp } from "react-icons/io5";
 import { Separator } from '@radix-ui/react-separator';
+import Image from 'next/image'
 
 export default function Navbar() {
   const [expanded, setExpanded] = useState(true)
@@ -17,7 +18,7 @@ export default function Navbar() {
              h-full flex-col bg-pink-500 border-r shadow-sm transition-all`}>
         <div className='p-4 pb-2 flex justify-between items-center mb-12'>
           <img
-            src='https://img.logoipsum.com/297.svg'
+            src='logo.png'
             className={`${expanded ? 'w-0' 
               : 'w-[11rem]'}
              overflow-hidden transition-all grayscale`}
