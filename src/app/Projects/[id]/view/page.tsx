@@ -12,7 +12,6 @@ import EditTask from '@/app/components/Modals/EditTask'
 import TaskDetails from '@/app/components/Modals/MatAndSubForm/TaskDetails'
 import { IoIosAddCircle } from "react-icons/io";
 import {MoveProject} from '@/app/components/Modals/crudForms'
-import { ToastContainer } from 'react-toastify';
 import SearchPhase from '@/app/components/SearchPhase'
 import { ExtendProject } from '@/app/components/Modals/crudForms'
 
@@ -39,10 +38,8 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
   const phase = searchParams?.phase;
   const edittask = searchParams?.edittask;
   const viewtask = searchParams?.viewtask;
-  const addmat = searchParams?.addmat;
   const extProj = searchParams?.extProj;
   const movProj = searchParams?.movProj;
-  const addsub = searchParams?.addsub;
   const project = await getInfoProject(Number(id))
   if (!project) {
     return <p>Project data is unavailable. Please try again later.</p>;
