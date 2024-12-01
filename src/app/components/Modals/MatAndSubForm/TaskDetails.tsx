@@ -18,9 +18,9 @@ const MatList = ({ tasks, projID, taskId}) => {
               <Table className="w-[17rem] table-fixed" key={`mat-list-${i}`}>
                 <TableBody>
                   <TableRow className="text-center bg-slate-100 hover:bg-slate-200">
-                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-2/5">{mat.materials.name}</TableCell>
+                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-3/5">{mat.materials.name}</TableCell>
                     <TableCell className="text-xs py-1.5 px-1 leading-tight w-2/5">{mat.qty}</TableCell>
-                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-2/5">{mat.unit}</TableCell>
+                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-1/5">{mat.unit}</TableCell>
                     <TableCell className="text-center py-1.5 px-1 w-1/5">
                     <form action={async (e) => {'use server'; await hardDelMat(mat.id); revalidatePath('Projects/'+projID+'/view?viewtask='+taskId+'&state=Mat')}}>
                       <button type='submit'>

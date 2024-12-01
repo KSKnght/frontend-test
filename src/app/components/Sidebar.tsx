@@ -6,7 +6,6 @@ import { HiUser } from "react-icons/hi";
 import { HiDocumentText } from "react-icons/hi2";
 import { HiOutlineMenu } from "react-icons/hi";
 import { IoArchiveSharp } from "react-icons/io5";
-import { Separator } from '@radix-ui/react-separator';
 import Image from 'next/image'
 
 export default function Navbar() {
@@ -16,15 +15,15 @@ export default function Navbar() {
     <aside className="h-screen">
       <nav className={`${expanded ? 'w-auto' : 'w-80'}
              h-full flex-col bg-pink-500 border-r shadow-sm transition-all`}>
-        <div className='p-4 pb-2 flex justify-between items-center mb-12'>
+        <div className='p-4 pb-6 flex justify-between items-center mb-10 border-b border-pink-400'>
           <img
             src='logo.png'
             className={`${expanded ? 'w-0' 
               : 'w-[11rem]'}
-             overflow-hidden transition-all grayscale`}
+             overflow-hidden transition-all grayscale brightness-[100] translate-y-2`}
             alt=''
           />
-          <button onClick={() => setExpanded(curr => !curr)} className='p-1.5 rounded-lg bg-pink-600 hover:bg-pink-700 text-white transition-colors'>
+          <button onClick={() => setExpanded(curr => !curr)} className='p-1.5 rounded-lg bg-pink-600 hover:bg-pink-700 text-white transition-colors mt-4'>
             <HiOutlineMenu className='w-6 h-6'/>
           </button>
         </div>

@@ -4,17 +4,33 @@ import { createTask } from '@/actionsSupabase/Create';
 import React, { startTransition, useState } from 'react'
 import { revalidatePath } from 'next/cache';
 import { useRouter } from 'next/navigation';
-import { taskSchema } from '../formSchema';
 import { z } from 'zod';
 
-const AddTask = ({data, projID}) => {
+const taskSchema = z.object({
+  taskname: z.string().min(1, "Task name is required"),
 
+  deadline: z
+  .string()
+  .min(1, "Deadline is required")
+  .refine((val) => !isNaN(Date.parse(val)), {
+    message: "Invalid date format",
+  }),
+
+  description: z.string().optional(),
+});
+
+function validateDeadline(deadline: string, endDate: string): boolean {
+  const deadlineDate = Date.parse(deadline);
+  const endDateParsed = Date.parse(endDate);
+  return deadlineDate <= endDateParsed;
+}
+
+const AddTask = ({data, projID, endDate}) => {
     const [formData, setFormData] = useState({
         taskname: '',
         deadline: '',
         description: ''
       })
-
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
     const route = useRouter();
@@ -38,28 +54,46 @@ const AddTask = ({data, projID}) => {
         validateForm(formData);
     };
 
-    const validateForm = (data: typeof formData) => {
-      try {
-        taskSchema.parse(data); // Validate with Zod
-        setErrors({}); // Clear errors if valid
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          const fieldErrors: { [key: string]: string } = {};
-          error.errors.forEach((err) => {
-            if (err.path[0]) {
-              fieldErrors[err.path[0] as string] = err.message;
-            }
-          });
-          setErrors(fieldErrors); // Set errors from Zod validation
-        }
+    async function validateForm(formData: any) {
+      const fieldErrors: { [key: string]: string } = {};
+      
+      // Step 1: Perform custom validation for deadline vs endDate
+      if (!validateDeadline(formData.deadline, endDate)) {
+        fieldErrors.deadline = "Deadline must not be after the project end date";
       }
-    };
 
+        try {
+          const deadlineError = validateDeadline(data.deadline, endDate);
+          if (deadlineError) {
+            setErrors({});
+            return;
+          }
+          taskSchema.parse(data); // Validate with Zod
+          setErrors({}); // Clear errors if valid
+        } catch (error) {
+          if (error instanceof z.ZodError) {
+            error.errors.forEach((err) => {
+              if (err.path[0]) {
+                fieldErrors[err.path[0] as string] = err.message;
+              }
+            });
+            setErrors(fieldErrors); // Set errors from Zod validation
+          }
+        }
+    }
+    
       const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
+        const formDataWithEndDate = { ...formData, endDate: endDate };
+        validateForm(formDataWithEndDate);
+
+        if (Object.keys(errors).length > 0) {
+          return; 
+        }
+
         try {
-            taskSchema.parse(formData); 
+            taskSchema.parse(formDataWithEndDate); 
             setErrors({}); 
           
             const formDataToSend = new FormData(e.currentTarget);
