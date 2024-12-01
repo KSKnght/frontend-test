@@ -160,9 +160,9 @@ const PhaseCard = ({ Phase, proj, isDisabled }) => {
           </Link>
         </div>
       
-        {Phase.phaseTasks.map((task, i) => {
+        {Phase.phaseTasks.map((task,) => {
           if (task.isDeleted == false) {
-            return <TaskCard tasks={task} proj={proj} data={Phase.projectID} key={i} isDisabled={isDisabled} />;
+            return <TaskCard tasks={task} proj={proj} data={Phase.projectID} key={task.id} isDisabled={isDisabled} />;
           }
         })}
       </div>
