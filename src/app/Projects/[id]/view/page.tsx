@@ -95,16 +95,25 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
         <div className=''>
           <div className='mb-6 h-[5rem] w-full bg-white content-center z-[2] border-b border-slate-200'>
               <div className='flex flex-row content-center space-x-10'>
-              <button
+              {isDisabled === true ? <Link
+                href={'/Projects/'+id+'/view'}
                 className={`z-[50] fixed top-0 h-10 translate-y-4 translate-x-5 flex flex-row w-32 rounded-lg items-center px-3 py-1 justify-between 
                 ${isDisabled
                     ? 'bg-gray-300 cursor-not-allowed text-gray-500'
                     : 'bg-pink-600 text-white hover:bg-pink-700'}`}
-                disabled={isDisabled}
               >
                 <IoIosAddCircle className='mt-1 mr-1 -translate-y-[0.19rem]' />
                 <p>Add Phase</p>
-              </button>
+              </Link> : <Link
+                href={'/Projects/'+id+'/view?addPhase=true'}
+                className={`z-[50] fixed top-0 h-10 translate-y-4 translate-x-5 flex flex-row w-32 rounded-lg items-center px-3 py-1 justify-between 
+                ${isDisabled
+                    ? 'bg-gray-300 cursor-not-allowed text-gray-500'
+                    : 'bg-pink-600 text-white hover:bg-pink-700'}`}
+              >
+                <IoIosAddCircle className='mt-1 mr-1 -translate-y-[0.19rem]' />
+                <p>Add Phase</p>
+              </Link> }
                 <SearchPhase groupedPhases={groupedPhases} id={id} maxPriority={maxPriority} isDisabled={isDisabled} />
               </div>
           </div>
