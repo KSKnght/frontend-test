@@ -19,7 +19,7 @@ const statusColors = {
   CANCELLED: 'bg-red-800'
 };
 
-const PhaseCard = ({ Phase, proj, maxPriority, isDisabled}) => {
+const PhaseCard = ({ Phase, proj, isDisabled}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [phaseName, setPhaseName] = useState(Phase.phaseName);
 
@@ -56,8 +56,8 @@ const PhaseCard = ({ Phase, proj, maxPriority, isDisabled}) => {
   };
 
   const handlePriorityChange = async (newPriority) => {
-    if (newPriority < 1 || newPriority > maxPriority) return; // Validate range
-    await movePriority(Phase.id, newPriority); // Call the function
+    if (newPriority < 1) return; // Validate range
+    await movePriority(Phase.id, newPriority, proj); // Call the function
     reloadPage(`/Projects/${proj}/view`); // Reload to reflect changes
   };
 
@@ -110,23 +110,11 @@ const PhaseCard = ({ Phase, proj, maxPriority, isDisabled}) => {
                 )}
             </div>
 
-          {/* Right Chevron - Disable if priority is maxPriority */}
             <div className="group relative">
                 <FaChevronRight
-                  className={`cursor-pointer ${
-                    Phase.priority === maxPriority || isDisabled
-                      ? 'text-slate-300 cursor-not-allowed'
-                      : 'text-slate-400 hover:text-pink-500'
-                  }`}
-                  onClick={() => {
-                    if (!isDisabled && Phase.priority < maxPriority) handlePriorityChange(Phase.priority + 1);
-                  }}
+                  className={`cursor-pointer text-slate-400 hover:text-pink-500`}
+                  onClick={(e) => {e.stopPropagation(); startTransition( async () => { await handlePriorityChange(Phase.priority + 1)})}}
                 />
-                {Phase.priority === maxPriority && (
-                  <span className="absolute -top-8 right-0 hidden w-max rounded-md bg-gray-400 px-2 py-1 text-sm text-white group-hover:block">
-                    Cannot increase priority further
-                  </span>
-                )}
             </div>
 
             </div>
@@ -157,7 +145,7 @@ const PhaseCard = ({ Phase, proj, maxPriority, isDisabled}) => {
       <div className='mb-8'>
           <Link
             href={isDisabled ? '#' : '/Projects/' + Phase.projectID + '/view?phase=' + Phase.id}
-            className={`border-dashed w-full px-[6.64rem] items-center rounded-md py-4 p-2 cursor-pointer border-2 transition-colors ${
+            className={`border-dashed w-full px-[6.6rem] items-center rounded-md py-4 p-2 cursor-pointer border-2 transition-colors ${
               isDisabled
                 ? 'border-gray-300 text-gray-400'
                 : 'border-slate-400 text-slate-400 hover:border-pink-600 hover:text-pink-600'

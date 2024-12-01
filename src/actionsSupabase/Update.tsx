@@ -10,9 +10,9 @@ export async function updateProject(FormData : FormData, id: number) {
     .from('project')
     .update({
         name: FormData.get('name'),
-        type: FormData.get('type'),
-        projectAddress: FormData.get('address'),
-        clientID: Number(FormData.get('id')) // Assuming you have a client_id column
+        // type: FormData.get('type'),
+        projectAddress: FormData.get('projectAddress'),
+        // clientID: Number(FormData.get('id')) // Assuming you have a client_id column
     })
     .eq('id', id);
 
@@ -21,10 +21,10 @@ export async function updateProject(FormData : FormData, id: number) {
     return {success : false}
     } else {
     console.log('Project updated successfully:', data);
-    return {success : true}
+        revalidatePath('/Projects');
+        return {success : true}
     }
-    revalidatePath('/Projects');
-    redirect('/Projects');
+    
 };
 
 
@@ -215,15 +215,17 @@ export async function cancelProject(id: number) {
         console.log('error cancelling project:', error)
     } else {
         console.log('project cancelled')
-    }
+    } 
+    revalidatePath('/Projects')
+    revalidatePath('/view')
 }
 
-export async function moveProjectDate(FormData : FormData, id: number) {
+export async function moveProjectDate(startDate: Date, endDate: Date, id: number) {
     const { error } = await supabase
     .from('project')
     .update({
-        startDate: new Date(FormData.get('startDate') + 'T00:00:00.000Z'),
-        endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
+        startDate: startDate,
+        endDate: endDate
     })
     .eq('id', id);
 
@@ -232,15 +234,17 @@ export async function moveProjectDate(FormData : FormData, id: number) {
         return {success: false}
     } else {
         console.log('project has been moved')
+        revalidatePath('Projects/'+id+'/view');
+        redirect('view');
         return {success: true}
     }
 }
 
-export async function extendProjectEndDate(FormData: FormData, id : number) {
+export async function extendProjectEndDate(date : Date, id : number) {
     const { error } = await supabase
     .from('project')
     .update({
-        endDate: new Date(FormData.get('endDate') + 'T00:00:00.000Z'),
+            endDate: date,
     })
     .eq('id', id);
 
@@ -248,8 +252,10 @@ export async function extendProjectEndDate(FormData: FormData, id : number) {
         console.log('error moving project endDate:', error)
         return {success: false}
     } else {
-        console.log('project end Date has been extended')
-        return {success: true}
+        console.log('project end Date has been extended');
+        revalidatePath('Projects/'+id+'/view');
+        redirect('view');
+        return {success: true};
     }
 }
 
@@ -283,7 +289,7 @@ export async function unarchiveProject(id: number) {
     }
 }
 
-export async function movePriority(id: number, priority: number) {
+export async function movePriority(id: number, priority: number, projID: number) {
     const { error } = await supabase
     .from('phase')
     .update({
@@ -294,5 +300,6 @@ export async function movePriority(id: number, priority: number) {
         console.log('error moving phase priority:', error)
     } else {
         console.log('phase has been moved to other step')
+        revalidatePath('Projects/'+projID+'/view');
     }
 }

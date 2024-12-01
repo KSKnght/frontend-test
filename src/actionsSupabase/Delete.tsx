@@ -39,6 +39,8 @@ export async function softDelPhase(id: Number, projID: Number) {
     })
     .eq('id', id)
 
+    if (error) console.log('Error deleting Phase:', error)
+
     revalidatePath('/Projects/' + projID + '/view')
 }
 

@@ -2,11 +2,6 @@
 
 import {z} from "zod"
 
-const validateEndDate = (startDate: string, endDate: string) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    return end > start && end.getTime() !== start.getTime(); // endDate > startDate && endDate != startDate
-  };
 
 
 //General Regex
@@ -18,6 +13,7 @@ const middleInitialCheck = /^[a-zA-Z]$/
 const contactAlphabetCheck = /^[\d+]+$/
 const contactRegex = /^09|^\+63/
 const emailAdCheck = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const currDate = new Date();
 
 
 
@@ -175,6 +171,7 @@ export const projectformSchema = z.object({
       id: z.string().refine((value) => value !== clientOptions.SELECT, {
         message: "Select a client",
       }),
+      
       startDate: z.string(),
       endDate: z.string(),
     })
@@ -182,13 +179,13 @@ export const projectformSchema = z.object({
       const { startDate, endDate } = data;
   
       // Validate startDate
-      if (isNaN(Date.parse(startDate))) {
+      if (!startDate || startDate.trim() === '') {
         ctx.addIssue({
           path: ['startDate'],
           message: 'Start date is required',
           code: z.ZodIssueCode.custom,
         });
-      } else if (Date.parse(startDate) < Date.now()) {
+      } else if (new Date(startDate) < currDate) {
         ctx.addIssue({
           path: ['startDate'],
           message: 'Start date cannot be in the past',
@@ -197,19 +194,19 @@ export const projectformSchema = z.object({
       }
   
       // Validate endDate
-      if (isNaN(Date.parse(endDate))) {
+      if (!endDate || endDate.trim() === '') {
         ctx.addIssue({
           path: ['endDate'],
           message: 'End date is required',
           code: z.ZodIssueCode.custom,
         });
-      } else if (Date.parse(endDate) < Date.parse(startDate)) {
+      } else if (endDate < startDate) {
         ctx.addIssue({
           path: ['endDate'],
           message: 'End date must be after start date',
           code: z.ZodIssueCode.custom,
         });
-      } else if (Date.parse(endDate) == Date.parse(startDate)) {
+      } else if (endDate == startDate) {
         ctx.addIssue({
           path: ['endDate'],
           message: 'End date cannot be the same as start date',
@@ -220,6 +217,59 @@ export const projectformSchema = z.object({
     });
 
 export type projectData = z.infer<typeof projectformSchema>
+
+
+export const DateSchema = z.object({
+    startDate: z.string(),
+    endDate: z.string(),
+  })
+  .superRefine((data, ctx) => {
+    const { startDate, endDate } = data;
+
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(endDate);
+    
+    // Validate startDate
+    if (!startDate || startDate.trim() === '') {
+      ctx.addIssue({
+        path: ['startDate'],
+        message: 'Start date is required',
+        code: z.ZodIssueCode.custom,
+      });
+    }
+    //  else if (startDateObj < currDate) {
+    //   ctx.addIssue({
+    //     path: ['startDate'],
+    //     message: 'Start date cannot be in the past',
+    //     code: z.ZodIssueCode.custom,
+    //   });
+    // }
+
+    // Validate endDate
+    if (!endDate || endDate.trim() === '') {
+      ctx.addIssue({
+        path: ['endDate'],
+        message: 'End date is required',
+        code: z.ZodIssueCode.custom,
+      });
+    } else if (endDateObj < startDateObj) {
+      ctx.addIssue({
+        path: ['endDate'],
+        message: 'End date must be after start date',
+        code: z.ZodIssueCode.custom,
+      });
+    } else if (endDateObj.getTime() === startDateObj.getTime()) {
+      ctx.addIssue({
+        path: ['endDate'],
+        message: 'End date cannot be the same as start date',
+        code: z.ZodIssueCode.custom,
+      });
+      return;
+    } 
+  });
+export type datesData = z.infer<typeof DateSchema>
+
+console.log()
 
 
 //Phase Form - Input
@@ -300,5 +350,34 @@ export const subcontractorsSchema = z.object({
     }),
 })
 export type subcontractorsData = z.infer<typeof subcontractorsSchema>
+
+export const editProjectSchema = z.object({
+    name: z.string().min(1, {
+        message: "Project name is required",
+      }),
+    projectAddress: z.string().min(1, {
+    message: "Project address is required",
+    }),
+})
+
+export type editProjectData = z.infer<typeof editProjectSchema>
+
+
+
+export const moveProjectSchema = z.object({
+    startDate: z.date({}),
+    endDate: z.date({}),
+}).refine((data) => data.startDate <= data.endDate, {
+    message: "Start date must not be after the end date",
+    path: ["startDate"],
+}).refine((data) => data.startDate >= new Date(), {
+    message: "Start date must not be in the past",
+    path: ["startDate"],
+}).refine((data) => data.endDate >= data.startDate, {
+    message: "End date must not be before the start date",
+    path: ["endDate"],
+})  
+
+export type moveProjectData = z.infer<typeof editProjectSchema>
 
 

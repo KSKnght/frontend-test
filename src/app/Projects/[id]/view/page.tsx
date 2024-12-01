@@ -11,10 +11,10 @@ import Modal from '@/app/components/Modal'
 import EditTask from '@/app/components/Modals/EditTask'
 import TaskDetails from '@/app/components/Modals/MatAndSubForm/TaskDetails'
 import { IoIosAddCircle } from "react-icons/io";
-import ExtendProject from '@/app/components/Modals/ExtendProject'
-import MoveProject from '@/app/components/Modals/MoveProject'
+import {MoveProject} from '@/app/components/Modals/crudForms'
 import { ToastContainer } from 'react-toastify';
 import SearchPhase from '@/app/components/SearchPhase'
+import { ExtendProject } from '@/app/components/Modals/crudForms'
 
 
 export const revalidate = 0;
@@ -81,10 +81,10 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
                 <TaskDetails data={viewtask} state={state} projID={id}/>
             </Modal>}
       {extProj && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Extend Project'}>
-                <ExtendProject data={extProj} state={state} projID={project.id}/>
+                <ExtendProject data={extProj}/>
             </Modal>}
       {movProj && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Move Project'}>
-                <MoveProject data={movProj} state={state} projID={project.id}/>
+                <MoveProject data={movProj}/>
             </Modal>}
 
       <div className='h-screen'>

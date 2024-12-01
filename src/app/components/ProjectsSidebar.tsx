@@ -112,8 +112,8 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
                 disabled={isDisabled}
                 onClick={() => {
                   hasStarted
-                    ? router.push(`/Projects/${project.id}/view?extProj=true`)
-                    : router.push(`/Projects/${project.id}/view?movProj=true`);
+                    ? router.push(`/Projects/${project.id}/view?extProj=` + project.id)
+                    : router.push(`/Projects/${project.id}/view?movProj=` + project.id);
                 }}
                 className={`rounded-lg text-sm w-[16rem] py-3 text-center transition-colors ${
                   isDisabled

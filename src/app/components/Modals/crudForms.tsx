@@ -1,22 +1,19 @@
 'use server';
 
 import React from 'react'
-import { getClients, getInfoProject } from '@/actionsSupabase/read';
+import { getClients, getInfoProject, getProjectDate } from '@/actionsSupabase/read';
 import { updateClient, updateProject } from '@/actionsSupabase/Update';
-import EditProjectForm from './EditProject';
+import  EditProjectForm from './EditProject';
 import { createClient, createProject } from '@/actionsSupabase/Create';
 import AddProjectForm from './AddProject';
+import Extend from '@/app/components/Modals/ExtendProject';
+import Move from '@/app/components/Modals/MoveProject'
 
 export const EditProject = async ({data, clients}) => {
     const project = await getInfoProject(data);
     
     return (
-        <form action={async (e) => {'use server'; await updateProject(e, data);}}>
-            <EditProjectForm project={project} clients={clients}/>                  
-            <button className='submitButton' type='submit'>
-                Update Project
-            </button>
-        </form>
+        <EditProjectForm data={project} clients={clients}/>                  
     )
 }
 
@@ -55,5 +52,21 @@ export const EditClients = async ({id}) => {
                 Update Client
             </button>
         </form>
+    )
+}
+
+export const ExtendProject = async ({data}) => {
+    const project = await getProjectDate(data);
+    
+    return (
+        <Extend data={project} id={data} />
+    )
+}
+
+export const MoveProject = async ({data}) => {
+    const project = await getProjectDate(data);
+    
+    return (
+        <Move data={project} id={data} />
     )
 }
