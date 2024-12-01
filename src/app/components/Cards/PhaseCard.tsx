@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, startTransition } from 'react';
+import React, { useState, startTransition, useCallback, useMemo } from 'react';
 import TaskCard from './TaskCard';
 import Link from 'next/link';
 import { IoIosAddCircle } from "react-icons/io";
@@ -7,9 +7,8 @@ import { HiTrash } from "react-icons/hi";
 import { softDelPhase } from '@/actionsSupabase/Delete';
 import { movePriority, updatePhaseName } from '@/actionsSupabase/Update';
 import { reloadPage } from '@/actionsSupabase/reload';
-import { FaChevronLeft } from "react-icons/fa";
-import { FaChevronRight } from "react-icons/fa";
-
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useRouter } from 'next/navigation';
 
 const statusColors = {
   NOT_STARTED: 'bg-slate-500',
@@ -19,53 +18,86 @@ const statusColors = {
   CANCELLED: 'bg-red-800'
 };
 
-const PhaseCard = ({ Phase, proj, isDisabled}) => {
+const PhaseCard = ({ Phase, proj, isDisabled }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [phaseName, setPhaseName] = useState(Phase.phaseName);
+  const route = useRouter();
 
-  const handleDoubleClick = () => {
+  // Memoize the handleBlur and handleKeyDown functions to prevent unnecessary re-creations
+  const handleDoubleClick = useCallback(() => {
     if (isDisabled) {
       setIsEditing(false);  
     } else {
-      setIsEditing(true)
+      setIsEditing(true);
     }
-  };
+  }, [isDisabled]);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     setIsEditing(false);
     if (!isDisabled) {
       startTransition(async () => {
-        await updatePhaseName(Phase.id, phaseName); // Call parent function to update name in database
+        await updatePhaseName(Phase.id, phaseName);
         reloadPage('Projects/' + proj + '/view');
       });
     }
-  };
+  }, [isDisabled, phaseName, proj, Phase.id]);
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     setPhaseName(e.target.value);
-  };
+  }, []);
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter') {
       setIsEditing(false);
       startTransition(async () => {
-        await updatePhaseName(Phase.id, phaseName); // Save on Enter key
+        await updatePhaseName(Phase.id, phaseName);
         reloadPage('Projects/'+proj+'/view');
       });
     }
-  };
+  }, [proj, Phase.id, phaseName]);
 
-  const handlePriorityChange = async (newPriority) => {
+  const handlePriorityChange = useCallback(async (newPriority) => {
     if (newPriority < 1) return; // Validate range
-    await movePriority(Phase.id, newPriority, proj); // Call the function
-    reloadPage(`/Projects/${proj}/view`); // Reload to reflect changes
-  };
+    await movePriority(Phase.id, newPriority, proj);
+    route.refresh();
+  }, [proj, Phase.id]);
+
+  const renderChevronLeft = useMemo(() => (
+    <div className="group relative">
+      <FaChevronLeft
+        className={`cursor-pointer ${Phase.priority === 1 || isDisabled ? 'text-slate-300 cursor-not-allowed' : 'text-slate-400 hover:text-pink-500'}`}
+        onClick={async (e) => {
+          if (!isDisabled && Phase.priority > 1) {
+            e.stopPropagation();
+            await handlePriorityChange(Phase.priority - 1);
+          }
+        }}
+      />
+      {Phase.priority === 1 && (
+        <span className="absolute -top-8 right-0 hidden w-max rounded-md bg-gray-500 px-2 py-1 text-sm text-white group-hover:block">
+          Cannot decrease priority further
+        </span>
+      )}
+    </div>
+  ), [Phase.priority, isDisabled, handlePriorityChange]);
+
+  const renderChevronRight = useMemo(() => (
+    <div className="group relative">
+      <FaChevronRight
+        className="cursor-pointer text-slate-400 hover:text-pink-500"
+        onClick={async (e) => {
+          e.stopPropagation();
+          await handlePriorityChange(Phase.priority + 1);
+        }}
+      />
+    </div>
+  ), [handlePriorityChange]);
 
   return (
     <div className='h-auto w-[20rem] rounded-lg bg-slate-100 ml-5 mt-2 mb-auto p-4 shadow-sm border transition-all'>
       <div className='flex flex-row justify-between'>
         <div className='flex flex-row justify-between'>
-        {isEditing ? (
+          {isEditing ? (
             <input
               type="text"
               value={phaseName}
@@ -87,62 +119,35 @@ const PhaseCard = ({ Phase, proj, isDisabled}) => {
             </h1>
           )}
         </div>
-        {!isEditing && ( // Conditionally render buttons only if not editing
+        
+        {!isEditing && (
           <div className='flex flex-row text-slate-600 ml-4 items-center gap-1'>
             <div className="flex flex-row gap-1 text-slate-500">
-          
-          {/* Left Chevron - Disable if priority is 1 */}
-          <div className="group relative">
-                <FaChevronLeft
-                  className={`cursor-pointer ${
-                    Phase.priority === 1 || isDisabled
-                      ? 'text-slate-300 cursor-not-allowed'
-                      : 'text-slate-400 hover:text-pink-500'
-                  }`}
-                  onClick={() => {
-                    if (!isDisabled && Phase.priority > 1) handlePriorityChange(Phase.priority - 1);
-                  }}
-                />
-                {Phase.priority === 1 && (
-                  <span className="absolute -top-8 right-0 hidden w-max rounded-md bg-gray-500 px-2 py-1 text-sm text-white group-hover:block">
-                    Cannot decrease priority further
-                  </span>
-                )}
-            </div>
-
-            <div className="group relative">
-                <FaChevronRight
-                  className={`cursor-pointer text-slate-400 hover:text-pink-500`}
-                  onClick={(e) => {e.stopPropagation(); startTransition( async () => { await handlePriorityChange(Phase.priority + 1)})}}
-                />
-            </div>
-
+              {renderChevronLeft}
+              {renderChevronRight}
             </div>
             <button
               onClick={(e) => {
                 if (!isDisabled) {
                   e.stopPropagation();
-                  startTransition(async () => (await softDelPhase(Phase.id, Phase.projectID)));
+                  startTransition(async () => await softDelPhase(Phase.id, Phase.projectID));
                 }
               }}
-              className={`${
-                isDisabled ? ' text-slate-300' : 'text-slate-500 hover:text-red-500'
-              } transition-colors ease-out`}
+              className={`${isDisabled ? 'text-slate-300' : 'text-slate-500 hover:text-red-500'} transition-colors ease-out`}
               disabled={isDisabled}
             >
               <HiTrash className='w-5 h-5' />
             </button> 
           </div>
         )}
-        </div>
-
+      </div>
 
       <div className={`mt-2 mb-8 text-xs px-2 py-1 rounded-xl w-auto text-center transition-colors duration-500 ${statusColors[Phase.progress]}`}>
         <h2 className='text-white font-semibold'>{Phase.progress}</h2>
       </div>
 
       <div className='w-auto h-auto'>
-      <div className='mb-8'>
+        <div className='mb-8'>
           <Link
             href={isDisabled ? '#' : '/Projects/' + Phase.projectID + '/view?phase=' + Phase.id}
             className={`border-dashed w-full px-[6.6rem] items-center rounded-md py-4 p-2 cursor-pointer border-2 transition-colors ${
@@ -165,4 +170,4 @@ const PhaseCard = ({ Phase, proj, isDisabled}) => {
   );
 };
 
-export default PhaseCard;
+export default React.memo(PhaseCard);

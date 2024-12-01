@@ -17,7 +17,7 @@ import SearchPhase from '@/app/components/SearchPhase'
 import { ExtendProject } from '@/app/components/Modals/crudForms'
 
 
-export const revalidate = 0;
+export const revalidate = 1;
 
 type SearchParamProps = {
   addsub: any

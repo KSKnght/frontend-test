@@ -300,6 +300,6 @@ export async function movePriority(id: number, priority: number, projID: number)
         console.log('error moving phase priority:', error)
     } else {
         console.log('phase has been moved to other step')
-        revalidatePath('Projects/'+projID+'/view');
+        revalidatePath('/Projects/'+projID+'/view');
     }
 }

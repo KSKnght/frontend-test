@@ -47,7 +47,7 @@ const SearchablePhaseView = ({ groupedPhases, id, maxPriority, isDisabled}) => {
                     proj={id}
                     maxPriority={maxPriority}
                     isDisabled={isDisabled}
-                    key={i}
+                    key={phase.id}
                   />
                 ))}
               </div>
