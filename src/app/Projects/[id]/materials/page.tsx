@@ -106,7 +106,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
             </Modal>}
 
       {phase && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Add Task'}>
-                <AddTask data={phase} projID={project.id} />
+                <AddTask data={phase} projID={project.id} endDate={project.endDate} />
             </Modal>}
       {edittask && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Edit Task'}>
                 <EditTask data={edittask} project={project.id}/>
