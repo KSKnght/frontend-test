@@ -7,8 +7,7 @@ import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 
 const taskSchema = z.object({
-  taskname: z.string().min(1, "Task name is required"),
-
+  taskName: z.string().min(1, "Task name is required"),
   deadline: z
   .string()
   .min(1, "Deadline is required")
@@ -25,9 +24,9 @@ function validateDeadline(deadline: string, endDate: string): boolean {
   return deadlineDate <= endDateParsed;
 }
 
-const AddTask = ({data, projID, endDate}) => {
+const AddTask = ({data, projID, endDate, startDate}) => {
     const [formData, setFormData] = useState({
-        taskname: '',
+        taskName: '',
         deadline: '',
         description: ''
       })
@@ -127,14 +126,14 @@ const AddTask = ({data, projID, endDate}) => {
             <div>
                 <p className='text-xs font-bold flex mb-1'>Task Name*</p>
                 <input 
-                    className={`h-6 w-auto flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.taskname && errors.taskname ? 'border-red-500' : 'border-slate-200'}`}
+                    className={`h-6 w-auto flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.taskName && errors.taskName ? 'border-red-500' : 'border-slate-200'}`}
                     type="text" 
-                    name='taskname' 
-                    value={formData.taskname} 
+                    name='taskName' 
+                    value={formData.taskName} 
                     onChange={handleChange}
                     onBlur={() => handleBlur('taskname')}
                 />
-                {touched.taskname && errors.taskname && <p className='text-red-500 text-xs mt-1 text-left'>{errors.taskname}</p>} 
+                {touched.taskName && errors.taskName && <p className='text-red-500 text-xs mt-1 text-left'>{errors.taskName}</p>} 
             </div>
             
             <div>
