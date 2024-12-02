@@ -106,63 +106,61 @@ const EditProjectForm = ({data, clients}) => {
     
         return (
             <form onSubmit={(e) => { handleSubmit(e)}}>
-                <div className='flex flex-row justify-between space-x-3'>
-                    <div className="grid w-full gap-1.5">
-                        <Label className='font-bold text-xs flex'>Project Name</Label>
-                        <input
-                            className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.name && errors.name ? 'border-red-500' : 'border-slate-200'}`}
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            onBlur={() => handleBlur('name')}
-                        />
-                        {touched.name && errors.name && <p className="text-red-500 text-xs mt-1 text-left">{errors.name}</p>}
-                    </div>
-                    <div>
-                        <Label className="font-bold text-xs">Project Type</Label>
-                        <input
-                            className="h-8 w-full flex border border-slate-200 bg-gray-100 rounded-lg pl-1 text-sm cursor-not-allowed"
-                            type="text"
-                            name="type"
-                            value={formData.type}
-                            disabled
-                        />
-                        {touched.type && errors.type && <p className="text-red-500 text-xs mt-1">{errors.type}</p>}
+                  <div className='w-[25rem] space-y-8'>
+                    <div className="grid w-full gap-1.5 text-left">
+                        <div>
+                          <Label className='font-bold text-xs flex'>Project Name</Label>
+                          <input
+                              className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.name && errors.name ? 'border-red-500' : 'border-slate-200'}`}
+                              type="text"
+                              name="name"
+                              value={formData.name}
+                              onChange={handleChange}
+                              onBlur={() => handleBlur('name')}
+                          />
+                          {touched.name && errors.name && <p className="text-red-500 text-xs mt-1 text-left">{errors.name}</p>}
+                        </div>
+                        <div>
+                            <Label className="font-bold text-xs text-left">Project Type</Label>
+                            <input
+                                className="h-8 w-full flex border border-slate-200 bg-gray-100 rounded-lg pl-1 text-sm cursor-not-allowed"
+                                type="text"
+                                name="type"
+                                value={formData.type}
+                                disabled
+                            />
+                            {touched.type && errors.type && <p className="text-red-500 text-xs mt-1">{errors.type}</p>}
+                        </div>
+                        <div className='mt-2'>
+                            <Label className='font-bold text-xs flex'>Project Address</Label>
+                            <input
+                                className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.projectAddress && errors.projectAddress ? 'border-red-500' : 'border-slate-200'}`}
+                                type="text"
+                                name="projectAddress"
+                                value={formData.projectAddress}
+                                onChange={handleChange}
+                                onBlur={() => handleBlur('projectAddress')}
+                            />
+                            {touched.projectAddress && errors.projectAddress && <p className="text-red-500 text-xs mt-1 text-left">{errors.projectAddress}</p>}
+                        </div>
+                        <div>
+                            <Label className="font-bold text-xs">Client</Label>
+                            <select
+                                className={`h-8 w-full flex bg-gray-100 border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.clientID && errors.clientID ? 'border-red-500' : 'border-slate-200'}`}
+                                name="clientID"
+                                value={formData.clientID}
+                                disabled
+                            >
+                            {clients.map((client, i) => (
+                                <option key={i} value={client.id}>
+                                    {client.lastname + ', ' + client.firstname + ' ' + client.middlename}
+                                </option>
+                            ))}                          
+                            </select>
+                            {touched.clientID && errors.clientID && <p className="text-red-500 text-xs mt-1">{errors.clientID}</p>}
+                        </div>
                     </div>
                 </div>
-                
-                <div className='flex flex-row justify-between space-x-3 mt-3'>
-                    <div className="grid w-full max-w-sm items-center gap-1.5">
-                        <Label className='font-bold text-xs flex'>Project Address</Label>
-                        <input
-                            className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.projectAddress && errors.projectAddress ? 'border-red-500' : 'border-slate-200'}`}
-                            type="text"
-                            name="projectAddress"
-                            value={formData.projectAddress}
-                            onChange={handleChange}
-                            onBlur={() => handleBlur('projectAddress')}
-                        />
-                        {touched.projectAddress && errors.projectAddress && <p className="text-red-500 text-xs mt-1 text-left">{errors.projectAddress}</p>}
-                    </div>
-                    <div>
-                        <Label className="font-bold text-xs">Client</Label>
-                        <select
-                            className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.clientID && errors.clientID ? 'border-red-500' : 'border-slate-200'}`}
-                            name="clientID"
-                            value={formData.clientID}
-                            disabled
-                        >
-                        {clients.map((client, i) => (
-                            <option key={i} value={client.id}>
-                                {client.lastname + ', ' + client.firstname + ' ' + client.middlename}
-                            </option>
-                        ))}                          
-                        </select>
-                        {touched.clientID && errors.clientID && <p className="text-red-500 text-xs mt-1">{errors.clientID}</p>}
-                    </div>
-                </div>
-                
 
             {errors.submit && <p className='text-red-500 text-xs mt-1 text-left'>{errors.submit}</p>}
             <button 
