@@ -4,26 +4,37 @@ import { getTask } from '@/actionsSupabase/read';
 import { updateTask } from '@/actionsSupabase/Update';
 import { redirect, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { taskSchema } from '../formSchema';
+// import { taskSchema } from '../formSchema';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 
 interface TaskData {
   id: number;
-  taskname: string;
-  priority: number;
+  taskName: string;
   deadline: string;
   description: string;
 }
 
-const EditTask = ({ data, project }) => {
+function validateDeadline_End(deadline: string, endDate: string): boolean {
+  const deadlineDate = new Date(deadline).getTime();
+  const endDateParsed = new Date(endDate).getTime();
+  return deadlineDate <= endDateParsed;
+}
+
+function validateDeadline_Start(deadline: string, startDate: string): boolean {
+  const deadlineDate = new Date(deadline).getTime();
+  const startDateParsed = new Date(startDate).getTime();
+  return deadlineDate >= startDateParsed;
+}
+
+
+const EditTask = ({ data, project, endDate, startDate }) => {
   const [task, setTask] = useState<TaskData | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [touched, setTouched] = useState<{ [key: string]: boolean}>({})
   const [formData, setFormData] = useState<TaskData>({
     id: 0,
-    taskname: '',
-    priority: 0,
+    taskName: '',
     deadline: '',
     description: '',
   });
@@ -41,8 +52,7 @@ const EditTask = ({ data, project }) => {
         if (fetchedTask) {
           setTask({
             id: fetchedTask.id,
-            taskname: fetchedTask.taskName || '', // Adjust to match actual data keys
-            priority: fetchedTask.priority || 0,
+            taskName: fetchedTask.taskName || '', // Adjust to match actual data keys
             deadline: fetchedTask.deadline || '',
             description: fetchedTask.description || '',
           });
@@ -78,51 +88,47 @@ const EditTask = ({ data, project }) => {
   };
 
   // Validation function
-  const validateForm = (data: typeof formData) => {
-    try {
-      taskSchema.parse(data); // Validate with Zod
-      setErrors({}); // Clear errors if valid
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const fieldErrors: { [key: string]: string } = {};
-        error.errors.forEach((err) => {
-          if (err.path[0]) {
-            fieldErrors[err.path[0] as string] = err.message;
-          }
-        });
-        setErrors(fieldErrors); // Set errors from Zod validation
+  const validateForm = (data: TaskData) => {
+    const fieldErrors: { [key: string]: string } = {};
+
+    if (!data.taskName.trim()) {
+      fieldErrors.taskName = 'Task Name is required';
+    }
+
+    if (!data.deadline) {
+      fieldErrors.deadline = 'Deadline is required';
+    } else {
+      if (!validateDeadline_End(data.deadline, endDate)) {
+        fieldErrors.deadline = 'Deadline must not be after the project end date';
+      }
+      if (!validateDeadline_Start(data.deadline, startDate)) {
+        fieldErrors.deadline = 'Deadline must not be before the project start date';
       }
     }
+
+    setErrors(fieldErrors);
+    return Object.keys(fieldErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      taskSchema.parse(formData);
-      setErrors({});
+    if (!validateForm(formData)) {
+      return; // Exit if validation fails
+    }
 
+    try {
       const formDataToSend = new FormData(e.currentTarget);
       const response = await updateTask(formDataToSend, formData.id, project);
 
       if (response.success) {
         revalidatePath('/Projects/' + project + '/view');
+        route.push('/Projects/' + project + '/view');
       } else {
         setErrors({ submit: 'Failed to update task. Please try again.' });
       }
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const fieldErrors: { [key: string]: string } = {};
-        error.errors.forEach((err) => {
-          if (err.path[0]) {
-            fieldErrors[err.path[0] as string] = err.message;
-            console.log(err.message)
-          }
-          
-        });
-        setErrors(fieldErrors);
-      } else {
-      }
+      setErrors({ submit: 'An unexpected error occurred. Please try again later.' });
     }
   };
 
@@ -131,31 +137,18 @@ const EditTask = ({ data, project }) => {
 
   return (
     <form onSubmit={(e) => { handleSubmit(e); route.push('/Projects/' + project + '/view'); }}>
-        <div className='flex flex-row justify-evenly space-x-3'>
-            <div>
-                <p className='text-xs font-bold flex mb-1'>Priority*</p>
-                <input 
-                    className={`h-6 w-auto flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.priority && errors.priority ? 'border-red-500' : 'border-slate-200'}`}
-                    type="number" 
-                    name='priority' 
-                    value={formData.priority} 
-                    onChange={handleChange}
-                    onBlur={() => handleBlur('priority')}
-                />
-                {touched.priority && errors.priority && <p className='text-red-500 text-xs mt-1 text-left'>{errors.priority}</p>} 
-            </div>
-            
+        <div className='flex flex-row justify-evenly space-x-3'>            
             <div>
                 <p className='text-xs font-bold flex mb-1'>Task Name*</p>
                 <input 
-                    className={`h-6 w-auto flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.taskname && errors.taskname ? 'border-red-500' : 'border-slate-200'}`}
+                    className={`h-6 w-auto flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.taskName && errors.taskName ? 'border-red-500' : 'border-slate-200'}`}
                     type="text" 
-                    name='taskname' 
-                    value={formData.taskname} 
+                    name='taskName' 
+                    value={formData.taskName} 
                     onChange={handleChange}
-                    onBlur={() => handleBlur('taskname')}
+                    onBlur={() => handleBlur('taskName')}
                 />
-                {touched.taskname && errors.taskname && <p className='text-red-500 text-xs mt-1 text-left'>{errors.taskname}</p>} 
+                {touched.taskName && errors.taskName && <p className='text-red-500 text-xs mt-1 text-left'>{errors.taskName}</p>} 
             </div>
             
             <div>

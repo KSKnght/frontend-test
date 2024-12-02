@@ -5,28 +5,42 @@ import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { HiTrash, HiClock } from "react-icons/hi";
 import { hardDelMat, hardDelSub } from '@/actionsSupabase/Delete';
 import { revalidatePath } from 'next/cache';
+import { updateQty } from '@/actionsSupabase/Update';
+import EditableQty from './EditableQty';
 
 
-const MatList = ({ tasks, projID, taskId}) => {
+const MatList = ({ tasks, projID, taskId }) => {
   return (
     <div className="flex flex-col">
       <h3 className="text-xs font-semibold mb-2 text-left">Materials List</h3>
       <div className="w-[20rem] bg-slate-300 h-[9.5rem] flex items-center justify-center">
         {tasks.length ? (
-          <div className="h-[9.5rem] overflow-y-auto w-full"> {/* Set fixed height and make it scrollable */}
+          <div className="h-[9.5rem] overflow-y-auto w-full">
             {tasks.map((mat, i) => (
-              <Table className="w-[17rem] table-fixed" key={`mat-list-${i}`}>
+              <Table className="w-[20rem] table-fixed" key={`mat-list-${i}`}>
                 <TableBody>
                   <TableRow className="text-center bg-slate-100 hover:bg-slate-200">
-                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-3/5">{mat.materials.name}</TableCell>
-                    <TableCell className="text-xs py-1.5 px-1 leading-tight text-center w-2/5">{mat.qty}</TableCell>
-                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-1/5">{mat.unit}</TableCell>
+                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-3/5">
+                      {mat.materials.name}
+                    </TableCell>
+                    <TableCell className="text-xs py-1.5 px-1 leading-tight text-center w-2/5 justify-center">
+                        <EditableQty mat={mat} projID={projID} taskId={taskId} />
+                    </TableCell>
+                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-1/5">
+                      {mat.unit}
+                    </TableCell>
                     <TableCell className="text-center py-1.5 px-1 w-1/5">
-                    <form action={async (e) => {'use server'; await hardDelMat(mat.id); revalidatePath('Projects/'+projID+'/view?viewtask='+taskId+'&state=Mat')}}>
-                      <button type='submit'>
-                        <HiTrash className="text-slate-400 cursor-pointer hover:text-red-500" />
-                      </button>
-                    </form>
+                      <form
+                        action={async () => {
+                          'use server';
+                          await hardDelMat(mat.id);
+                          revalidatePath(`Projects/${projID}/view?viewtask=${taskId}&state=Mat`);
+                        }}
+                      >
+                        <button type="submit">
+                          <HiTrash className="text-slate-400 cursor-pointer hover:text-red-500" />
+                        </button>
+                      </form>
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -44,6 +58,7 @@ const MatList = ({ tasks, projID, taskId}) => {
     </div>
   );
 };
+
 
 const SubConList = ({ subcon, projID, taskId }) => {
   return (

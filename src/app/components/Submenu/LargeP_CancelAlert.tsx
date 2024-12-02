@@ -13,13 +13,13 @@ import {
 import { Button } from "../ui/button";
 import { cancelProject } from '@/actionsSupabase/Update';
 
-const Project_CancelAlert = ({id}) => {
+const LargeP_CancelAlert = ({id}) => {
 
   return (
     <div>
       <AlertDialog>
         <AlertDialogTrigger asChild className='translate-x-[0.1rem]'>
-            <Button onClick={(e) => {e.stopPropagation()}} className='h-8 rounded-lg text-sm w-[8rem] py-3 text-left hover:text-red-500 text-red-500 hover:bg-red-50' variant='ghost'>Cancel Project</Button>
+            <Button onClick={(e) => {e.stopPropagation()}} className='rounded-lg text-sm w-[16rem] py-3 text-center bg-red-50 hover:text-red-500 text-red-500 hover:bg-red-100' variant='ghost'>Cancel Project</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
             <AlertDialogHeader>
@@ -42,4 +42,4 @@ const Project_CancelAlert = ({id}) => {
   )
 }
 
-export default Project_CancelAlert
+export default LargeP_CancelAlert

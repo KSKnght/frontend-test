@@ -33,7 +33,7 @@ export async function updateTask(FormData : FormData, id: number, projID: number
         const { data, error } = await supabase
         .from('phaseTasks') // Make sure to match your table name
         .update({
-            taskName: FormData.get('taskname'),
+            taskName: FormData.get('taskName'),
             description: FormData.get('description'),
             deadline: new Date(FormData.get('deadline') + 'T00:00:00.000Z'),
         })

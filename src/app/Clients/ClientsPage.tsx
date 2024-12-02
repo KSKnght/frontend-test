@@ -30,6 +30,7 @@ import { supabase } from '@/lib/supabase';
 const ClientsPage = ({ clients, searchParams }: { clients: any[], searchParams: Record<string, string> | null | undefined }) => {
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const show = searchParams?.show;
   const edit = searchParams?.edit;
 
@@ -59,7 +60,16 @@ const ClientsPage = ({ clients, searchParams }: { clients: any[], searchParams: 
     `${client.lastname} ${client.firstname} ${client.middlename}`
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
-  );
+  )
+  .sort((a, b) => {
+    const nameA = `${a.lastname} ${a.firstname}`.toLowerCase();
+    const nameB = `${b.lastname} ${b.firstname}`.toLowerCase();
+    if (sortOrder === 'asc') {
+      return nameA > nameB ? 1 : -1;
+    } else {
+      return nameA < nameB ? 1 : -1;
+    }
+  });
 
   return (
     <main className='flex'>
@@ -78,22 +88,24 @@ const ClientsPage = ({ clients, searchParams }: { clients: any[], searchParams: 
             <HiUser className='w-8 h-8 mr-3 translate-y-[1rem] text-pink-600'/>
             <h1 className='text-4xl font-black mt-3 text-pink-600'>CLIENTS</h1>
           </div>
-          <Link className='flex flex-row w-32 rounded-lg px-3 py-1 mt-6 -translate-y-2 text-white bg-pink-600' href={'/Clients/?show=true'}>
-            <IoIosAddCircle className='mt-1 mr-1'/>
-            Add Client
-          </Link>
+          <div className='flex flex-row'>
+              <div className='px-[3rem] mb-3'>
+                <input
+                  type='text'
+                  placeholder='Search clients...'
+                  className='w-[40rem] px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-pink-600'
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <Link className='flex flex-row w-32 rounded-lg px-3 py-2 mt-5 -translate-y-5 text-white bg-pink-600' href={'/Clients/?show=true'}>
+                <IoIosAddCircle className='mt-1 mr-1'/>
+                Add Client
+              </Link>
+          </div>
+
         </div>
         
-        {/* Search bar */}
-        <div className='px-[3rem] mb-3'>
-          <input
-            type='text'
-            placeholder='Search clients...'
-            className='w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-pink-600'
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
 
         <Suspense>
           <div className='mt-8 px-[3rem] overflow-auto' style={{ maxHeight: 'calc(103vh - 200px)' }}>
@@ -104,8 +116,17 @@ const ClientsPage = ({ clients, searchParams }: { clients: any[], searchParams: 
                   : 'No clients matched.'}
               </TableCaption>
               <TableHeader>
-                <TableRow className=''>  
-                  <TableHead className='font-bold text-slate-600 w-[25rem]'>Client Name</TableHead>
+                <TableRow className='font-bold text-slate-600 w-[25rem] cursor-pointer'>  
+                  <TableHead
+                    className="font-bold text-slate-600 w-[25rem] cursor-pointer"
+                    onClick={() =>
+                      setSortOrder((prevOrder) =>
+                        prevOrder === 'asc' ? 'desc' : 'asc'
+                      )
+                    }
+                  >
+                    Client Name {sortOrder === 'asc' ? '↑' : '↓'}
+                  </TableHead>
                   <TableHead className='font-bold text-slate-600 w-[25rem]'>Email Address</TableHead>
                   <TableHead className='font-bold text-slate-600'>Contact Number</TableHead>
                   <TableHead className='font-bold text-slate-600 text-right'></TableHead>
@@ -115,7 +136,7 @@ const ClientsPage = ({ clients, searchParams }: { clients: any[], searchParams: 
                 {filteredClients.map((client, i) => (
                   <TableRow key={i}>
                     <TableCell className='w-[25rem]'>
-                      {client.lastname + ' ' + client.firstname + ' ' + client.middlename}
+                      {client.lastname + ', ' + client.firstname + ' ' + client.middlename + '.'}
                     </TableCell>
                     <TableCell>{client.emailAdd}</TableCell>
                     <TableCell>{client.contactNum}</TableCell>
