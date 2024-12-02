@@ -12,6 +12,7 @@ import { IoCalendarClear } from "react-icons/io5";
 import { redirect, useRouter } from 'next/navigation';
 import Button from './Button';
 import Alert from "./Submenu/LargeP_CancelAlert"
+import Restore from "./Submenu/LargeP_RestoreAlert"
 
 
 const statusColors = {
@@ -28,6 +29,8 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
   const startDate = new Date(project.startDate);
   const hasStarted = project.progress;
   const isDisabled = project.progress === 'CANCELLED' || project.isArchived === true;
+  const isCancelled = project.progress
+  const Archived = project.isArchived
 
 
   return (
@@ -124,7 +127,8 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
                 {hasStarted ? 'Extend Project' : 'Move Project'}
               </button>
 
-          <Alert id={id}/>
+              {Archived == true ? <Restore id={id}/> : '' }
+              {isCancelled == 'CANCELLED' ? '' : <Alert id={id}/> }
 
             </div>
       </div>
