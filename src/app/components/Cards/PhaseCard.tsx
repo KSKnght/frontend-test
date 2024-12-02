@@ -91,7 +91,7 @@ const PhaseCard = ({ Phase, proj, isDisabled }) => {
         }}
       />
     </div>
-  ), [handlePriorityChange]);
+  ), [handlePriorityChange, isDisabled]);
 
   return (
     <div className='h-auto w-[20rem] rounded-lg bg-slate-100 ml-5 mt-2 mb-auto p-4 shadow-sm border transition-all'>
