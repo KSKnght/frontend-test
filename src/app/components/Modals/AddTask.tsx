@@ -28,17 +28,15 @@ const AddTask = ({data, projID, endDate, startDate}) => {
     const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
     const route = useRouter();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
-  
-      // Convert priority to a number, keep others as strings
-      setFormData({
-        ...formData,
-        [name]: name === 'priority' ? Number(value) : value,
-      });
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
   
       if (touched[name]) {
-        validateForm({ ...formData, [name]: name === 'priority' ? Number(value) : value });
+        validateForm({ ...formData, [name]: value });
       }
     };
 
@@ -49,9 +47,6 @@ const AddTask = ({data, projID, endDate, startDate}) => {
 
     async function validateForm(formData: any) {
       const fieldErrors: { [key: string]: string } = {};
-      
-      console.log(startDate)
-      console.log(endDate)
 
       if (!formData.taskName.trim()) {
         fieldErrors.taskName = 'Task Name is required';
