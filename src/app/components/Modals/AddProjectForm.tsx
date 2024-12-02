@@ -102,7 +102,7 @@ const AddProjectForm = () => {
 
     return (
         <form onSubmit={(e) => { handleSubmit(e); route.push('/Projects'); }}>
-            <div className='flex flex-row justify-between space-x-3'>
+            <div className='w-[25rem] space-y-5'>
                 <div className="grid w-full gap-1.5">
                     <Label className='font-bold text-xs flex'>Project Name</Label>
                     <input
@@ -113,7 +113,7 @@ const AddProjectForm = () => {
                         onChange={handleChange}
                         onBlur={() => handleBlur('name')}
                     />
-                    {touched.name && errors.name && <p className="text-red-500 text-xs mt-1 text-left">{errors.name}</p>}
+                    {touched.name && errors.name && <p className="text-red-500 text-xs text-left">{errors.name}</p>}
                 </div>
                 <div>
                     <p className='subHeader'>Project Type</p>
@@ -137,24 +137,9 @@ const AddProjectForm = () => {
                             Design
                         </option>
                     </select>
-                    {touched.type && errors.type && <p className="text-red-500 text-xs mt-1">{errors.type}</p>}
+                    {touched.type && errors.type && <p className="text-red-500 text-xs mt-1 text-left">{errors.type}</p>}
                 </div>
-                <div>
-                    <p className='subHeader'>Start Date</p>
-                    <input
-                        className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.startDate && errors.startDate ? 'border-red-500' : 'border-slate-200'}`}
-                        type="date"
-                        name="startDate"
-                        value={formData.startDate}
-                        onChange={handleChange}
-                        onBlur={() => handleBlur('startDate')}
-                    />
-                    {touched.startDate && errors.startDate && <p className="text-red-500 text-xs mt-1 text-left">{errors.startDate}</p>}
-                </div>
-            </div>
-            
-            <div className='flex flex-row justify-between space-x-3 mt-3'>
-                <div className="grid w-full max-w-sm items-center gap-1.5">
+                <div className="grid w-full max-w-sm items-center">
                     <Label className='font-bold text-xs flex'>Project Address</Label>
                     <input
                         className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.address && errors.address ? 'border-red-500' : 'border-slate-200'}`}
@@ -166,6 +151,7 @@ const AddProjectForm = () => {
                     />
                     {touched.address && errors.address && <p className="text-red-500 text-xs mt-1 text-left">{errors.address}</p>}
                 </div>
+
                 <div>
                     <p className='subHeader'>Client</p>
                     <select 
@@ -184,24 +170,39 @@ const AddProjectForm = () => {
                             </option>
                         ))}
                     </select>
-                    {touched.id && errors.id && <p className="text-red-500 text-xs mt-1">{errors.id}</p>}
+                {touched.id && errors.id && <p className="text-red-500 text-xs mt-1 text-left">{errors.id}</p>}
+                <div className='flex flex-row space-x-3 mt-6 justify-between'>
+                    <div>
+                        <p className='subHeader'>Start Date</p>
+                        <input
+                            className={`h-8 w-[11rem] flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.startDate && errors.startDate ? 'border-red-500' : 'border-slate-200'}`}
+                            type="date"
+                            name="startDate"
+                            value={formData.startDate}
+                            onChange={handleChange}
+                            onBlur={() => handleBlur('startDate')}
+                        />
+                        {touched.startDate && errors.startDate && <p className="text-red-500 text-xs mt-1 text-left">{errors.startDate}</p>}
+                    </div>
+                    <div>
+                        <p className='subHeader'>End Date</p>
+                        <input
+                            className={`h-8 w-[11rem] flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.endDate && errors.endDate ? 'border-red-500' : 'border-slate-200'}`}
+                            type="date"
+                            name="endDate"
+                            value={formData.endDate}
+                            onChange={handleChange}
+                            onBlur={() => handleBlur('endDate')}
+                        />
+                        {touched.endDate && errors.endDate && <p className="text-red-500 text-xs mt-1 text-left">{errors.endDate}</p>}
+                    </div>
+
                 </div>
-                <div>
-                    <p className='subHeader'>End Date</p>
-                    <input
-                        className={`h-8 w-full flex border focus:outline-pink-600 rounded-lg pl-1 text-sm ${touched.endDate && errors.endDate ? 'border-red-500' : 'border-slate-200'}`}
-                        type="date"
-                        name="endDate"
-                        value={formData.endDate}
-                        onChange={handleChange}
-                        onBlur={() => handleBlur('endDate')}
-                    />
-                    {touched.endDate && errors.endDate && <p className="text-red-500 text-xs mt-1 text-left">{errors.endDate}</p>}
-                </div>
+            </div>
             </div>
             
             <button 
-            className={`mt-8 text-sm px-4 py-1 rounded-lg text-white ${hasErrors || isEmpty ? 'bg-gray-400 cursor-not-allowed' : 'bg-pink-600'}`}
+            className={`mt-12 text-sm px-4 py-1 rounded-lg text-white ${hasErrors || isEmpty ? 'bg-gray-400 cursor-not-allowed' : 'bg-pink-600'}`}
             type="submit"
             disabled={hasErrors || isEmpty}
             >

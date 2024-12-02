@@ -56,9 +56,9 @@ export default async function ProjectsPage({ searchParams }: SearchParamProps) {
                     <div className='flex flex-row space-x-4 items-center pr-11'>
                         <div className='flex flex-row space-x-1 items-center'>
                             <div>
-                                <button className='p-[13px] bg-slate-100 hover:bg-slate-200 rounded-lg'>
+                                {/* <button className='p-[13px] bg-slate-100 hover:bg-slate-200 rounded-lg'>
                                     <FaFilter className='text-slate-600' />
-                                </button>
+                                </button> */}
                             </div>
 
                             <div className="relative">
