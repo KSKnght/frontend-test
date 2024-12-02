@@ -82,14 +82,13 @@ const AddTask = ({data, projID, endDate, startDate}) => {
             const formDataToSend = new FormData(e.currentTarget);
             const response = await createTask(formDataToSend, data, projID);
           
-            if (response.success) {
+            if (response.success === true) {
               revalidatePath('/Projects/' + projID + '/view');
               route.push(`/Projects/${projID}/view`);
             } else {
               setErrors({ submit: 'Failed to create project. Please try again.' });
             }
           } catch (error) {
-            setErrors({ submit: 'An unexpected error occurred. Please try again later.' });
           }
     }
 

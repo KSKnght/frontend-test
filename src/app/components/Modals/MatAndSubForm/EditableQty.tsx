@@ -24,7 +24,7 @@ const EditableQtyCell = ({ mat, projID, taskId }) => {
         name="qty"
         type="number"
         value={newQty}
-        className="text-center w-16 bg-transparent border border-gray-300 rounded"
+        className="text-center h-8 w-16 bg-transparent border border-gray-300 rounded"
         onChange={(e) => setNewQty(Number(e.target.value))}
         onKeyDown={handleKeyDown}
       />

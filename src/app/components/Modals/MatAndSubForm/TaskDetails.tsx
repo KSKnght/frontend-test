@@ -20,7 +20,7 @@ const MatList = ({ tasks, projID, taskId }) => {
               <Table className="w-[20rem] table-fixed" key={`mat-list-${i}`}>
                 <TableBody>
                   <TableRow className="text-center bg-slate-100 hover:bg-slate-200">
-                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-3/5">
+                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-3/5 text-left pl-3">
                       {mat.materials.name}
                     </TableCell>
                     <TableCell className="text-xs py-1.5 px-1 leading-tight text-center w-2/5 justify-center">
@@ -49,7 +49,7 @@ const MatList = ({ tasks, projID, taskId }) => {
           </div>
         ) : (
           <div>
-            <div className="w-[17rem] bg-slate-50 h-[9.5rem] flex items-center justify-center">
+            <div className="w-[20rem] bg-slate-50 h-[9.5rem] flex items-center justify-center">
               <p className="text-xs text-gray-500 italic">No materials added.</p>
             </div>
           </div>

@@ -9,6 +9,7 @@ const numberRegex = /^\d+$/
 const alphabetRegex = /^[A-Za-z\s]+$/
 
 //Client-Specific Regex
+const lastnameRegex = /^[A-Za-z]+(-[A-Za-z]+)?$/
 const middleInitialCheck = /^[a-zA-Z]$/
 const contactAlphabetCheck = /^[\d+]+$/
 const contactRegex = /^09|^\+63/
@@ -77,7 +78,7 @@ export const clientformSchema = z.object({
                 })
                 return;
             }
-            if(!alphabetRegex.test(value)) {
+            if(!lastnameRegex.test(value)) {
                 ctx.addIssue ({
                     code: z.ZodIssueCode.custom,
                     message: 'Last name should contain alphabets only',
