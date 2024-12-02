@@ -4,7 +4,7 @@ import { getTask } from '@/actionsSupabase/read';
 import { updateTask } from '@/actionsSupabase/Update';
 import { redirect, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { taskSchema } from '../formSchema';
+// import { taskSchema } from '../formSchema';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 
@@ -80,7 +80,6 @@ const EditTask = ({ data, project }) => {
   // Validation function
   const validateForm = (data: typeof formData) => {
     try {
-      taskSchema.parse(data); // Validate with Zod
       setErrors({}); // Clear errors if valid
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -99,7 +98,6 @@ const EditTask = ({ data, project }) => {
     e.preventDefault();
 
     try {
-      taskSchema.parse(formData);
       setErrors({});
 
       const formDataToSend = new FormData(e.currentTarget);

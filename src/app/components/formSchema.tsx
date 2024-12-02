@@ -303,21 +303,21 @@ export type dateData = z.infer<typeof daterangeSchema>;
 
 
 
-// Task Form Schema
-export const taskSchema = z.object({
-    taskname: z.string().min(1, 'Task name is required'),
+// // Task Form Schema
+// export const taskSchema = z.object({
+//     taskname: z.string().min(1, 'Task name is required'),
 
-    deadline: z
-      .string()  // Assuming the deadline comes as a string from an input field
-      .refine((val) => !isNaN(Date.parse(val)), {
-        message: 'Invalid date format',
-      })
-      .refine((val) => Date.parse(val) >= Date.now(), {
-        message: 'Deadline cannot be in the past',
-      }),
+//     deadline: z
+//       .string()  // Assuming the deadline comes as a string from an input field
+//       .refine((val) => !isNaN(Date.parse(val)), {
+//         message: 'Invalid date format',
+//       })
+//       .refine((val) => Date.parse(val) >= Date.now(), {
+//         message: 'Deadline cannot be in the past',
+//       }),
 
-    description: z.string().optional(),
-  });
+//     description: z.string().optional(),
+//   });
 
 
 

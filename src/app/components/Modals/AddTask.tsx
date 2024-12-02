@@ -6,22 +6,16 @@ import { revalidatePath } from 'next/cache';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 
-const taskSchema = z.object({
-  taskName: z.string().min(1, "Task name is required"),
-  deadline: z
-  .string()
-  .min(1, "Deadline is required")
-  .refine((val) => !isNaN(Date.parse(val)), {
-    message: "Invalid date format",
-  }),
-
-  description: z.string().optional(),
-});
-
-function validateDeadline(deadline: string, endDate: string): boolean {
-  const deadlineDate = Date.parse(deadline);
-  const endDateParsed = Date.parse(endDate);
+function validateDeadline_End(deadline: string, endDate: string): boolean {
+  const deadlineDate = new Date(deadline).getTime();
+  const endDateParsed = new Date(endDate).getTime();
   return deadlineDate <= endDateParsed;
+}
+
+function validateDeadline_Start(deadline: string, startDate: string): boolean {
+  const deadlineDate = new Date(deadline).getTime();
+  const startDateParsed = new Date(startDate).getTime();
+  return deadlineDate >= startDateParsed;
 }
 
 const AddTask = ({data, projID, endDate, startDate}) => {
@@ -56,61 +50,51 @@ const AddTask = ({data, projID, endDate, startDate}) => {
     async function validateForm(formData: any) {
       const fieldErrors: { [key: string]: string } = {};
       
-      // Step 1: Perform custom validation for deadline vs endDate
-      if (!validateDeadline(formData.deadline, endDate)) {
-        fieldErrors.deadline = "Deadline must not be after the project end date";
+      console.log(startDate)
+      console.log(endDate)
+
+      if (!formData.taskName.trim()) {
+        fieldErrors.taskName = 'Task Name is required';
+      }
+  
+      if (!formData.deadline) {
+        fieldErrors.deadline = 'Deadline is required';
+      } else {
+        if (!validateDeadline_End(formData.deadline, endDate)) {
+          fieldErrors.deadline = 'Deadline must not be after the project end date';
+        }
+        if (!validateDeadline_Start(formData.deadline, startDate)) {
+          fieldErrors.deadline = 'Deadline must not be before the project start date';
+        }
       }
 
-        try {
-          const deadlineError = validateDeadline(data.deadline, endDate);
-          if (deadlineError) {
-            setErrors({});
-            return;
-          }
-          taskSchema.parse(data); // Validate with Zod
-          setErrors({}); // Clear errors if valid
-        } catch (error) {
-          if (error instanceof z.ZodError) {
-            error.errors.forEach((err) => {
-              if (err.path[0]) {
-                fieldErrors[err.path[0] as string] = err.message;
-              }
-            });
-            setErrors(fieldErrors); // Set errors from Zod validation
-          }
-        }
-    }
+      setErrors(fieldErrors);
+      return Object.keys(fieldErrors).length === 0;
+    };
     
       const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
-        const formDataWithEndDate = { ...formData, endDate: endDate };
-        validateForm(formDataWithEndDate);
+
+        if (!validateForm(formData)) {
+          return;
+        }
 
         if (Object.keys(errors).length > 0) {
           return; 
         }
 
         try {
-            taskSchema.parse(formDataWithEndDate); 
-            setErrors({}); 
-          
             const formDataToSend = new FormData(e.currentTarget);
             const response = await createTask(formDataToSend, data, projID);
           
             if (response.success) {
+              revalidatePath('/Projects/' + projID + '/view');
+              route.push(`/Projects/${projID}/view`);
             } else {
               setErrors({ submit: 'Failed to create project. Please try again.' });
             }
           } catch (error) {
-            if (error instanceof z.ZodError) {
-              const fieldErrors = error.errors.reduce((acc: { [key: string]: string }, err) => {
-                if (err.path[0]) acc[err.path[0] as string] = err.message;
-                return acc;
-              }, {});
-              setErrors(fieldErrors);
-            } else {
-            }
+            setErrors({ submit: 'An unexpected error occurred. Please try again later.' });
           }
     }
 
@@ -131,7 +115,7 @@ const AddTask = ({data, projID, endDate, startDate}) => {
                     name='taskName' 
                     value={formData.taskName} 
                     onChange={handleChange}
-                    onBlur={() => handleBlur('taskname')}
+                    onBlur={() => handleBlur('taskName')}
                 />
                 {touched.taskName && errors.taskName && <p className='text-red-500 text-xs mt-1 text-left'>{errors.taskName}</p>} 
             </div>
