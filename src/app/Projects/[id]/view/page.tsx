@@ -14,7 +14,7 @@ import { IoIosAddCircle } from "react-icons/io";
 import {MoveProject} from '@/app/components/Modals/crudForms'
 import SearchPhase from '@/app/components/SearchPhase'
 import { ExtendProject } from '@/app/components/Modals/crudForms'
-
+import AutoRefresh from './AutoRefresh'
 
 export const revalidate = 1;
 
@@ -65,6 +65,7 @@ const page = async ({params, searchParams}:{ params: { id: string }, searchParam
 
   return (
     <div className=' flex flex-row overflow-x-auto h-screen'>
+      <AutoRefresh id={id} />
       {addPhase && <Modal returnLink={'/Projects/'+ project.id+'/view'} name={'Add Phase'}>
                 <AddPhase data={project.id} />
             </Modal>}

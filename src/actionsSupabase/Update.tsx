@@ -303,3 +303,20 @@ export async function movePriority(id: number, priority: number, projID: number)
         revalidatePath('/Projects/'+projID+'/view');
     }
 }
+
+export async function updateQty(id: number, qty: number, taskID: number, projID: number) {
+    const { error } = await supabase
+    .from('taskMat')
+    .update({
+        qty: qty
+    })
+    .eq('id', id)
+
+    if (error){
+        console.log('error moving phase priority:', error)
+    } else {
+        console.log('phase has been moved to other step')
+        revalidatePath('/Projects/'+projID+'/view');
+        revalidatePath('/Projects/'+projID+'/view?viewtask=' + taskID + '&state=Mat')
+    }
+}
