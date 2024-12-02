@@ -11,7 +11,7 @@ import { RiProgress2Fill } from "react-icons/ri";
 import { IoCalendarClear } from "react-icons/io5";
 import { redirect, useRouter } from 'next/navigation';
 import Button from './Button';
-import Alert from "./Submenu/Project_CancelAlert"
+import Alert from "./Submenu/LargeP_CancelAlert"
 
 
 const statusColors = {
