@@ -27,7 +27,7 @@ import {
 const statusColors = {
   NOT_STARTED: 'bg-slate-500',    
   IN_PROGRESS: 'bg-amber-500', 
-  COMPLETED: 'bg-green-500',
+  COMPLETE: 'bg-green-500',
   OVERDUE: 'bg-red-500',
   CANCELLED: 'bg-red-800'     
 };
