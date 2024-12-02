@@ -11,7 +11,7 @@ const MatList = ({ tasks, projID, taskId}) => {
   return (
     <div className="flex flex-col">
       <h3 className="text-xs font-semibold mb-2 text-left">Materials List</h3>
-      <div className="w-[17rem] bg-slate-300 h-[9.5rem] flex items-center justify-center">
+      <div className="w-[20rem] bg-slate-300 h-[9.5rem] flex items-center justify-center">
         {tasks.length ? (
           <div className="h-[9.5rem] overflow-y-auto w-full"> {/* Set fixed height and make it scrollable */}
             {tasks.map((mat, i) => (
@@ -19,7 +19,7 @@ const MatList = ({ tasks, projID, taskId}) => {
                 <TableBody>
                   <TableRow className="text-center bg-slate-100 hover:bg-slate-200">
                     <TableCell className="text-xs py-1.5 px-1 leading-tight w-3/5">{mat.materials.name}</TableCell>
-                    <TableCell className="text-xs py-1.5 px-1 leading-tight w-2/5">{mat.qty}</TableCell>
+                    <TableCell className="text-xs py-1.5 px-1 leading-tight text-center w-2/5">{mat.qty}</TableCell>
                     <TableCell className="text-xs py-1.5 px-1 leading-tight w-1/5">{mat.unit}</TableCell>
                     <TableCell className="text-center py-1.5 px-1 w-1/5">
                     <form action={async (e) => {'use server'; await hardDelMat(mat.id); revalidatePath('Projects/'+projID+'/view?viewtask='+taskId+'&state=Mat')}}>
@@ -90,7 +90,7 @@ const TaskDetails = async ({data, state, projID}) => {
     console.log(task);
 
   return (
-    <div className='flex flex-row'>
+    <div className='flex flex-row w-[38rem]'>
         <div>
             <div className='flex flex-col'>
                 <div>
@@ -130,7 +130,7 @@ const TaskDetails = async ({data, state, projID}) => {
             
         </div>
 
-        <div className='border-l border-slate-400 ml-2 pl-8 h-[396px] w-64'>
+        <div className='border-l border-slate-400 ml-8 pl-8 h-[396px] w-64'>
             <AddMatSub mat={materialsUnselected ?? []} data={task.id} state={state} projID={projID} subCon={sucon} status={task.status} matUsed={task.taskMat} subUsed={task._phaseTasksTosubCon}/>
         </div>
     </div>
