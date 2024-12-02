@@ -80,7 +80,7 @@ const AddProjectForm = () => {
               revalidatePath('/Projects');
               route.push('/Projects')
             } else {
-              setErrors({ submit: 'Failed to create project. Please try again.' });
+
             }
           } catch (error) {
             if (error instanceof z.ZodError) {

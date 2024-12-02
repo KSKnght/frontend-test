@@ -26,7 +26,7 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
   const router = useRouter();
   const currentDate = new Date();
   const startDate = new Date(project.startDate);
-  const hasStarted = currentDate >= startDate;
+  const hasStarted = project.progress;
   const isDisabled = project.progress === 'CANCELLED' || project.isArchived === true;
 
 
@@ -111,7 +111,7 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
               <button
                 disabled={isDisabled}
                 onClick={() => {
-                  hasStarted
+                  hasStarted == 'IN_PROGRESS'
                     ? router.push(`/Projects/${project.id}/view?extProj=` + project.id)
                     : router.push(`/Projects/${project.id}/view?movProj=` + project.id);
                 }}
