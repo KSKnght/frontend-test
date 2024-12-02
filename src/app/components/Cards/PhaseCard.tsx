@@ -84,7 +84,7 @@ const PhaseCard = ({ Phase, proj, isDisabled }) => {
   const renderChevronRight = useMemo(() => (
     <div className="group relative">
       <FaChevronRight
-        className="cursor-pointer text-slate-400 hover:text-pink-500"
+        className={`cursor-pointer ${isDisabled ? 'text-slate-300 cursor-not-allowed' : 'text-slate-400 hover:text-pink-500'}`}
         onClick={async (e) => {
           e.stopPropagation();
           await handlePriorityChange(Phase.priority + 1);
