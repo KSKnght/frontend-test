@@ -25,8 +25,6 @@ const statusColors = {
 
 const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: boolean, id : Number}) => {
   const router = useRouter();
-  const currentDate = new Date();
-  const startDate = new Date(project.startDate);
   const hasStarted = project.progress;
   const isDisabled = project.progress === 'CANCELLED' || project.isArchived === true;
   const isCancelled = project.progress
@@ -103,7 +101,17 @@ const ProjectsSidebar = ({project, currPage, id} : {project: any, currPage: bool
             </div>
 
 
-            <div className='ml-4 mt-[8rem] flex flex-col gap-3'>
+            
+
+            <div className='ml-4 mt-[6rem] flex flex-col gap-3'>
+              
+              <button
+                className='rounded-lg text-sm w-[16rem] py-3 text-center transition-colors bg-slate-100 hover:bg-slate-200'
+                onClick={() => {router.push('log')}}
+              >
+                Activity Log
+              </button>
+
               { currPage == false && 
                   <button onClick={() => {router.push('materials')}} className='bg-slate-100 rounded-lg text-sm w-[16rem] py-3 text-center hover:bg-slate-200 transition-colors'>View All Materials</button>
               } 
